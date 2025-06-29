@@ -1,0 +1,28 @@
+# Release Automation Workflow
+# TODO: Implement automated release workflow with:
+# - Version bumping
+# - Changelog generation
+# - PyPI package building and publishing
+# - GitHub release creation
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version'
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    # TODO: Add UV setup
+    # TODO: Add version bumping
+    # TODO: Add package building
+    # TODO: Add PyPI publishing
+    # TODO: Add GitHub release creation
