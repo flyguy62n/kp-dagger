@@ -21,23 +21,21 @@ Features:
 - Multi-format reporting (JSON, HTML, Excel)
 """
 
-import warnings
-
 __version__ = "0.0.1-dev"
 __author__ = "Randy Bartels"
 __email__ = "rjbartels@outlook.com"
+__url__ = "https://github.com/flyguy62n/pybastion"
 
-# Issue development warning when package is imported
-warnings.warn(
-    "PyBastion is in active development and not ready for production use. "
-    "Features may change significantly between versions. "
-    "Visit https://github.com/flyguy62n/pybastion for current status.",
-    UserWarning,
-    stacklevel=2,
-)
 
 __all__ = [
     "Database",
     "ParserFactory",
     "Scanner",
+    "main",  # CLI entry point
 ]
+
+# Import CLI main function when available
+import contextlib
+
+with contextlib.suppress(ImportError):
+    from pybastion.cli.main import main

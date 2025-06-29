@@ -2,7 +2,7 @@
 
 ⚠️ **DEVELOPMENT VERSION - NOT PRODUCTION READY** ⚠️
 
-A comprehensive Python application for analyzing network device configurations to identify security vulnerabilities, compliance violations, and best practice deviations.
+A comprehensive Python application for analyzing network security device configurations to identify security vulnerabilities, compliance violations, and best practice deviations.
 
 ## 🚧 Current Status
 
