@@ -7,7 +7,8 @@ using Rich for enhanced terminal experience.
 
 import logging
 import sys
-from typing import Any
+import types
+from typing import Any, Self
 
 from rich.console import Console
 from rich.logging import RichHandler
@@ -71,32 +72,32 @@ def setup_logging(verbose: int = 0, quiet: bool = False) -> None:  # noqa: FBT00
     logger.setLevel(log_level)
 
 
-def print_info(message: str, **kwargs: Any) -> None:
+def print_info(message: str, **kwargs: dict[str, Any]) -> None:
     """Print an info message."""
-    console.print(f"ℹ️ {message}", style="info", **kwargs)
+    console.print(f"ℹ️ {message}", style="info", **kwargs)  # noqa: RUF001
 
 
-def print_warning(message: str, **kwargs: Any) -> None:
+def print_warning(message: str, **kwargs: dict[str, Any]) -> None:
     """Print a warning message."""
     console.print(f"⚠️ {message}", style="warning", **kwargs)
 
 
-def print_error(message: str, **kwargs: Any) -> None:
+def print_error(message: str, **kwargs: dict[str, Any]) -> None:
     """Print an error message."""
     error_console.print(f"❌ {message}", style="error", **kwargs)
 
 
-def print_success(message: str, **kwargs: Any) -> None:
+def print_success(message: str, **kwargs: dict[str, Any]) -> None:
     """Print a success message."""
     success_console.print(f"✅ {message}", style="success", **kwargs)
 
 
-def print_debug(message: str, **kwargs: Any) -> None:
+def print_debug(message: str, **kwargs: dict[str, Any]) -> None:
     """Print a debug message."""
     console.print(f"🐛 {message}", style="debug", **kwargs)
 
 
-def confirm_action(message: str, default: bool = False) -> bool:
+def confirm_action(message: str, *, default: bool = False) -> bool:
     """
     Ask for user confirmation.
 
@@ -126,13 +127,13 @@ def handle_keyboard_interrupt() -> None:
 class ProgressReporter:
     """Context manager for reporting progress of long-running operations."""
 
-    def __init__(self, description: str, console: Console | None = None):
+    def __init__(self, description: str, console: Console | None = None) -> None:
         self.description = description
         self.console = console or globals()["console"]
         self.progress = None
         self.task = None
 
-    def __enter__(self):
+    def __enter__(self) -> Self:
         from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 
         self.progress = Progress(
@@ -145,7 +146,12 @@ class ProgressReporter:
         self.task = self.progress.add_task(self.description, total=None)
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: types.TracebackType | None,
+    ) -> None:
         if self.progress:
             self.progress.stop()
 

@@ -46,9 +46,9 @@ console = Console()
 @click.pass_context
 def main(
     ctx: click.Context,
-    version: bool,
+    version: bool,  # noqa: FBT001
     verbose: int,
-    quiet: bool,
+    quiet: bool,  # noqa: FBT001
     output_format: str,
 ) -> None:
     """
