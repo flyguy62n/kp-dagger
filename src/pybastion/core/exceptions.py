@@ -14,8 +14,6 @@ class PyBastionError(Exception):
 class ConfigurationError(PyBastionError):
     """Configuration-related errors."""
 
-    pass
-
 
 class ParsingError(PyBastionError):
     """Device configuration parsing errors."""
@@ -35,8 +33,6 @@ class ParsingError(PyBastionError):
 
 class DatabaseError(PyBastionError):
     """Database operation errors."""
-
-    pass
 
 
 class ValidationError(PyBastionError):
@@ -58,20 +54,18 @@ class ValidationError(PyBastionError):
 class AnalysisError(PyBastionError):
     """Security analysis errors."""
 
-    pass
-
 
 class ReportError(PyBastionError):
     """Report generation errors."""
-
-    pass
 
 
 class UnsupportedDeviceError(PyBastionError):
     """Unsupported device type errors."""
 
     def __init__(
-        self, device_type: str, supported_types: list[str] | None = None
+        self,
+        device_type: str,
+        supported_types: list[str] | None = None,
     ) -> None:
         """Initialize the unsupported device error."""
         message = f"Unsupported device type: {device_type}"

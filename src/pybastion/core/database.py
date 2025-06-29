@@ -5,9 +5,10 @@ from pathlib import Path
 from typing import Any
 
 import duckdb
+from sqlmodel import SQLModel, create_engine
+
 from pybastion.core.exceptions import DatabaseError
 from pybastion.models.base.enums import DeviceType
-from sqlmodel import SQLModel, create_engine
 
 
 class DatabaseManager:
