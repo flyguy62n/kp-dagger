@@ -1,8 +1,30 @@
 # PyBastion
 
+⚠️ **DEVELOPMENT VERSION - NOT PRODUCTION READY** ⚠️
+
 A comprehensive Python application for analyzing network device configurations to identify security vulnerabilities, compliance violations, and best practice deviations.
 
-## Features
+## 🚧 Current Status
+
+**This package is in active development and is not ready for production use.**
+
+- **Version**: 0.0.1 (Pre-Alpha)
+- **Purpose**: PyPI name reservation and early development preview
+- **Stability**: Features may change significantly between versions
+- **Testing**: Limited functionality currently available
+
+### What's Working
+- Basic project structure and framework
+- Core architecture design
+- Development environment setup
+
+### What's Coming
+- Configuration file parsing for multiple vendors
+- Security analysis and compliance checking
+- Comprehensive reporting capabilities
+- Full CLI interface
+
+## Planned Features
 
 - **Multi-vendor Support**: Parse and analyze configurations from:
   - Cisco IOS
@@ -23,18 +45,24 @@ A comprehensive Python application for analyzing network device configurations t
 
 ## Installation
 
+⚠️ **Warning**: This is a development version. Installing from PyPI will give you a minimal placeholder package.
+
 ### Prerequisites
 
 - Python 3.12 or higher
-- UV package manager
+- UV package manager (recommended for development)
 
-### Install from PyPI
+### Install from PyPI (Development Version)
 
 ```bash
 pip install pybastion
 ```
 
-### Development Installation
+**Note**: The PyPI version currently provides only basic structure and will display warnings when imported. Most functionality is not yet implemented.
+
+### Development Installation (Recommended)
+
+To work with the actual development code:
 
 ```bash
 git clone https://github.com/flyguy62n/pybastion.git
@@ -42,9 +70,11 @@ cd pybastion
 uv sync
 ```
 
-## Quick Start
+## Development Status & Roadmap
 
-### Scan Configuration Files
+### Planned Usage (Coming Soon)
+
+Once development is complete, PyBastion will support:
 
 ```bash
 # Scan a single configuration file
@@ -74,6 +104,24 @@ pybastion report generate --database scan.db --format excel --output report.xlsx
 pybastion validate config router.cfg --device-type cisco-ios
 ```
 
+## Contributing
+
+We welcome contributions! Since this is in early development:
+
+1. Check the [Issues](https://github.com/flyguy62n/pybastion/issues) for current tasks
+2. Fork the repository
+3. Create a feature branch
+4. Submit a pull request
+
+### Development Setup
+
+```bash
+git clone https://github.com/flyguy62n/pybastion.git
+cd pybastion
+uv sync --group dev
+uv run pytest
+```
+
 ## Architecture
 
 The application follows a modular, extensible architecture:
@@ -90,6 +138,25 @@ src/pybastion/
 └── utils/                  # Utility functions
 ```
 
+## Development Status
+
+### Completed
+- ✅ Project structure and architecture design
+- ✅ Core framework setup
+- ✅ Development environment configuration
+- ✅ Base model classes and interfaces
+
+### In Progress
+- 🚧 Configuration file parsers
+- 🚧 Security analysis engines
+- 🚧 CLI interface implementation
+
+### Planned
+- 📅 API client integrations (CVE Details, End of Life)
+- 📅 Report generation system
+- 📅 Comprehensive test suite
+- 📅 Documentation and examples
+
 ## Development
 
 ### Setup Development Environment
@@ -100,7 +167,7 @@ git clone https://github.com/flyguy62n/pybastion.git
 cd pybastion
 
 # Install dependencies
-uv sync
+uv sync --group dev
 
 # Run tests
 uv run pytest
@@ -110,6 +177,28 @@ uv run ruff check
 uv run ruff format
 ```
 
+### Publishing to PyPI
+
+This package is currently published as a development placeholder to reserve the name. The process:
+
+```bash
+# Build the package
+uv build
+
+# Test on TestPyPI first
+uv publish --repository testpypi
+
+# Publish to PyPI
+uv publish
+```
+
 ## License
 
 This project is licensed under the MIT License.
+
+## Contact
+
+- **Author**: Randy Bartels
+- **Email**: rjbartels@outlook.com
+- **Repository**: https://github.com/flyguy62n/pybastion
+- **Issues**: https://github.com/flyguy62n/pybastion/issues

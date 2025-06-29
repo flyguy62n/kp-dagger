@@ -4,6 +4,9 @@ PyBastion.
 A comprehensive tool for analyzing network device configurations for security
 vulnerabilities, compliance issues, and best practices violations.
 
+⚠️  WARNING: This is a development version and is not ready for production use.
+    Features may change significantly between versions.
+
 Supports:
 - Cisco IOS/ASA configurations
 - FortiGate FortiOS configurations
@@ -18,9 +21,20 @@ Features:
 - Multi-format reporting (JSON, HTML, Excel)
 """
 
-__version__ = "0.1.0"
+import warnings
+
+__version__ = "0.0.1-dev"
 __author__ = "Randy Bartels"
 __email__ = "rjbartels@outlook.com"
+
+# Issue development warning when package is imported
+warnings.warn(
+    "PyBastion is in active development and not ready for production use. "
+    "Features may change significantly between versions. "
+    "Visit https://github.com/flyguy62n/pybastion for current status.",
+    UserWarning,
+    stacklevel=2,
+)
 
 __all__ = [
     "Database",
