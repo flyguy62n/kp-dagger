@@ -1,5 +1,5 @@
 def main():
-    print("Hello from network-security-scanner!")
+    print("Hello from PyBastion!")
 
 
 if __name__ == "__main__":

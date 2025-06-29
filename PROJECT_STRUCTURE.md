@@ -1,10 +1,10 @@
-# Network Security Scanner - Project Structure
+# PyBastion - Project Structure
 
-This document outlines the complete project structure for the Network Security Scanner application, a Python-based tool for analyzing network device configurations for security vulnerabilities, compliance issues, and best practices violations.
+This document outlines the complete project structure for PyBastion, a Python-based tool for analyzing network device configurations for security vulnerabilities, compliance issues, and best practices violations.
 
 ## Overview
 
-The Network Security Scanner is designed with a modular, extensible architecture that:
+PyBastion is designed with a modular, extensible architecture that:
 - Parses network device configurations from multiple vendors (Cisco IOS/ASA, FortiGate, PAN-OS)
 - Normalizes device-specific data into a common database schema using DuckDB
 - Performs SQL-based security analysis and compliance checking
@@ -13,9 +13,9 @@ The Network Security Scanner is designed with a modular, extensible architecture
 ## Project Structure
 
 ```
-network_security_scanner/
+pybastion/
 ├── .github/                          # GitHub configuration and workflows
-├── src/network_security_scanner/     # Main application source code
+├── src/pybastion/     # Main application source code
 ├── tests/                            # Test suite
 ├── sql/                              # Database schema and queries
 ├── docs/                             # Documentation
@@ -40,7 +40,7 @@ GitHub-specific configuration and automation.
 - **`workflows/`**: Automated testing, linting, and release processes
 - **`copilot-instructions.md`**: Coding standards and architectural guidelines
 
-### `src/network_security_scanner/`
+### `src/pybastion/`
 Main application source code organized by functional areas.
 
 #### `cli/` - Command Line Interface

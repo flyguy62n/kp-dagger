@@ -1,6 +1,6 @@
 """Test base parser functionality."""
 
-from network_security_scanner.parsers.base.parser import BaseParser
+from pybastion.parsers.base.parser import BaseParser
 
 
 class TestParser(BaseParser):

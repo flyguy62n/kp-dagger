@@ -3,27 +3,32 @@
 from typing import Any
 
 import httpx
-
-from network_security_scanner.core.exceptions import APIError
+from pybastion.core.exceptions import APIError
 
 
 class CVEDetailsClient:
     """Client for CVE Details API."""
 
     def __init__(self, api_key: str | None = None) -> None:
-        """Initialize CVE Details client.
+        """
+        Initialize CVE Details client.
 
         Args:
             api_key: API key for CVE Details (if required)
+
         """
         self.api_key = api_key
         self.base_url = "https://www.cvedetails.com/api"
         self.client = httpx.Client()
 
     async def get_vulnerabilities(
-        self, vendor: str, product: str, version: str
+        self,
+        vendor: str,
+        product: str,
+        version: str,
     ) -> list[dict[str, Any]]:
-        """Get vulnerabilities for a specific product version.
+        """
+        Get vulnerabilities for a specific product version.
 
         Args:
             vendor: Vendor name
@@ -35,6 +40,7 @@ class CVEDetailsClient:
 
         Raises:
             APIError: If API request fails
+
         """
         # TODO: Implement CVE Details API integration
         try:

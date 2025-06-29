@@ -5,9 +5,12 @@ from pathlib import Path
 
 
 def setup_logging(
-    level: str = "INFO", log_file: Path | None = None, verbose: bool = False
+    level: str = "INFO",
+    log_file: Path | None = None,
+    verbose: bool = False,
 ) -> logging.Logger:
-    """Set up logging configuration.
+    """
+    Set up logging configuration.
 
     Args:
         level: Logging level
@@ -16,6 +19,7 @@ def setup_logging(
 
     Returns:
         Configured logger
+
     """
     # Configure logging format
     log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -35,7 +39,7 @@ def setup_logging(
         handlers.append(file_handler)
 
     # Configure logger
-    logger = logging.getLogger("network_security_scanner")
+    logger = logging.getLogger("pybastion")
     logger.setLevel(getattr(logging, level.upper()))
 
     for handler in handlers:

@@ -19,8 +19,8 @@ Features:
 """
 
 __version__ = "0.1.0"
-__author__ = "Randy Bartels"
-__email__ = "rjbartels@outlook.com"
+__author__ = "Randy"
+__email__ = "randy@example.com"
 
 __all__ = [
     "Database",

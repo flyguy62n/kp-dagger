@@ -1,9 +1,8 @@
 """Device metadata and information models."""
 
+from pybastion.models.base.enums import DeviceType
+from pybastion.models.base.mixins import TimestampMixin
 from sqlmodel import Field, SQLModel
-
-from network_security_scanner.models.base.enums import DeviceType
-from network_security_scanner.models.base.mixins import TimestampMixin
 
 
 class Device(SQLModel, TimestampMixin, table=True):

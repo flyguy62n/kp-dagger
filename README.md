@@ -1,4 +1,4 @@
-# Network Security Scanner
+# PyBastion
 
 A comprehensive Python application for analyzing network device configurations to identify security vulnerabilities, compliance violations, and best practice deviations.
 
@@ -31,14 +31,14 @@ A comprehensive Python application for analyzing network device configurations t
 ### Install from PyPI
 
 ```bash
-pip install network-security-scanner
+pip install pybastion
 ```
 
 ### Development Installation
 
 ```bash
-git clone https://github.com/flyguy62n/network-security-scanner.git
-cd network-security-scanner
+git clone https://github.com/flyguy62n/pybastion.git
+cd pybastion
 uv sync
 ```
 
@@ -48,30 +48,30 @@ uv sync
 
 ```bash
 # Scan a single configuration file
-network-scanner scan files router.cfg
+pybastion scan files router.cfg
 
 # Scan multiple files with device type specification
-network-scanner scan files --device-type cisco-ios *.cfg
+pybastion scan files --device-type cisco-ios *.cfg
 
 # Scan directory recursively
-network-scanner scan files --recursive /path/to/configs/
+pybastion scan files --recursive /path/to/configs/
 
 # Generate HTML report
-network-scanner scan files --format html --output report.html *.cfg
+pybastion scan files --format html --output report.html *.cfg
 ```
 
 ### Generate Reports
 
 ```bash
 # Generate report from database
-network-scanner report generate --database scan.db --format excel --output report.xlsx
+pybastion report generate --database scan.db --format excel --output report.xlsx
 ```
 
 ### Validate Configurations
 
 ```bash
 # Validate configuration syntax
-network-scanner validate config router.cfg --device-type cisco-ios
+pybastion validate config router.cfg --device-type cisco-ios
 ```
 
 ## Architecture
@@ -79,7 +79,7 @@ network-scanner validate config router.cfg --device-type cisco-ios
 The application follows a modular, extensible architecture:
 
 ```
-src/network_security_scanner/
+src/pybastion/
 ├── cli/                    # Command-line interface
 ├── core/                   # Core scanning logic
 ├── models/                 # Data models and schemas
@@ -96,8 +96,8 @@ src/network_security_scanner/
 
 ```bash
 # Clone repository
-git clone https://github.com/flyguy62n/network-security-scanner.git
-cd network-security-scanner
+git clone https://github.com/flyguy62n/pybastion.git
+cd pybastion
 
 # Install dependencies
 uv sync

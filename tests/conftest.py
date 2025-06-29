@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from network_security_scanner.core.database import DatabaseManager
-from network_security_scanner.core.scanner import NetworkScanner
+from pybastion.core.database import DatabaseManager
+from pybastion.core.scanner import PyBastionScanner
 
 
 @pytest.fixture
@@ -35,9 +35,9 @@ def memory_database() -> DatabaseManager:
 
 
 @pytest.fixture
-def test_scanner() -> NetworkScanner:
+def test_scanner() -> PyBastionScanner:
     """Create a test scanner instance."""
-    return NetworkScanner(database_path=":memory:")
+    return PyBastionScanner(database_path=":memory:")
 
 
 @pytest.fixture

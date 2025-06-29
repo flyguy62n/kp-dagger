@@ -2,20 +2,22 @@
 
 from typing import Any
 
-from network_security_scanner.parsers.base.parser import BaseParser
+from pybastion.parsers.base.parser import BaseParser
 
 
 class CiscoASAParser(BaseParser):
     """Parser for Cisco ASA device configurations."""
 
     def parse(self, config_text: str) -> dict[str, Any]:
-        """Parse Cisco ASA configuration text.
+        """
+        Parse Cisco ASA configuration text.
 
         Args:
             config_text: Raw configuration text
 
         Returns:
             Structured configuration data
+
         """
         # TODO: Implement Cisco ASA parsing logic
         return {
@@ -24,13 +26,15 @@ class CiscoASAParser(BaseParser):
         }
 
     def can_parse(self, config_text: str) -> bool:
-        """Check if this parser can handle the given configuration.
+        """
+        Check if this parser can handle the given configuration.
 
         Args:
             config_text: Configuration text to check
 
         Returns:
             True if this parser can handle the config, False otherwise
+
         """
         # TODO: Implement device detection logic
         config_lower = config_text.lower()

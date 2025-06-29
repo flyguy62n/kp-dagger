@@ -3,8 +3,7 @@
 from typing import Any
 
 import httpx
-
-from network_security_scanner.core.exceptions import APIError
+from pybastion.core.exceptions import APIError
 
 
 class EndOfLifeClient:
@@ -16,7 +15,8 @@ class EndOfLifeClient:
         self.client = httpx.Client()
 
     async def get_product_info(self, product: str) -> dict[str, Any]:
-        """Get product lifecycle information.
+        """
+        Get product lifecycle information.
 
         Args:
             product: Product name
@@ -26,6 +26,7 @@ class EndOfLifeClient:
 
         Raises:
             APIError: If API request fails
+
         """
         # TODO: Implement End of Life API integration
         try:
@@ -35,7 +36,8 @@ class EndOfLifeClient:
             raise APIError(f"End of Life API error: {e}", "endoflife") from e
 
     async def check_version_support(self, product: str, version: str) -> dict[str, Any]:
-        """Check if a product version is still supported.
+        """
+        Check if a product version is still supported.
 
         Args:
             product: Product name
@@ -43,6 +45,7 @@ class EndOfLifeClient:
 
         Returns:
             Version support information
+
         """
         # TODO: Implement version support checking
         return {"supported": False, "eol_date": None}

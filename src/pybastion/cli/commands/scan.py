@@ -3,12 +3,11 @@
 from pathlib import Path
 
 import click
+from pybastion.cli.options import database_options, output_options
+from pybastion.core.scanner import NetworkScanner
+from pybastion.models.base.enums import DeviceType
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
-
-from network_security_scanner.cli.options import database_options, output_options
-from network_security_scanner.core.scanner import NetworkScanner
-from network_security_scanner.models.base.enums import DeviceType
 
 console = Console()
 
@@ -16,7 +15,6 @@ console = Console()
 @click.group(name="scan")
 def scan_group() -> None:
     """Scan network device configurations for security issues."""
-    pass
 
 
 @scan_group.command()
@@ -45,7 +43,8 @@ def files(
     output: Path | None,
     output_format: str,
 ) -> None:
-    """Scan configuration files for security issues.
+    """
+    Scan configuration files for security issues.
 
     Analyzes one or more network device configuration files for:
     - Security vulnerabilities
@@ -61,7 +60,8 @@ def files(
 
     try:
         scanner = NetworkScanner(
-            database_path=":memory:" if memory else database, verbose=verbose
+            database_path=":memory:" if memory else database,
+            verbose=verbose,
         )
 
         # Collect all files to scan
@@ -80,7 +80,7 @@ def files(
             return
 
         console.print(
-            f"[blue]Scanning {len(files_to_scan)} configuration files...[/blue]"
+            f"[blue]Scanning {len(files_to_scan)} configuration files...[/blue]",
         )
 
         with Progress(

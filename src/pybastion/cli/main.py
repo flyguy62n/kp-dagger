@@ -4,14 +4,13 @@ import sys
 from pathlib import Path
 
 import click
-from rich.console import Console
-
 from pybastion.cli.commands.config import config_group
 from pybastion.cli.commands.report import report_group
 from pybastion.cli.commands.scan import scan_group
 from pybastion.cli.commands.validate import validate_group
 from pybastion.cli.options import common_options
 from pybastion.core.exceptions import NetworkScannerError
+from rich.console import Console
 
 console = Console()
 

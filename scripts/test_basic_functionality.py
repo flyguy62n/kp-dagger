@@ -8,14 +8,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 try:
-    from network_security_scanner.core.exceptions import NetworkScannerError
-    from network_security_scanner.core.scanner import NetworkScanner
-    from network_security_scanner.models.base.enums import DeviceType
+    from pybastion.core.exceptions import NetworkScannerError
+    from pybastion.core.scanner import PyBastionScanner
+    from pybastion.models.base.enums import DeviceType
 
     print("✓ All imports successful")
 
     # Test basic scanner initialization
-    scanner = NetworkScanner(database_path=":memory:")
+    scanner = PyBastionScanner(database_path=":memory:")
     print("✓ Scanner initialized successfully")
 
     # Test device type detection
@@ -38,7 +38,7 @@ try:
             "findings": [],
             "total_findings": 0,
             "severity_counts": {"low": 0, "medium": 0, "high": 0, "critical": 0},
-        }
+        },
     ]
 
     json_report = scanner.generate_report(test_results, "json")
@@ -48,7 +48,7 @@ try:
     print("✓ HTML report generation successful")
 
     print("\n🎉 All basic functionality tests passed!")
-    print("The network security scanner is ready for development.")
+    print("PyBastion is ready for development.")
 
 except ImportError as e:
     print(f"❌ Import error: {e}")
