@@ -49,7 +49,7 @@ class Severity(str, Enum):
 class ComplianceStatus(str, Enum):
     """Compliance check status."""
 
-    PASS = "pass"
+    PASS = "pass"  # noqa: S105
     FAIL = "fail"
     NOT_APPLICABLE = "not_applicable"
     MANUAL_REVIEW = "manual_review"
