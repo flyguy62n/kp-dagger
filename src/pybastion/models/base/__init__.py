@@ -1,7 +1,6 @@
 """Base model components."""
 
 from pybastion.models.base.base import PyBastionBaseModel
-from pybastion.models.base.customer import Customer
 from pybastion.models.base.enums import (
     AddressType,
     ComplianceStatus,
@@ -12,11 +11,11 @@ from pybastion.models.base.enums import (
     RuleAction,
     Severity,
 )
+from pybastion.models.base.tenant import Tenant
 
 __all__ = [
     "AddressType",
     "ComplianceStatus",
-    "Customer",
     "DeviceType",
     "IPVersion",
     "Protocol",
@@ -24,4 +23,5 @@ __all__ = [
     "RoutingProtocolType",
     "RuleAction",
     "Severity",
+    "Tenant",
 ]

@@ -1,165 +1,147 @@
 """
-Foundational IP Address model for PyBastion.
+Normalized IP Address model for PyBastion.
 
-This module defines the IPAddress model that serves as the foundation
-for all IP address representations throughout the application.
+This model represents IP addresses in a normalized format that can be used
+across different device types and configurations. It supports both IPv4 and IPv6
+addresses with original and normalized representations.
 """
 
-import ipaddress
+from uuid import UUID
 
-from pydantic import ValidationInfo, field_validator
-from sqlmodel import Field, Index, UniqueConstraint
+from sqlmodel import Field
 
 from pybastion.models.base.base import PyBastionBaseModel
-from pybastion.models.base.enums import AddressType, IPVersion
-
-# Constants for IP prefix length validation
-IPV4_MAX_PREFIX_LENGTH = 32
-IPV6_MAX_PREFIX_LENGTH = 128
+from pybastion.models.base.enums import IPVersion
 
 
 class IPAddress(PyBastionBaseModel, table=True):
     """
-    Foundational IP Address model for PyBastion.
+    Normalized IP address model with encryption support.
 
-    Stores both original vendor representation and normalized form
-    for traceability and consistency across different device types.
+    This model stores IP addresses with both original and normalized
+    representations. The original representation preserves the exact
+    format from the device configuration, while the normalized format
+    provides consistent representation for analysis.
     """
 
     __tablename__ = "ip_addresses"
 
-    # Core IP address information (normalized)
-    ip_address: str = Field(
-        description="The IP address in canonical form (e.g., '192.168.1.1')",
+    # Basic IP address information
+    version: IPVersion = Field(description="IP version (IPv4 or IPv6)")
+
+    # Storage fields for encrypted data (not exposed in API)
+    original_address_encrypted: bytes | None = Field(
+        default=None,
+        exclude=True,
+        description="Encrypted original IP address representation",
+    )
+    normalized_address_encrypted: bytes | None = Field(
+        default=None,
+        exclude=True,
+        description="Encrypted normalized IP address representation",
     )
 
+    # Non-encrypted metadata
     prefix_length: int | None = Field(
         default=None,
-        description="CIDR prefix length (e.g., 24 for /24), None for host addresses",
-    )
-
-    netmask: str | None = Field(
-        default=None,
-        description="Dotted decimal netmask (e.g., '255.255.255.0'), None for host addresses",
-    )
-
-    ip_version: IPVersion = Field(
-        description="IP version (IPv4 or IPv6)",
-    )
-
-    address_type: AddressType = Field(
-        description="Type of address representation (individual, network, range, etc.)",
-    )
-
-    # Original representation for traceability
-    original_format: str = Field(
-        description="Exact format as it appeared in configuration (e.g., '192.168.1.1 255.255.255.0', 'host 192.168.1.100', 'any')",
-    )
-
-    # Computed/derived fields for efficiency
-    network_address: str | None = Field(
-        default=None,
-        description="Network portion (e.g., '192.168.1.0'), computed from ip_address and prefix_length",
-    )
-
-    broadcast_address: str | None = Field(
-        default=None,
-        description="Broadcast address (IPv4 only), None for IPv6 or host addresses",
-    )
-
-    host_count: int | None = Field(
-        default=None,
-        description="Number of host addresses in network, None for individual addresses",
-    )
-
-    # Context and metadata
-    description: str | None = Field(
-        default=None,
-        description="Human-readable description or comment",
+        description="Network prefix length (CIDR notation)",
+        ge=0,
+        le=128,
     )
 
     is_private: bool = Field(
         default=False,
-        description="True if address is in RFC 1918 private address space",
+        description="Whether this is a private/internal IP address",
+    )
+
+    is_loopback: bool = Field(
+        default=False,
+        description="Whether this is a loopback address",
     )
 
     is_multicast: bool = Field(
         default=False,
-        description="True if address is multicast",
+        description="Whether this is a multicast address",
     )
 
-    is_reserved: bool = Field(
-        default=False,
-        description="True if address is reserved/special use",
+    # Reference to source configuration
+    device_id: UUID | None = Field(
+        default=None,
+        foreign_key="devices.id",
+        description="Device this IP address was found on",
     )
 
-    # Database constraints and indexes
-    __table_args__ = (
-        UniqueConstraint(
-            "customer_id",
-            "ip_address",
-            "prefix_length",
-            "address_type",
-            name="unique_ip_per_customer",
-        ),
-        Index("idx_customer_ip", "customer_id", "ip_address"),
-        Index("idx_customer_network", "customer_id", "network_address"),
-        Index("idx_ip_version", "ip_version"),
-        Index("idx_address_type", "address_type"),
+    config_line_number: int | None = Field(
+        default=None,
+        description="Line number in configuration file where this IP was found",
     )
 
-    @field_validator("ip_address")
-    @classmethod
-    def validate_ip_address(cls, value: str) -> str:
-        """Validate IP address format."""
-        try:
-            ipaddress.ip_address(value)
-        except ValueError as exc:
-            msg = f"Invalid IP address: {value}"
-            raise ValueError(msg) from exc
-        return value
+    context: str | None = Field(
+        default=None,
+        description="Configuration context (interface, ACL, route, etc.)",
+    )
 
-    @field_validator("netmask")
-    @classmethod
-    def validate_netmask(cls, value: str | None) -> str | None:
-        """Validate netmask format."""
+    # Encrypted field properties
+    @property
+    def original_address(self) -> str | None:
+        """Get the original address (decrypted)."""
+        if not hasattr(self, "_original_address_cached"):
+            if self.original_address_encrypted is None:
+                return None
+            if self._encryption_service is None:
+                msg = "Encryption service not available for decryption"
+                raise RuntimeError(msg)
+            try:
+                self._original_address_cached = self._encryption_service.decrypt(
+                    self.original_address_encrypted,
+                )
+            except Exception:  # noqa: BLE001
+                return None
+        return self._original_address_cached
+
+    @original_address.setter
+    def original_address(self, value: str | None) -> None:
+        """Set the original address (encrypted)."""
         if value is None:
-            return value
-        try:
-            # Validate netmask by trying to parse as IP address
-            ipaddress.ip_address(value)
-        except ValueError as exc:
-            msg = f"Invalid netmask: {value}"
-            raise ValueError(msg) from exc
-        return value
+            self.original_address_encrypted = None
+            self._original_address_cached = None
+            return
 
-    @field_validator("prefix_length")
-    @classmethod
-    def validate_prefix_length(
-        cls, value: int | None, info: ValidationInfo
-    ) -> int | None:
-        """Validate prefix length based on IP version."""
+        if self._encryption_service is None:
+            msg = "Encryption service not available for encryption"
+            raise RuntimeError(msg)
+
+        self.original_address_encrypted = self._encryption_service.encrypt(value)
+        self._original_address_cached = value
+
+    @property
+    def normalized_address(self) -> str | None:
+        """Get the normalized address (decrypted)."""
+        if not hasattr(self, "_normalized_address_cached"):
+            if self.normalized_address_encrypted is None:
+                return None
+            if self._encryption_service is None:
+                msg = "Encryption service not available for decryption"
+                raise RuntimeError(msg)
+            try:
+                self._normalized_address_cached = self._encryption_service.decrypt(
+                    self.normalized_address_encrypted,
+                )
+            except Exception:  # noqa: BLE001
+                return None
+        return self._normalized_address_cached
+
+    @normalized_address.setter
+    def normalized_address(self, value: str | None) -> None:
+        """Set the normalized address (encrypted)."""
         if value is None:
-            return value
+            self.normalized_address_encrypted = None
+            self._normalized_address_cached = None
+            return
 
-        # Get IP version from the model data
-        ip_version = info.data.get("ip_version") if info.data else None
+        if self._encryption_service is None:
+            msg = "Encryption service not available for encryption"
+            raise RuntimeError(msg)
 
-        if ip_version == IPVersion.IPV4 and not (0 <= value <= IPV4_MAX_PREFIX_LENGTH):
-            msg = f"IPv4 prefix length must be between 0 and {IPV4_MAX_PREFIX_LENGTH}, got {value}"
-            raise ValueError(msg)
-        if ip_version == IPVersion.IPV6 and not (0 <= value <= IPV6_MAX_PREFIX_LENGTH):
-            msg = f"IPv6 prefix length must be between 0 and {IPV6_MAX_PREFIX_LENGTH}, got {value}"
-            raise ValueError(msg)
-
-        return value
-
-    def __str__(self) -> str:
-        """String representation of the IP address."""
-        if self.prefix_length is not None:
-            return f"{self.ip_address}/{self.prefix_length}"
-        return self.ip_address
-
-    def __repr__(self) -> str:
-        """Detailed representation of the IP address."""
-        return f"IPAddress(ip_address='{self.ip_address}', type='{self.address_type}', original='{self.original_format}')"
+        self.normalized_address_encrypted = self._encryption_service.encrypt(value)
+        self._normalized_address_cached = value

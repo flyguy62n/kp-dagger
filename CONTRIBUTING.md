@@ -71,6 +71,8 @@ For new features or bugs:
 
 ## Development Guidelines
 
+> 📖 **For detailed development information**, see our comprehensive [Development Guide](docs/development/contributing.md) which covers advanced topics like adding parsers, security rules, and architectural details.
+
 ### Code Style
 
 We use [Ruff](https://docs.astral.sh/ruff/) for linting and formatting:
