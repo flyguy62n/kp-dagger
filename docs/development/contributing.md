@@ -16,6 +16,27 @@ If you're new to contributing, start with the [main CONTRIBUTING.md](../../CONTR
 
 This guide provides deeper technical details for ongoing development work.
 
+## Recommended Workflow for Single-Developer Activity
+
+This is mostly for my own reference unless/until others join the project:
+
+```Powershell
+# For any new feature work:
+git checkout main
+git pull origin main
+git checkout -b feature/short-name
+
+# Work on feature (commit frequently)
+git add .
+git commit -m "feat: implement X"
+
+# When complete (within 1-3 days):
+git checkout main
+git merge feature/short-name
+git branch -d feature/short-name
+git push origin main
+```
+
 ## Advanced Development Setup
 
 ### Prerequisites
