@@ -81,3 +81,13 @@ class AddressType(str, Enum):
     RANGE = "range"  # Address range (e.g., "192.168.1.10-192.168.1.20")
     WILDCARD = "wildcard"  # Cisco wildcard mask format (e.g., "192.168.1.0 0.0.0.255")
     ANY = "any"  # Special "any" address keyword
+
+
+class ReportFormat(str, Enum):
+    """Report output formats."""
+
+    HTML = "html"
+    JSON = "json"
+    CSV = "csv"
+    PDF = "pdf"
+    EXCEL = "excel"
