@@ -27,7 +27,7 @@ __email__ = "rjbartels@outlook.com"
 __url__ = "https://github.com/flyguy62n/pybastion"
 
 
-__all__ = [
+__all__: list[str] = [
     "Database",
     "ParserFactory",
     "Scanner",

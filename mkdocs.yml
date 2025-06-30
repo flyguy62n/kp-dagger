@@ -1,0 +1,132 @@
+site_name: PyBastion Documentation
+site_description: Network device configuration security analysis tool
+site_url: https://pybastion.readthedocs.io
+repo_url: https://github.com/flyguy62n/pybastion
+repo_name: flyguy62n/pybastion
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - toc.integrate
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: blue grey
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - getting-started/installation.md
+    - getting-started/quick-start.md
+    - getting-started/configuration.md
+  - User Guide:
+    - user-guide/cli-commands.md
+    - user-guide/configuration-analysis.md
+    - user-guide/security-reports.md
+    - user-guide/supported-devices.md
+  - Architecture:
+    - architecture/overview.md
+    - architecture/data-models.md
+    - architecture/encryption.md
+    - architecture/multi-tenancy.md
+    - architecture/parsers.md
+  - API Reference:
+    - Core:
+      - api-reference/core/encryption.md
+      - api-reference/core/database.md
+      - api-reference/core/scanner.md
+    - Models:
+      - api-reference/models/base.md
+      - api-reference/models/normalized.md
+      - api-reference/models/device-specific.md
+    - Parsers:
+      - api-reference/parsers/base.md
+      - api-reference/parsers/cisco-ios.md
+      - api-reference/parsers/cisco-asa.md
+      - api-reference/parsers/fortigate.md
+      - api-reference/parsers/paloalto.md
+    - CLI:
+      - api-reference/cli/commands.md
+      - api-reference/cli/utils.md
+  - Security:
+    - security/encryption-design.md
+    - security/threat-model.md
+    - security/compliance.md
+    - security/best-practices.md
+  - Development:
+    - Development Guide: development/contributing.md
+    - development/development-setup.md
+    - development/coding-standards.md
+    - development/testing.md
+    - development/adding-parsers.md
+    - development/release-process.md
+  - Examples:
+    - examples/basic-usage.md
+    - examples/custom-rules.md
+    - examples/encryption-examples.md
+    - examples/api-examples.md
+
+plugins:
+  - search
+  - git-revision-date-localized:
+      type: date
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            members_order: source
+            merge_init_into_class: true
+  - mermaid2
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/flyguy62n/pybastion
+  version:
+    provider: mike

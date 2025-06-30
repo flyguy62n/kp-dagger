@@ -49,7 +49,7 @@ class Severity(str, Enum):
 class ComplianceStatus(str, Enum):
     """Compliance check status."""
 
-    PASS = "pass"
+    PASS = "pass"  # noqa: S105
     FAIL = "fail"
     NOT_APPLICABLE = "not_applicable"
     MANUAL_REVIEW = "manual_review"
@@ -64,3 +64,20 @@ class RoutingProtocolType(str, Enum):
     BGP = "bgp"
     RIP = "rip"
     IS_IS = "is-is"
+
+
+class IPVersion(str, Enum):
+    """IP version enumeration."""
+
+    IPV4 = "ipv4"
+    IPV6 = "ipv6"
+
+
+class AddressType(str, Enum):
+    """Type of IP address representation."""
+
+    INDIVIDUAL = "individual"  # Single host address (e.g., "192.168.1.1")
+    NETWORK = "network"  # Network with CIDR/netmask (e.g., "192.168.1.0/24")
+    RANGE = "range"  # Address range (e.g., "192.168.1.10-192.168.1.20")
+    WILDCARD = "wildcard"  # Cisco wildcard mask format (e.g., "192.168.1.0 0.0.0.255")
+    ANY = "any"  # Special "any" address keyword
