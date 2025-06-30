@@ -17,7 +17,8 @@ console = Console()
 
 
 def validate_file_extensions(
-    files: Sequence[Path], allowed_extensions: set[str]
+    files: Sequence[Path],
+    allowed_extensions: set[str],
 ) -> bool:
     """
     Validate that all files have allowed extensions.
@@ -57,13 +58,14 @@ def detect_device_type(config_file: Path) -> str:
         Detected device type string
 
     """
+    max_read_lines = 50  # Limit to first 50 lines for performance
     try:
         with config_file.open("r", encoding="utf-8", errors="ignore") as f:
             # Read first few lines for detection
             content = ""
             for i, line in enumerate(f):
                 content += line.lower()
-                if i > 50:  # Only read first 50 lines for performance
+                if i > max_read_lines:
                     break
 
         # Simple heuristics for device type detection
@@ -75,11 +77,13 @@ def detect_device_type(config_file: Path) -> str:
             return "fortigate"
         if "config" in content and ("paloalto" in content or "panorama" in content):
             return "paloalto"
-        # Default fallback
-        return "cisco-ios"
 
     except (OSError, UnicodeDecodeError):
         return "cisco-ios"  # Safe default
+
+    else:
+        # Default fallback
+        return "cisco-ios"
 
 
 def get_output_filename(input_file: Path, suffix: str, extension: str) -> Path:
@@ -131,10 +135,10 @@ def safe_file_write(file_path: Path, content: str, encoding: str = "utf-8") -> b
         ensure_directory(file_path.parent)
         with file_path.open("w", encoding=encoding) as f:
             f.write(content)
-        return True
     except OSError as e:
         print_error(f"Failed to write file {file_path}: {e}")
         return False
+    return True
 
 
 def get_file_size_human(file_path: Path) -> str:
@@ -148,15 +152,17 @@ def get_file_size_human(file_path: Path) -> str:
         Human-readable size string
 
     """
+    binary_divisor = 1024
     try:
         size = file_path.stat().st_size
         for unit in ["B", "KB", "MB", "GB"]:
-            if size < 1024:
+            if size < binary_divisor:
                 return f"{size:.1f} {unit}"
-            size /= 1024
-        return f"{size:.1f} TB"
+            size /= binary_divisor
     except OSError:
         return "Unknown"
+    else:
+        return f"{size:.1f} TB"
 
 
 def is_binary_file(file_path: Path, chunk_size: int = 1024) -> bool:
@@ -182,9 +188,11 @@ def is_binary_file(file_path: Path, chunk_size: int = 1024) -> bool:
         # Check if content is mostly printable ASCII
         try:
             chunk.decode("utf-8")
-            return False
         except UnicodeDecodeError:
             return True
+        else:
+            # If we can decode it, assume it's text
+            return False
 
     except OSError:
         return True  # Assume binary if we can't read it

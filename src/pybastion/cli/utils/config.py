@@ -6,7 +6,7 @@ Handles configuration file loading, validation, and management for the CLI inter
 
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, ClassVar
 
 import click
 from rich.console import Console
@@ -19,7 +19,7 @@ console = Console()
 class ConfigManager:
     """Manages CLI configuration settings."""
 
-    DEFAULT_CONFIG = {
+    DEFAULT_CONFIG: ClassVar[dict[str, Any]] = {
         "output_format": "table",
         "verbose": 0,
         "parallel_jobs": 1,
@@ -72,17 +72,19 @@ class ConfigManager:
         except OSError as e:
             print_error(f"Failed to save configuration: {e}")
 
-    def get(self, key: str, default: Any = None) -> Any:
+    def get(
+        self, key: str, default: dict[str, Any] | None = None
+    ) -> str | float | bool | dict[str, Any]:
         """Get a configuration value."""
         return self.config.get(key, default)
 
-    def set(self, key: str, value: Any) -> None:
+    def set(self, key: str, value: str | float | bool | dict[str, Any]) -> None:
         """Set a configuration value."""
         self.config[key] = value
 
     def reset(self) -> None:
         """Reset configuration to defaults."""
-        self.config = self.DEFAULT_CONFIG.copy()
+        self.config: dict[str, Any] = self.DEFAULT_CONFIG.copy()
 
     def show(self) -> None:
         """Display current configuration."""
@@ -119,7 +121,8 @@ class ConfigManager:
 )
 @click.pass_context
 def config(
-    ctx: click.Context,
+    ctx: click.Context,  # noqa: ARG001
+    *,
     show: bool,
     reset: bool,
     set_option: tuple[tuple[str, str], ...],
@@ -149,11 +152,11 @@ def config(
         return
 
     if set_option:
-        for key, value in set_option:
+        for key, _value in set_option:
             # Try to convert to appropriate type
-            if value.lower() in ("true", "false"):
-                value = value.lower() == "true"
-            elif value.isdigit():
+            if _value.lower() in ("true", "false"):
+                value = _value.lower() == "true"
+            elif _value.isdigit():
                 value = int(value)
 
             config_manager.set(key, value)
