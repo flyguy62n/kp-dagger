@@ -11,12 +11,12 @@ from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
-from pybastion.cli.utils.output import error_console, success_console
+from pybastion.cli.utils.output import RichCommand, error_console, success_console
 
 console = Console()
 
 
-@click.command()
+@click.command(cls=RichCommand)
 @click.argument(
     "input_file",
     type=click.Path(exists=True, path_type=Path),

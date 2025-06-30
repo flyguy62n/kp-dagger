@@ -10,9 +10,29 @@ import sys
 import types
 from typing import Any, Self
 
+import click
 from rich.console import Console
 from rich.logging import RichHandler
+from rich.panel import Panel
+from rich.text import Text
 from rich.theme import Theme
+
+__all__ = [
+    "ProgressReporter",
+    "RichCommand",
+    "RichGroup",
+    "confirm_action",
+    "console",
+    "error_console",
+    "handle_keyboard_interrupt",
+    "print_debug",
+    "print_error",
+    "print_info",
+    "print_success",
+    "print_warning",
+    "setup_logging",
+    "success_console",
+]
 
 # Custom theme for PyBastion CLI
 PYBASTION_THEME = Theme(
@@ -159,3 +179,148 @@ class ProgressReporter:
         """Update the progress description."""
         if self.progress and self.task is not None:
             self.progress.update(self.task, description=description)
+
+
+class RichGroup(click.Group):
+    """
+    Click Group with Rich-formatted help output.
+
+    This class overrides Click's default help formatting to use Rich
+    for enhanced terminal output with colors, styling, and better formatting.
+    """
+
+    def format_help(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:  # noqa: ARG002
+        """Format the help page using Rich instead of Click's default formatter."""
+        help_text = self.get_short_help_str()
+
+        # Create Rich text object for the help content
+        help_content = Text()
+
+        # Add command name and description
+        if self.name:
+            help_content.append(f"{self.name}\n", style="bold blue")
+
+        if help_text:
+            help_content.append(f"{help_text}\n\n", style="")
+
+        # Add usage section
+        usage = self.get_usage(ctx)
+        if usage:
+            help_content.append("Usage:\n", style="bold yellow")
+            help_content.append(f"  {usage}\n\n", style="dim")
+
+        # Add options section
+        if self.params:
+            help_content.append("Options:\n", style="bold yellow")
+            for param in self.params:
+                if isinstance(param, click.Option):
+                    opts = "/".join(param.opts)
+                    help_line = f"  {opts:20} {param.help or ''}\n"
+                    help_content.append(help_line, style="")
+            help_content.append("\n")
+
+        # Add commands section
+        if hasattr(self, "commands") and self.commands:
+            help_content.append("Commands:\n", style="bold yellow")
+            for name, cmd in self.commands.items():
+                cmd_help = cmd.get_short_help_str() or ""
+                help_line = f"  {name:20} {cmd_help}\n"
+                help_content.append(help_line, style="")
+
+        # Display the formatted help
+        panel = Panel(
+            help_content,
+            title="PyBastion CLI Help",
+            border_style="blue",
+            padding=(1, 2),
+        )
+        console.print(panel)
+
+
+class RichCommand(click.Command):
+    """
+    Click Command with Rich-formatted help output.
+
+    This class overrides Click's default help formatting to use Rich
+    for enhanced terminal output.
+    """
+
+    def format_help(self, ctx: click.Context, formatter: click.HelpFormatter) -> None:  # noqa: ARG002, C901, PLR0912
+        """Format the help page using Rich instead of Click's default formatter."""
+        help_text = self.help or "No help available."
+
+        # Create Rich text object for the help content
+        help_content = Text()
+
+        # Add command name and description
+        if self.name:
+            help_content.append(f"{self.name}\n", style="bold blue")
+
+        # Process help text to separate main description from examples
+        lines = help_text.split("\n")
+        main_help = []
+        examples = []
+        in_examples = False
+
+        for line in lines:
+            if line.strip().startswith("Examples:"):
+                in_examples = True
+            elif in_examples:
+                examples.append(line)
+            else:
+                main_help.append(line)
+
+        # Add main help text
+        main_help_text = "\n".join(main_help).strip()
+        if main_help_text:
+            help_content.append(f"{main_help_text}\n\n", style="")
+
+        # Add usage section
+        usage = self.get_usage(ctx)
+        if usage:
+            help_content.append("Usage:\n", style="bold yellow")
+            help_content.append(f"  {usage}\n\n", style="dim")
+
+        # Separate arguments and options
+        arguments = [p for p in self.params if isinstance(p, click.Argument)]
+        options = [p for p in self.params if isinstance(p, click.Option)]
+
+        # Add arguments section
+        if arguments:
+            help_content.append("Arguments:\n", style="bold yellow")
+            for param in arguments:
+                arg_name = param.name.upper()
+                arg_desc = f"{param.name} argument"
+                if param.required:
+                    arg_desc += " (required)"
+                help_line = f"  {arg_name:20} {arg_desc}\n"
+                help_content.append(help_line, style="")
+            help_content.append("\n")
+
+        # Add options section
+        if options:
+            help_content.append("Options:\n", style="bold yellow")
+            for param in options:
+                opts = "/".join(param.opts)
+                help_line = f"  {opts:20} {param.help or ''}\n"
+                help_content.append(help_line, style="")
+            help_content.append("\n")
+
+        # Add examples section if present
+        if examples:
+            help_content.append("Examples:\n", style="bold yellow")
+            for example in examples:
+                if example.strip():
+                    if example.strip().startswith("#"):
+                        help_content.append(f"  {example}\n", style="dim cyan")
+                    else:
+                        help_content.append(f"  {example}\n", style="dim")
+
+        # Display the formatted help
+        panel = Panel(
+            help_content,
+            title=f"PyBastion - {self.name}",
+            border_style="blue",
+            padding=(1, 2),
+        )
+        console.print(panel)

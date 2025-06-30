@@ -14,12 +14,12 @@ from pybastion.cli.commands.analyze import analyze
 from pybastion.cli.commands.report import report
 from pybastion.cli.commands.validate import validate
 from pybastion.cli.utils.config import config
-from pybastion.cli.utils.output import error_console, setup_logging
+from pybastion.cli.utils.output import RichGroup, error_console, setup_logging
 
 console = Console()
 
 
-@click.group(invoke_without_command=True)
+@click.group(invoke_without_command=True, cls=RichGroup)
 @click.option(
     "--version",
     is_flag=True,
