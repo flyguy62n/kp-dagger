@@ -11,7 +11,7 @@ from uuid import UUID, uuid4
 from pydantic import ConfigDict
 from sqlmodel import Field, SQLModel
 
-from pybastion.utils.get_timestamp import get_timestamp
+from pybastion.utils.get_timestamp import get_iso_timestamp
 
 
 class PyBastionBaseModel(SQLModel):
@@ -36,12 +36,12 @@ class PyBastionBaseModel(SQLModel):
     )
 
     created_at: datetime = Field(
-        default_factory=get_timestamp,
+        default_factory=get_iso_timestamp,
         description="Timestamp when the record was created",
     )
 
     updated_at: datetime = Field(
-        default_factory=get_timestamp,
+        default_factory=get_iso_timestamp,
         description="Timestamp when the record was last updated",
     )
 
