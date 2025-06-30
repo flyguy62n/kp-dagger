@@ -16,12 +16,13 @@ from pybastion.utils.get_timestamp import get_iso_timestamp
 
 class PyBastionBaseModel(SQLModel):
     """
-    Base model class for all PyBastion application models.
+    Base model class for all PyBastion application models with multi-tenant support.
 
     This class provides common fields and functionality that should be
     inherited by all other models in the application. It includes:
 
     - id: UUID primary key for unique identification
+    - customer_id: Foreign key reference to customers table for multi-tenancy
     - created_at: Timestamp of record creation
     - updated_at: Timestamp of last update
 
@@ -33,6 +34,12 @@ class PyBastionBaseModel(SQLModel):
         default_factory=uuid4,
         primary_key=True,
         description="Unique identifier for the record",
+    )
+
+    customer_id: UUID = Field(
+        foreign_key="customers.id",
+        description="Customer/tenant this record belongs to",
+        index=True,
     )
 
     created_at: datetime = Field(
@@ -55,6 +62,7 @@ class PyBastionBaseModel(SQLModel):
         json_schema_extra={
             "example": {
                 "id": "123e4567-e89b-12d3-a456-426614174000",
+                "customer_id": "456e7890-e89b-12d3-a456-426614174000",
                 "created_at": "2024-01-01T00:00:00Z",
                 "updated_at": "2024-01-01T00:00:00Z",
             },

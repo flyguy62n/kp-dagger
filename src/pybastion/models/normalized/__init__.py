@@ -1,3 +1,9 @@
 """Normalized database schema models."""
 
-__all__ = []
+from pybastion.models.normalized.device import Device
+from pybastion.models.normalized.ip_address import IPAddress
+
+__all__ = [
+    "Device",
+    "IPAddress",
+]
