@@ -18,7 +18,29 @@ if TYPE_CHECKING:
     from pybastion.core.encryption import TenantEncryptionService
 
 
-class PyBastionBaseModel(SQLModel):
+class PyBastionConfigMixin(SQLModel):
+    """
+    Abstract base class providing shared configuration for all PyBastion models.
+
+    This mixin defines common Pydantic configuration settings that should be
+    inherited by all models in the application, ensuring consistency across
+    the entire data model hierarchy.
+    """
+
+    # Shared configuration for all PyBastion models
+    model_config = ConfigDict(
+        # Validate data when fields are modified after model creation
+        validate_assignment=True,
+        # Serialize enums as their values, not enum objects
+        use_enum_values=True,
+    )
+
+    class Config:
+        # Mark as abstract so SQLAlchemy doesn't create a table
+        abstract = True
+
+
+class PyBastionBaseModel(PyBastionConfigMixin):
     """
     Base model class for all PyBastion application models with multi-tenant support.
 
@@ -57,12 +79,8 @@ class PyBastionBaseModel(SQLModel):
         description="Timestamp when the record was last updated",
     )
 
-    # Modern Pydantic v2 configuration
-    model_config = ConfigDict(
-        # Validate data when fields are modified after model creation
-        validate_assignment=True,
-        # Serialize enums as their values, not enum objects
-        use_enum_values=True,
+    # Extended configuration for models with encryption support
+    model_config = PyBastionConfigMixin.model_config | ConfigDict(
         # Allow arbitrary types for encryption service and descriptors
         arbitrary_types_allowed=True,
         # Ignore descriptor types
@@ -103,7 +121,7 @@ class PyBastionBaseModel(SQLModel):
             if hasattr(self.__class__, field_name):
                 attr = getattr(self.__class__, field_name)
                 if isinstance(
-                    attr, type(self).__dict__.get(field_name, None)
+                    attr, type(self).__dict__.get(field_name, None),
                 ) and hasattr(attr, "storage_field"):
                     # This is an EncryptedField, get the storage field
                     storage_value = getattr(self, attr.storage_field, None)

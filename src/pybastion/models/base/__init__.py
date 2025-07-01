@@ -1,6 +1,6 @@
 """Base model components."""
 
-from pybastion.models.base.base import PyBastionBaseModel
+from pybastion.models.base.base import PyBastionBaseModel, PyBastionConfigMixin
 from pybastion.models.base.enums import (
     AddressType,
     ComplianceStatus,
@@ -20,6 +20,7 @@ __all__ = [
     "IPVersion",
     "Protocol",
     "PyBastionBaseModel",
+    "PyBastionConfigMixin",
     "RoutingProtocolType",
     "RuleAction",
     "Severity",

@@ -9,12 +9,13 @@ from datetime import datetime
 from uuid import UUID, uuid4
 
 from pydantic import ConfigDict
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field
 
+from pybastion.models.base.base import PyBastionConfigMixin
 from pybastion.utils.get_timestamp import get_iso_timestamp
 
 
-class Tenant(SQLModel, table=True):
+class Tenant(PyBastionConfigMixin, table=True):
     """
     Tenant model - source of truth for all tenant data.
 
@@ -31,11 +32,14 @@ class Tenant(SQLModel, table=True):
     )
 
     name: str = Field(
+        max_length=255,
         description="Tenant organization name",
     )
 
     slug: str = Field(
         unique=True,
+        max_length=100,
+        regex=r"^[a-z0-9-]+$",  # Only lowercase, numbers, hyphens
         description="URL-safe tenant identifier (e.g., 'acme-corp')",
     )
 
@@ -57,20 +61,24 @@ class Tenant(SQLModel, table=True):
     # Tenant-specific metadata
     description: str | None = Field(
         default=None,
+        max_length=1000,
         description="Optional description of the tenant",
     )
 
-    contact_email: str | None = Field(
-        default=None,
-        description="Primary contact email for this tenant",
+    # Technical settings
+    timezone: str = Field(
+        default="UTC",
+        max_length=50,
+        description="Timezone for this tenant (used for timestamp generation)",
     )
 
-    # Modern Pydantic v2 configuration
-    model_config = ConfigDict(
-        # Validate data when fields are modified after model creation
-        validate_assignment=True,
-        # Serialize enums as their values, not enum objects
-        use_enum_values=True,
+    retention_policy_days: int = Field(
+        default=0,
+        description="Data retention policy in days (0 = forever)",
+    )
+
+    # Configuration extending base settings with tenant-specific examples
+    model_config = PyBastionConfigMixin.model_config | ConfigDict(
         # Add example data to JSON schema for API documentation
         json_schema_extra={
             "example": {
@@ -81,7 +89,37 @@ class Tenant(SQLModel, table=True):
                 "created_at": "2024-01-01T00:00:00Z",
                 "updated_at": "2024-01-01T00:00:00Z",
                 "description": "Large enterprise tenant",
-                "contact_email": "admin@acme.com",
+                "timezone": "UTC",
+                "retention_policy_days": 0,
             },
         },
     )
+
+    @classmethod
+    def generate_slug_from_name(cls, name: str) -> str:
+        """
+        Generate a URL-safe slug from a tenant name.
+
+        Args:
+            name: The tenant name to convert
+
+        Returns:
+            A URL-safe slug
+
+        Example:
+            >>> Tenant.generate_slug_from_name("ACME Corporation")
+            'acme-corporation'
+
+        """
+        import re
+
+        # Convert to lowercase, replace spaces/special chars with hyphens
+        slug = re.sub(r"[^a-z0-9]+", "-", name.lower())
+        # Remove leading/trailing hyphens and collapse multiple hyphens
+        slug = re.sub(r"^-+|-+$", "", slug)
+        slug = re.sub(r"-+", "-", slug)
+        return slug
+
+    def update_timestamp(self) -> None:
+        """Update the updated_at timestamp to current time."""
+        self.updated_at = get_iso_timestamp()
