@@ -12,7 +12,7 @@ from rich.text import Text
 
 from pybastion.cli.commands.analyze import analyze
 from pybastion.cli.commands.report import report
-from pybastion.cli.commands.validate import validate
+from pybastion.cli.commands.tenant import create_tenant
 from pybastion.cli.utils.config import config
 from pybastion.cli.utils.output import RichGroup, error_console, setup_logging
 
@@ -151,7 +151,7 @@ def show_welcome() -> None:
 main.add_command(analyze)
 main.add_command(config)
 main.add_command(report)
-main.add_command(validate)
+main.add_command(create_tenant)
 
 
 if __name__ == "__main__":
