@@ -7,7 +7,7 @@ When asked to implement a solution, you will:
 2. If existing functionality is found, you will provide a code snippet that demonstrates how to use it.
 3. If no existing functionality is found, you will provide a code snippet that implements the requested functionality.
 
-You will follow these guidelines when implementing solutions:
+After I provide instructions to implement a solution, you will:
 1. Review the code base for other changes that might be needed to support the new functionality.
 2. Ensure that the code is modular and adheres to the existing design patterns of the application
 3. Write unit tests for the code using Pytest.  The tests will be designed to ensure the functionality works as expected and will cover edge cases.  Tests will be saved in the appropriate location under the `tests` directory of the project.
@@ -25,7 +25,7 @@ You are developing a Python application named PyBastion.  The application will b
 1. You will use SQLModel for the combined ORM (SQLAlchemy) and data validation (Pydantic) library:
     - Pydantic will be used for data validation and serialization.
     - SQLAlchemy will be used for database interactions.
-2. You will use DuckDB as an in-process database to store all data related to the application.  
+2. You will use SQLite as an in-process database to store all data related to the application.  
 3. The application will process network device configuration files which are expected to be in plaintext format.
 4. Supported network device configuration file formats include currently supported versions Cisco IOS, Cisco ASA, Fortigate FortiOS, and PaloAlto PAN-OS.
 5. The application will be designed to be extensible, allowing for the addition of new network device configuration file formats in the future.
@@ -39,9 +39,9 @@ You are developing a Python application named PyBastion.  The application will b
         - [CVE Details](https://www.cvedetails.com/documentation/apis) for CVE information.
         - [End of Life.Net](https://endoflife.date/docs/api/v1/#/) for end of life information.
 8. The application will support the use of encryption for all data interactions.  Encryption will be implemented at the database interface.
+9. The application will use `dependency-injector` for dependency injection to manage dependencies and promote modularity.
 
 Misc. requirements:
 1. The application will be distributed via PyPI.
 2. All package management and build actions will use UV for Python.
 3. When running commands in the console, you will assume that PowerShell syntax should be used and then try other formats if PowerShell does not work.  That is, multiple commands should be separated by semicolons (`;`) and not newlines or double-ampersands (`&&`).
-

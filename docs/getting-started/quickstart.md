@@ -55,7 +55,7 @@ Create a configuration file for your organization:
 ```yaml
 # ~/.pybastion/config.yaml
 database:
-  path: "./pybastion.db"
+  path: "./pybastion.sqlite"
   encryption_enabled: true
 
 tenants:

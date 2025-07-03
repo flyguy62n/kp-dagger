@@ -1,0 +1,61 @@
+# PyBastion Configuration File
+# This file contains the configuration settings for PyBastion
+
+# Core services configuration
+core:
+  # Database configuration
+  database:
+    path: "./pybastion.sqlite"  # Use ":memory:" for in-memory database, which is also the default
+  
+  # Encryption configuration (REQUIRED for production)
+  encryption:
+    master_key: "change-me-in-production-use-strong-key"
+    salt: "change-me-in-production-use-random-salt"
+
+# External API clients configuration
+api_clients:
+  # CVE Details API configuration
+  cve:
+    api_key: ""  # Get from https://www.cvedetails.com/api/
+    base_url: "https://www.cvedetails.com/api/"
+    timeout: 30
+    rate_limit: 100  # requests per minute
+  
+  # End of Life API configuration  
+  eol:
+    base_url: "https://endoflife.date/api/"
+    timeout: 30
+    rate_limit: 1000  # requests per minute
+
+# Parser configuration
+parsers:
+  max_file_size: 104857600  # 100MB maximum config file size
+  encoding: "utf-8"         # Default file encoding
+
+# Security analyzer configuration
+analyzers:
+  # Compliance checking configuration
+  compliance:
+    cis_level: 1            # CIS benchmark level (1 or 2)
+    include_level2: false   # Include Level 2 checks
+  
+  # Risk assessment configuration
+  risk:
+    severity_weights:
+      critical: 10.0
+      high: 7.5
+      medium: 5.0
+      low: 2.5
+      info: 1.0
+
+# Report generation configuration
+reports:
+  templates:
+    html_path: "templates/html"     # HTML template directory
+    excel_path: "templates/excel"   # Excel template directory
+  output_dir: "reports"             # Default output directory
+
+# Scanner configuration
+scanner:
+  verbose: false           # Enable verbose logging
+  parallel_workers: 4      # Number of parallel processing workers

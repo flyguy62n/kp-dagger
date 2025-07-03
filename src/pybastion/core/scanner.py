@@ -3,6 +3,9 @@
 from pathlib import Path
 from typing import Any
 
+from dependency_injector.wiring import Provide, inject
+
+from pybastion.containers import ApplicationContainer
 from pybastion.core.database import DatabaseManager
 from pybastion.core.exceptions import (
     NetworkScannerError,
@@ -15,22 +18,35 @@ from pybastion.parsers.factory import ParserFactory
 class PyBastionScanner:
     """Main scanner class for analyzing network device configurations."""
 
+    @inject
     def __init__(
         self,
-        database_path: str | Path | None = None,
+        database_manager: DatabaseManager = Provide[
+            ApplicationContainer.core_container.database_manager
+        ],
+        parser_factory: ParserFactory = Provide[
+            ApplicationContainer.parser_container.parser_factory
+        ],
+        analyzers: Any = Provide[ApplicationContainer.analyzer_container],
+        reporters: Any = Provide[ApplicationContainer.report_container],
         verbose: bool = False,
     ) -> None:
         """
         Initialize the network scanner.
 
         Args:
-            database_path: Path to database file or ":memory:" for in-memory
+            database_manager: Database manager instance
+            parser_factory: Parser factory instance
+            analyzers: Analyzer services container
+            reporters: Reporter services container
             verbose: Enable verbose logging
 
         """
         self.verbose = verbose
-        self.database = DatabaseManager(database_path)
-        self.parser_factory = ParserFactory()
+        self.database = database_manager
+        self.parser_factory = parser_factory
+        self.analyzers = analyzers
+        self.reporters = reporters
 
         # Initialize database
         self.database.initialize()

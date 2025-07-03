@@ -43,6 +43,11 @@ console = Console()
     default="auto",
     help="Output format for CLI messages.",
 )
+@click.option(
+    "--config-file",
+    type=click.Path(exists=True, path_type=str),
+    help="Path to configuration file.",
+)
 @click.pass_context
 def main(
     ctx: click.Context,
@@ -50,6 +55,7 @@ def main(
     verbose: int,
     quiet: bool,  # noqa: FBT001
     output_format: str,
+    config_file: str | None,
 ) -> None:
     """
     PyBastion - Network Device Configuration Security Analysis Tool.
@@ -66,9 +72,25 @@ def main(
     ctx.obj["verbose"] = verbose
     ctx.obj["quiet"] = quiet
     ctx.obj["output_format"] = output_format
+    ctx.obj["config_file"] = config_file
 
     # Setup logging based on verbosity
     setup_logging(verbose, quiet)
+
+    # NOTE: Container and DI integration will be added when all services are implemented
+    # if config_file:
+    #     try:
+    #         from pybastion.containers.config import load_config
+    #         from pybastion.containers import ApplicationContainer
+    #
+    #         config_data = load_config(config_file)
+    #         container = ApplicationContainer()
+    #         container.config.from_dict(config_data)
+    #         container.wire_modules()
+    #         ctx.obj["container"] = container
+    #     except Exception as e:
+    #         error_console.print(f"❌ Failed to load config: {e}", style="red")
+    #         ctx.exit(1)
 
     if version:
         show_version()
