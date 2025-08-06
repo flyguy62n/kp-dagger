@@ -5,8 +5,8 @@ from typing import Any
 
 import pytest
 
-from pybastion.core.database import DatabaseManager
-from pybastion.core.scanner import PyBastionScanner
+from kp_dagger.core.database import DatabaseManager
+from kp_dagger.core.scanner import PyBastionScanner
 
 
 @pytest.fixture

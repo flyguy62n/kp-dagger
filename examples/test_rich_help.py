@@ -13,7 +13,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 import contextlib
 
-from pybastion.cli.main import main
+from kp_dagger.cli.main import main
 
 
 def demo_help_pages() -> None:

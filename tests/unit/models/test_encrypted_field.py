@@ -5,9 +5,9 @@ from uuid import uuid4
 import pytest
 from sqlmodel import Field
 
-from pybastion.core.encryption import EncryptionServiceManager, TenantEncryptionService
-from pybastion.models.base.base import PyBastionBaseModel
-from pybastion.models.base.encryption import EncryptedField
+from kp_dagger.core.encryption import EncryptionServiceManager, TenantEncryptionService
+from kp_dagger.models.base.base import PyBastionBaseModel
+from kp_dagger.models.base.encryption import EncryptedField
 
 
 class TestModel(PyBastionBaseModel, table=True):

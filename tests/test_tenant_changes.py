@@ -11,10 +11,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 def test_tenant_model():
     """Test the updated tenant-based models."""
     try:
-        from pybastion.models.base.enums import AddressType, DeviceType, IPVersion
-        from pybastion.models.base.tenant import Tenant
-        from pybastion.models.normalized.device import Device
-        from pybastion.models.normalized.ip_address import IPAddress
+        from kp_dagger.models.base.enums import AddressType, DeviceType, IPVersion
+        from kp_dagger.models.base.tenant import Tenant
+        from kp_dagger.models.normalized.device import Device
+        from kp_dagger.models.normalized.ip_address import IPAddress
 
         print("✅ All imports successful")
 

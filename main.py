@@ -11,13 +11,13 @@ For production usage, use one of these methods:
 This file may be removed in future versions.
 """
 
-from pybastion.cli.main import main
+from kp_dagger.cli.main import main
 
 
 def run_application() -> None:
     """Initialize and run the PyBastion application."""
     print(
-        "⚠️  Using development entry point. Consider using 'uv run pybastion' instead."
+        "⚠️  Using development entry point. Consider using 'uv run pybastion' instead.",
     )
 
     # NOTE: Container initialization will be added when DI integration is complete

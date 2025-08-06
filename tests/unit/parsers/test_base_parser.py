@@ -1,6 +1,6 @@
 """Test base parser functionality."""
 
-from pybastion.parsers.base.parser import BaseParser
+from kp_dagger.parsers.base.parser import BaseParser
 
 
 class TestParser(BaseParser):

@@ -8,9 +8,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 try:
-    from pybastion.core.exceptions import NetworkScannerError
-    from pybastion.core.scanner import PyBastionScanner
-    from pybastion.models.base.enums import DeviceType
+    from kp_dagger.core.exceptions import NetworkScannerError
+    from kp_dagger.core.scanner import PyBastionScanner
+    from kp_dagger.models.base.enums import DeviceType
 
     print("✓ All imports successful")
 

@@ -2,7 +2,7 @@
 
 import pytest
 
-from pybastion.core.scanner import PyBastionScanner
+from kp_dagger.core.scanner import PyBastionScanner
 
 
 def test_scanner_initialization():

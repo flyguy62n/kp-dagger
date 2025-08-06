@@ -6,7 +6,7 @@ from uuid import uuid4
 
 import pytest
 
-from pybastion.core.encryption import (
+from kp_dagger.core.encryption import (
     DecryptionError,
     EncryptionConfigError,
     EncryptionServiceManager,
