@@ -11,7 +11,6 @@ from uuid import UUID, uuid4
 from pydantic import ConfigDict
 from sqlmodel import Field
 
-from kp_dagger.models.base.base import DaggerConfigMixin
 from kp_dagger.utils.get_timestamp import get_iso_timestamp
 
 

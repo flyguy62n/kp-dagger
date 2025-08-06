@@ -4,9 +4,9 @@ Dagger uses SQLModel to combine SQLAlchemy ORM capabilities with Pydantic valida
 
 ## Base Models
 
-### DaggerBaseModel
+### KPDaggerBaseModel
 
-All models inherit from `DaggerBaseModel`, which provides:
+All models inherit from `KPDaggerBaseModel`, which provides:
 
 - **Tenant isolation** through `tenant_id` field
 - **Encryption service integration** for sensitive data
@@ -14,7 +14,7 @@ All models inherit from `DaggerBaseModel`, which provides:
 - **Validation** using Pydantic
 
 ```python
-class DaggerBaseModel(SQLModel):
+class KPDaggerBaseModel(SQLModel):
     id: uuid.UUID | None = Field(default_factory=uuid4, primary_key=True)
     tenant_id: uuid.UUID = Field(foreign_key="tenant.id", index=True)
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
@@ -44,7 +44,7 @@ class Tenant(DaggerTenantModel, table=True):
 Common fields across all device types:
 
 ```python
-class Device(DaggerBaseModel, table=True):
+class Device(KPDaggerBaseModel, table=True):
     hostname: str | None = EncryptedField(default=None)
     management_ip: str | None = EncryptedField(default=None)
     device_type: DeviceType
@@ -65,7 +65,7 @@ class Device(DaggerBaseModel, table=True):
 Network interface information:
 
 ```python
-class Interface(DaggerBaseModel, table=True):
+class Interface(KPDaggerBaseModel, table=True):
     device_id: uuid.UUID = Field(foreign_key="device.id")
     name: str = Field(max_length=100)
     interface_type: InterfaceType
@@ -87,7 +87,7 @@ class Interface(DaggerBaseModel, table=True):
 Stores parsed configuration data:
 
 ```python
-class Configuration(DaggerBaseModel, table=True):
+class Configuration(KPDaggerBaseModel, table=True):
     device_id: uuid.UUID = Field(foreign_key="device.id")
     filename: str = Field(max_length=255)
     file_hash: str = Field(max_length=64)  # SHA256
@@ -106,7 +106,7 @@ class Configuration(DaggerBaseModel, table=True):
 Security rules and ACLs:
 
 ```python
-class AccessList(DaggerBaseModel, table=True):
+class AccessList(KPDaggerBaseModel, table=True):
     device_id: uuid.UUID = Field(foreign_key="device.id")
     interface_id: uuid.UUID | None = Field(foreign_key="interface.id", default=None)
     name: str = Field(max_length=255)
@@ -130,7 +130,7 @@ class AccessList(DaggerBaseModel, table=True):
 Results from security analysis:
 
 ```python
-class SecurityFinding(DaggerBaseModel, table=True):
+class SecurityFinding(KPDaggerBaseModel, table=True):
     configuration_id: uuid.UUID = Field(foreign_key="configuration.id")
     rule_id: str = Field(max_length=100)  # CIS benchmark ID
     category: FindingCategory
@@ -151,7 +151,7 @@ class SecurityFinding(DaggerBaseModel, table=True):
 CVE and vulnerability tracking:
 
 ```python
-class Vulnerability(DaggerBaseModel, table=True):
+class Vulnerability(KPDaggerBaseModel, table=True):
     cve_id: str = Field(max_length=20, unique=True)
     cvss_score: float | None = Field(default=None)
     cvss_vector: str | None = Field(default=None, max_length=200)
@@ -211,7 +211,7 @@ class FindingCategory(str, Enum):
 Sensitive data is automatically encrypted using `EncryptedField`:
 
 ```python
-class IPAddress(DaggerBaseModel, table=True):
+class IPAddress(KPDaggerBaseModel, table=True):
     original_address: str | None = EncryptedField(default=None)
     normalized_address: str | None = EncryptedField(default=None)
     version: IPVersion

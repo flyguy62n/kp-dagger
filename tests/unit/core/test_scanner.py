@@ -2,8 +2,6 @@
 
 import pytest
 
-from kp_dagger.core.scanner import DaggerScanner
-
 
 def test_scanner_initialization():
     """Test DaggerScanner initialization."""

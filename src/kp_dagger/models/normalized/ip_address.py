@@ -10,11 +10,10 @@ from uuid import UUID
 
 from sqlmodel import Field
 
-from kp_dagger.models.base.base import DaggerBaseModel
 from kp_dagger.models.base.enums import IPVersion
 
 
-class IPAddress(DaggerBaseModel, table=True):
+class IPAddress(KPDaggerBaseModel, table=True):
     """
     Normalized IP address model with encryption support.
 

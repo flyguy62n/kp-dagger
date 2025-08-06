@@ -80,8 +80,8 @@ def main(
     # NOTE: Container and DI integration will be added when all services are implemented
     # if config_file:
     #     try:
-    #         from Dagger.containers.config import load_config
-    #         from Dagger.containers import ApplicationContainer
+    #         from kp_dagger.containers.config import load_config
+    #         from kp_dagger.containers import ApplicationContainer
     #
     #         config_data = load_config(config_file)
     #         container = ApplicationContainer()

@@ -6,7 +6,6 @@ from typing import Any
 import pytest
 
 from kp_dagger.core.database import DatabaseManager
-from kp_dagger.core.scanner import DaggerScanner
 
 
 @pytest.fixture

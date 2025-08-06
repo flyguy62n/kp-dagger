@@ -50,7 +50,7 @@ src/Dagger/
 
 ### Basic Container Usage
 ```python
-from Dagger.containers import ApplicationContainer
+from kp_dagger.containers import ApplicationContainer
 
 # Initialize container
 container = ApplicationContainer()
@@ -111,7 +111,7 @@ scanner:
 
 ### Loading Configuration
 ```python
-from Dagger.containers.config import load_config, validate_config
+from kp_dagger.containers.config import load_config, validate_config
 
 config_dict = load_config("config.yml")
 config = validate_config(config_dict)

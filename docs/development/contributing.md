@@ -173,7 +173,7 @@ Use specific exception types:
 
 ```python
 # ✅ Good - Specific exceptions
-from Dagger.core.exceptions import ParseError, ValidationError
+from kp_dagger.core.exceptions import ParseError, ValidationError
 
 def parse_config(content: str) -> dict[str, Any]:
     if not content.strip():
@@ -198,7 +198,7 @@ def parse_config(content: str) -> dict[str, Any]:
 
 2. **Implement Base Parser**
    ```python
-   from Dagger.parsers.base import BaseParser
+   from kp_dagger.parsers.base import BaseParser
    
    class NewVendorParser(BaseParser):
        def parse(self, content: str) -> dict[str, Any]:
@@ -228,7 +228,7 @@ def parse_config(content: str) -> dict[str, Any]:
 1. **Create Rule Module**
    ```python
    # src/Dagger/analyzers/rules/new_rule.py
-   from Dagger.analyzers.base import SecurityRule
+   from kp_dagger.analyzers.base import SecurityRule
    
    class NewSecurityRule(SecurityRule):
        rule_id = "NEW-001"
@@ -256,7 +256,7 @@ def parse_config(content: str) -> dict[str, Any]:
 1. **Create Report Handler**
    ```python
    # src/Dagger/reports/formatters/new_format.py
-   from Dagger.reports.base import BaseReportFormatter
+   from kp_dagger.reports.base import BaseReportFormatter
    
    class NewFormatReporter(BaseReportFormatter):
        format_name = "new-format"
@@ -298,7 +298,7 @@ tests/
 
 ```python
 import pytest
-from Dagger.parsers.cisco_ios import CiscoIOSParser
+from kp_dagger.parsers.cisco_ios import CiscoIOSParser
 
 class TestCiscoIOSParser:
     @pytest.fixture

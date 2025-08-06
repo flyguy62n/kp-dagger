@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from kp_dagger.containers import ApplicationContainer
-from kp_dagger.containers.config import DaggerConfig, load_config, validate_config
+from kp_dagger.containers.config import load_config, validate_config
 
 
 class TestDependencyInjectionIntegration:

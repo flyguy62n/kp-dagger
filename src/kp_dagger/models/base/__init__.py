@@ -1,6 +1,6 @@
 """Base model components."""
 
-from kp_dagger.models.base.base import DaggerBaseModel, DaggerConfigMixin
+from kp_dagger.models.base.base import DaggerConfigMixin, KPkp_daggerBaseModel
 from kp_dagger.models.base.enums import (
     AddressType,
     ComplianceStatus,
@@ -16,10 +16,10 @@ from kp_dagger.models.base.tenant import Tenant
 __all__ = [
     "AddressType",
     "ComplianceStatus",
-    "DaggerBaseModel",
     "DaggerConfigMixin",
     "DeviceType",
     "IPVersion",
+    "KPDaggerBaseModel",
     "Protocol",
     "RoutingProtocolType",
     "RuleAction",

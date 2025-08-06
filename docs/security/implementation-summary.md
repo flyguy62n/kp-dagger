@@ -46,9 +46,9 @@
 
 ```python
 from uuid import uuid4
-from Dagger.core.encryption import EncryptionServiceManager
-from Dagger.models.normalized.ip_address import IPAddress
-from Dagger.models.base.enums import IPVersion
+from kp_dagger.core.encryption import EncryptionServiceManager
+from kp_dagger.models.normalized.ip_address import IPAddress
+from kp_dagger.models.base.enums import IPVersion
 
 # Initialize encryption
 runtime_key = EncryptionServiceManager.generate_runtime_key()

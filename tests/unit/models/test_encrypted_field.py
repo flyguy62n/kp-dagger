@@ -5,12 +5,14 @@ from uuid import uuid4
 import pytest
 from sqlmodel import Field
 
-from kp_dagger.core.encryption import EncryptionServiceManager, TenantEncryptionService
-from kp_dagger.models.base.base import DaggerBaseModel
+from kp_dagger.core.encryption import (
+    EncryptionServiceManager,
+    TenantEncryptionService,
+)
 from kp_dagger.models.base.encryption import EncryptedField
 
 
-class TestModel(DaggerBaseModel, table=True):
+class TestModel(KPDaggerBaseModel, table=True):
     """Test model with encrypted field."""
 
     __tablename__ = "test_models"

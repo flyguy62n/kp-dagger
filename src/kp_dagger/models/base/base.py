@@ -1,7 +1,7 @@
 """
 Base model for Dagger application.
 
-This module defines the DaggerBaseModel that serves as the foundation
+This module defines the KPDaggerBaseModel that serves as the foundation
 for all other SQLModel-based models in the application.
 """
 
@@ -40,7 +40,7 @@ class DaggerConfigMixin(SQLModel):
         abstract = True
 
 
-class DaggerBaseModel(DaggerConfigMixin):
+class KPDaggerBaseModel(DaggerConfigMixin):
     """
     Base model class for all Dagger application models with multi-tenant support.
 

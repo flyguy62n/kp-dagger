@@ -203,7 +203,7 @@ The CLI supports the following configuration options:
 The CLI is accessible via:
 ```python
 # Direct import
-from Dagger.cli.main import main
+from kp_dagger.cli.main import main
 
 # Package entry point (pyproject.toml)
 Dagger = "Dagger.cli.main:main"

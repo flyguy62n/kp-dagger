@@ -76,7 +76,7 @@ def report(  # noqa: PLR0913
     open_report: bool,
 ) -> None:
     """
-    Generate reports from Dagger analysis results.
+    Generate reports from kp_dagger analysis results.
 
     ⚠️  WARNING: This is a development version and is not ready for production use.
 

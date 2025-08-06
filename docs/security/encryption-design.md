@@ -25,7 +25,7 @@ The encryption system provides:
    - Automatic encryption/decryption
    - Caching for performance
 
-3. **DaggerBaseModel** (`Dagger.models.base.base`)
+3. **KPDaggerBaseModel** (`Dagger.models.base.base`)
    - SQLModel integration
    - Encryption service injection
    - Encrypted data serialization
@@ -79,7 +79,7 @@ tenant_key = derive_key(runtime_key, tenant_id, salt)
 Sensitive fields are transparently encrypted:
 
 ```python
-class IPAddress(DaggerBaseModel):
+class IPAddress(KPDaggerBaseModel):
     original_address: str | None = EncryptedField(default=None)
     normalized_address: str | None = EncryptedField(default=None)
 ```
@@ -88,8 +88,8 @@ class IPAddress(DaggerBaseModel):
 
 ```python
 from uuid import uuid4
-from Dagger.core.encryption import EncryptionServiceManager
-from Dagger.models.normalized.ip_address import IPAddress
+from kp_dagger.core.encryption import EncryptionServiceManager
+from kp_dagger.models.normalized.ip_address import IPAddress
 
 # Initialize encryption
 runtime_key = EncryptionServiceManager.generate_runtime_key()

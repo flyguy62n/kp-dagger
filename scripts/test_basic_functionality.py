@@ -9,7 +9,7 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 try:
     from kp_dagger.core.exceptions import NetworkScannerError
-    from kp_dagger.core.scanner import DaggerScanner
+    from kp_dagger.core.scanner import kp_daggerScanner
     from kp_dagger.models.base.enums import DeviceType
 
     print("✓ All imports successful")

@@ -19,7 +19,7 @@ try {
 
 # Check if we're in a git repository
 if (-not (Test-Path ".git")) {
-    Write-Error "Please run this script from the root of your Dagger repository"
+    Write-Error "Please run this script from the root of your kp_dagger repository"
     exit 1
 }
 

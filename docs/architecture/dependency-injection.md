@@ -6,13 +6,36 @@ Dagger uses the `dependency-injector` library to implement a comprehensive depen
 
 The dependency injection system is organized into service-specific containers that manage related dependencies:
 
-```
-ApplicationContainer
-├── CoreContainer (database, encryption)
-├── ParserContainer (configuration parsers)
-├── AnalyzerContainer (security analyzers)
-├── ReportContainer (report generators)
-└── ApiClientContainer (external API clients)
+```mermaid
+flowchart TD
+    A[ApplicationContainer] --> B[CoreContainer]
+    A --> C[ParserContainer]
+    A --> D[AnalyzerContainer]
+    A --> E[ReportContainer]
+    A --> F[ApiClientContainer]
+    
+    B --> B1[DatabaseManager]
+    B --> B2[EncryptionService]
+    
+    C --> C1[ParserFactory]
+    
+    D --> D1[ComplianceAnalyzer]
+    D --> D2[VulnerabilityAnalyzer]
+    D --> D3[RiskAnalyzer]
+    
+    E --> E1[JsonReporter]
+    E --> E2[HtmlReporter]
+    E --> E3[ExcelReporter]
+    
+    F --> F1[CveClient]
+    F --> F2[EolClient]
+    
+    style A fill:#e3f2fd
+    style B fill:#fff3e0
+    style C fill:#f3e5f5
+    style D fill:#e8f5e8
+    style E fill:#fce4ec
+    style F fill:#f1f8e9
 ```
 
 ## Container Structure
@@ -21,7 +44,7 @@ ApplicationContainer
 The main container that orchestrates all service containers and provides the primary application services.
 
 ```python
-from Dagger.containers import ApplicationContainer
+from kp_kp_kp_dagger.containers import ApplicationContainer
 
 # Initialize container
 container = ApplicationContainer()
@@ -90,7 +113,7 @@ scanner:
 Load configuration:
 
 ```python
-from Dagger.containers.config import load_config, validate_config
+from kp_dagger.containers.config import load_config, validate_config
 
 # Load and validate configuration
 config_dict = load_config("config.yml")
@@ -108,7 +131,7 @@ Services can use dependency injection through constructor injection:
 
 ```python
 from dependency_injector.wiring import Provide, inject
-from Dagger.containers import ApplicationContainer
+from kp_dagger.containers import ApplicationContainer
 
 class MyService:
     @inject

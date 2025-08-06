@@ -5,12 +5,7 @@ Provides transparent field-level encryption for SQLModel models using
 the TenantEncryptionService.
 """
 
-from typing import TYPE_CHECKING
-
 from kp_dagger.core.encryption import DecryptionError
-
-if TYPE_CHECKING:
-    from kp_dagger.models.base.base import DaggerBaseModel
 
 
 class EncryptedField:
@@ -41,7 +36,7 @@ class EncryptedField:
 
     def __get__(
         self,
-        obj: "DaggerBaseModel | None",
+        obj: "KPDaggerBaseModel | None",
         objtype: type | None = None,
     ) -> str | None:
         """Get the decrypted field value."""
@@ -73,7 +68,7 @@ class EncryptedField:
         else:
             return decrypted_value
 
-    def __set__(self, obj: "DaggerBaseModel", value: str | None) -> None:
+    def __set__(self, obj: "KPDaggerBaseModel", value: str | None) -> None:
         """Set the field value with encryption."""
         if value is None and self.nullable:
             setattr(obj, self.storage_field, None)
@@ -95,7 +90,7 @@ class EncryptedField:
         # Cache the plaintext value
         setattr(obj, self.private_name, value)
 
-    def __delete__(self, obj: "DaggerBaseModel") -> None:
+    def __delete__(self, obj: "KPDaggerBaseModel") -> None:
         """Delete the field value."""
         setattr(obj, self.storage_field, None)
         if hasattr(obj, self.private_name):
