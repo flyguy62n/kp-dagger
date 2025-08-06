@@ -39,7 +39,7 @@ def setup_logging(
         handlers.append(file_handler)
 
     # Configure logger
-    logger = logging.getLogger("pybastion")
+    logger = logging.getLogger("Dagger")
     logger.setLevel(getattr(logging, level.upper()))
 
     for handler in handlers:

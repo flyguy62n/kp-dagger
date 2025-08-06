@@ -1,11 +1,11 @@
-# PyBastion Configuration File
-# This file contains the configuration settings for PyBastion
+# Dagger Configuration File
+# This file contains the configuration settings for Dagger
 
 # Core services configuration
 core:
   # Database configuration
   database:
-    path: "./pybastion.sqlite"  # Use ":memory:" for in-memory database, which is also the default
+    path: "./Dagger.sqlite"  # Use ":memory:" for in-memory database, which is also the default
   
   # Encryption configuration (REQUIRED for production)
   encryption:

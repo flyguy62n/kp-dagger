@@ -2,19 +2,19 @@
 
 import pytest
 
-from kp_dagger.core.scanner import PyBastionScanner
+from kp_dagger.core.scanner import DaggerScanner
 
 
 def test_scanner_initialization():
-    """Test PyBastionScanner initialization."""
-    scanner = PyBastionScanner(database_path=":memory:")
+    """Test DaggerScanner initialization."""
+    scanner = DaggerScanner(database_path=":memory:")
     assert scanner.database is not None
     assert scanner.parser_factory is not None
 
 
 def test_device_type_detection():
     """Test device type auto-detection."""
-    scanner = PyBastionScanner(database_path=":memory:")
+    scanner = DaggerScanner(database_path=":memory:")
 
     # Test Cisco IOS detection
     ios_config = "hostname router\nversion 15.1\ninterface GigabitEthernet0/0"
@@ -28,7 +28,7 @@ def test_device_type_detection():
 
 def test_severity_counting():
     """Test severity counting functionality."""
-    scanner = PyBastionScanner(database_path=":memory:")
+    scanner = DaggerScanner(database_path=":memory:")
 
     findings = [
         {"severity": "high"},

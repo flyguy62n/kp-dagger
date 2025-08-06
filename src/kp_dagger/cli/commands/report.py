@@ -1,5 +1,5 @@
 """
-Report command for PyBastion CLI.
+Report command for Dagger CLI.
 
 Handles report generation from analysis results including HTML, JSON, and Excel formats.
 """
@@ -76,7 +76,7 @@ def report(  # noqa: PLR0913
     open_report: bool,
 ) -> None:
     """
-    Generate reports from PyBastion analysis results.
+    Generate reports from Dagger analysis results.
 
     ⚠️  WARNING: This is a development version and is not ready for production use.
 
@@ -84,16 +84,16 @@ def report(  # noqa: PLR0913
 
     Examples:
         # Generate HTML report
-        pybastion report analysis-results.json
+        Dagger report analysis-results.json
 
         # Generate executive summary report
-        pybastion report --template executive --format pdf results.json
+        Dagger report --template executive --format pdf results.json
 
         # Generate Excel report with all severity levels
-        pybastion report --format excel --include-passed results.json
+        Dagger report --format excel --include-passed results.json
 
         # Generate and open report
-        pybastion report --open results.json
+        Dagger report --open results.json
 
     """
     verbose = ctx.obj.get("verbose", 0)

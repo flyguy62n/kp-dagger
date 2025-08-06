@@ -6,7 +6,7 @@ import pytest
 
 from kp_dagger.containers import ApplicationContainer
 from kp_dagger.containers.config import (
-    PyBastionConfig,
+    DaggerConfig,
     load_config,
     validate_config,
 )
@@ -48,8 +48,8 @@ class TestApplicationContainer:
         assert container.config.core.database.path() == ":memory:"
         assert container.config.scanner.verbose() is True
 
-    @patch("pybastion.core.database.DatabaseManager")
-    @patch("pybastion.parsers.factory.ParserFactory")
+    @patch("Dagger.core.database.DatabaseManager")
+    @patch("Dagger.parsers.factory.ParserFactory")
     def test_scanner_factory(
         self,
         mock_parser_factory: Mock,  # noqa: ARG002
@@ -106,7 +106,7 @@ class TestConfiguration:
         }
 
         config = validate_config(config_dict)
-        assert isinstance(config, PyBastionConfig)
+        assert isinstance(config, DaggerConfig)
         assert config.core.encryption.master_key == "test-key"
         assert config.core.database.path == ":memory:"  # default value
 
@@ -165,7 +165,7 @@ class TestConfiguration:
             },
         }
 
-        config: PyBastionConfig = validate_config(config_dict)
+        config: DaggerConfig = validate_config(config_dict)
         assert config.core.database.path == "/tmp/test.db"  # noqa: S108
         assert config.api_clients.cve.timeout == 60  # noqa: PLR2004
         assert config.analyzers.compliance.cis_level == 2  # noqa: PLR2004

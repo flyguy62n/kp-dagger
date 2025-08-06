@@ -1,10 +1,10 @@
-# Contributing to PyBastion
+# Contributing to Dagger
 
-Thank you for your interest in contributing to PyBastion! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to Dagger! This document provides guidelines for contributing to the project.
 
 ## 🚧 Current Status
 
-**PyBastion is in active development (Pre-Alpha).** Most functionality is not yet implemented. See our [Roadmap](ROADMAP.md) for current development status.
+**Dagger is in active development (Pre-Alpha).** Most functionality is not yet implemented. See our [Roadmap](ROADMAP.md) for current development status.
 
 ## Getting Started
 
@@ -12,8 +12,8 @@ Thank you for your interest in contributing to PyBastion! This document provides
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/flyguy62n/pybastion.git
-   cd pybastion
+   git clone https://github.com/flyguy62n/Dagger.git
+   cd Dagger
    ```
 
 2. **Install dependencies**:
@@ -43,7 +43,7 @@ Thank you for your interest in contributing to PyBastion! This document provides
 
 ### 1. Check Existing Issues
 
-Before starting work, check our [GitHub Issues](https://github.com/flyguy62n/pybastion/issues) to see if someone is already working on what you want to do.
+Before starting work, check our [GitHub Issues](https://github.com/flyguy62n/Dagger/issues) to see if someone is already working on what you want to do.
 
 ### 2. Create an Issue
 
@@ -259,4 +259,4 @@ This project adheres to a code of professional conduct:
 
 ---
 
-Thank you for contributing to PyBastion! Your help makes this project better for everyone in the network security community.
+Thank you for contributing to Dagger! Your help makes this project better for everyone in the network security community.

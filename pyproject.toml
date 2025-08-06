@@ -1,10 +1,10 @@
 [project]
-name = "PyBastion"
+name = "KP-Dagger"
 dynamic = ["version"]
 description = "Network device configuration security analysis tool (Development Version - Not Production Ready)"
 readme = "README.md"
-license = { text = "MIT" }
-requires-python = ">=3.12"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.13"
 authors = [
     { name = "Randy", email = "randy@example.com" }
 ]
@@ -56,17 +56,17 @@ docs = [
     "mkdocs-section-index>=0.3.0",
     "mkdocs-autorefs>=1.0.0",
     "pymdown-extensions>=10.0.0",
-    "mkdocs-mermaid2-plugin>=1.1.0",
     "mkdocs-git-revision-date-localized-plugin>=1.2.0",
+    "mkdocs-mermaid2-plugin>=1.2.1",
 ]
 
 [project.scripts]
-pybastion = "pybastion.cli.main:main"
+kp_dagger = "kp_dagger.cli.main:main"
 
 [project.urls]
-Homepage = "https://github.com/flyguy62n/pybastion"
-Repository = "https://github.com/flyguy62n/pybastion.git"
-Issues = "https://github.com/flyguy62n/pybastion/issues"
+Homepage = "https://github.com/flyguy62n/kp-dagger"
+Repository = "https://github.com/flyguy62n/kp-dagger.git"
+Issues = "https://github.com/flyguy62n/kp-dagger/issues"
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -77,7 +77,7 @@ package-dir = {"" = "src"}
 include-package-data = true
 
 [tool.setuptools.dynamic]
-version = {attr = "pybastion.__version__"}
+version = {attr = "kp_dagger.__version__"}
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -87,7 +87,7 @@ pythonpath = "src/"
 addopts = [
     "--import-mode=importlib",
     "-v",
-    "--cov=src/pybastion",
+    "--cov=src/kp_dagger",
     "--cov-report=html",
     "--cov-report=term-missing"
 ]

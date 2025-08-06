@@ -2,7 +2,7 @@
 Tenant model for multi-tenant support.
 
 This module defines the Tenant model that serves as the foundation
-for multi-tenant data isolation in PyBastion.
+for multi-tenant data isolation in Dagger.
 """
 
 from datetime import datetime
@@ -11,11 +11,11 @@ from uuid import UUID, uuid4
 from pydantic import ConfigDict
 from sqlmodel import Field
 
-from kp_dagger.models.base.base import PyBastionConfigMixin
+from kp_dagger.models.base.base import DaggerConfigMixin
 from kp_dagger.utils.get_timestamp import get_iso_timestamp
 
 
-class Tenant(PyBastionConfigMixin, table=True):
+class Tenant(DaggerConfigMixin, table=True):
     """
     Tenant model - source of truth for all tenant data.
 
@@ -78,7 +78,7 @@ class Tenant(PyBastionConfigMixin, table=True):
     )
 
     # Configuration extending base settings with tenant-specific examples
-    model_config = PyBastionConfigMixin.model_config | ConfigDict(
+    model_config = DaggerConfigMixin.model_config | ConfigDict(
         # Add example data to JSON schema for API documentation
         json_schema_extra={
             "example": {

@@ -1,6 +1,6 @@
 # Dependency Injection Architecture
 
-PyBastion uses the `dependency-injector` library to implement a comprehensive dependency injection pattern. This promotes modularity, testability, and maintainability throughout the application.
+Dagger uses the `dependency-injector` library to implement a comprehensive dependency injection pattern. This promotes modularity, testability, and maintainability throughout the application.
 
 ## Architecture Overview
 
@@ -21,7 +21,7 @@ ApplicationContainer
 The main container that orchestrates all service containers and provides the primary application services.
 
 ```python
-from pybastion.containers import ApplicationContainer
+from Dagger.containers import ApplicationContainer
 
 # Initialize container
 container = ApplicationContainer()
@@ -72,7 +72,7 @@ Configuration is managed through Pydantic models and can be loaded from YAML fil
 # config.yml
 core:
   database:
-    path: "./pybastion.sqlite"
+    path: "./Dagger.sqlite"
   encryption:
     master_key: "production-key"
     salt: "production-salt"
@@ -90,7 +90,7 @@ scanner:
 Load configuration:
 
 ```python
-from pybastion.containers.config import load_config, validate_config
+from Dagger.containers.config import load_config, validate_config
 
 # Load and validate configuration
 config_dict = load_config("config.yml")
@@ -108,7 +108,7 @@ Services can use dependency injection through constructor injection:
 
 ```python
 from dependency_injector.wiring import Provide, inject
-from pybastion.containers import ApplicationContainer
+from Dagger.containers import ApplicationContainer
 
 class MyService:
     @inject

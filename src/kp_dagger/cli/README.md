@@ -1,11 +1,11 @@
-# PyBastion CLI Interface
+# Dagger CLI Interface
 
-This directory contains the complete Command Line Interface (CLI) for PyBastion, built with Click and Rich for enhanced terminal experience.
+This directory contains the complete Command Line Interface (CLI) for Dagger, built with Click and Rich for enhanced terminal experience.
 
 ## 🏗️ Structure
 
 ```
-src/pybastion/cli/
+src/Dagger/cli/
 ├── __init__.py              # CLI package initialization
 ├── main.py                  # Main CLI entry point with Click groups
 ├── commands/                # Individual command modules
@@ -35,7 +35,7 @@ src/pybastion/cli/
 - **Configurable Output** - Multiple output formats (table, JSON, YAML)
 
 ### Configuration Management
-- **Persistent Settings** - User configuration stored in `~/.pybastion/config.json`
+- **Persistent Settings** - User configuration stored in `~/.Dagger/config.json`
 - **CLI Options** - Override settings via command-line arguments
 - **Environment Variables** - Support for environment-based configuration
 
@@ -46,31 +46,31 @@ src/pybastion/cli/
 **PowerShell:**
 ```powershell
 # Basic configuration analysis
-pybastion analyze router-config.txt
+Dagger analyze router-config.txt
 
 # Multi-file analysis with specific device type
-pybastion analyze --device-type cisco-ios *.cfg
+Dagger analyze --device-type cisco-ios *.cfg
 
 # Full security analysis with CIS benchmarks
-pybastion analyze --cis-benchmarks --vulnerability-check config.txt
+Dagger analyze --cis-benchmarks --vulnerability-check config.txt
 
 # Parallel analysis with custom output
-pybastion analyze --parallel 4 --format json --output results.json configs/
+Dagger analyze --parallel 4 --format json --output results.json configs/
 ```
 
 **Bash:**
 ```bash
 # Basic configuration analysis
-pybastion analyze router-config.txt
+Dagger analyze router-config.txt
 
 # Multi-file analysis with specific device type
-pybastion analyze --device-type cisco-ios *.cfg
+Dagger analyze --device-type cisco-ios *.cfg
 
 # Full security analysis with CIS benchmarks
-pybastion analyze --cis-benchmarks --vulnerability-check config.txt
+Dagger analyze --cis-benchmarks --vulnerability-check config.txt
 
 # Parallel analysis with custom output
-pybastion analyze --parallel 4 --format json --output results.json configs/
+Dagger analyze --parallel 4 --format json --output results.json configs/
 ```
 
 ### Validation Commands
@@ -78,25 +78,25 @@ pybastion analyze --parallel 4 --format json --output results.json configs/
 **PowerShell:**
 ```powershell
 # Basic validation
-pybastion validate config.txt
+Dagger validate config.txt
 
 # Strict validation (warnings as errors)
-pybastion validate --strict --device-type cisco-asa firewall.cfg
+Dagger validate --strict --device-type cisco-asa firewall.cfg
 
 # Batch validation with JSON output
-pybastion validate --format json --output validation.json *.txt
+Dagger validate --format json --output validation.json *.txt
 ```
 
 **Bash:**
 ```bash
 # Basic validation
-pybastion validate config.txt
+Dagger validate config.txt
 
 # Strict validation (warnings as errors)
-pybastion validate --strict --device-type cisco-asa firewall.cfg
+Dagger validate --strict --device-type cisco-asa firewall.cfg
 
 # Batch validation with JSON output
-pybastion validate --format json --output validation.json *.txt
+Dagger validate --format json --output validation.json *.txt
 ```
 
 ### Report Generation
@@ -104,25 +104,25 @@ pybastion validate --format json --output validation.json *.txt
 **PowerShell:**
 ```powershell
 # Generate HTML report
-pybastion report analysis-results.json
+Dagger report analysis-results.json
 
 # Executive summary in PDF format
-pybastion report --template executive --format pdf results.json
+Dagger report --template executive --format pdf results.json
 
 # Open report automatically
-pybastion report --open --format html results.json
+Dagger report --open --format html results.json
 ```
 
 **Bash:**
 ```bash
 # Generate HTML report
-pybastion report analysis-results.json
+Dagger report analysis-results.json
 
 # Executive summary in PDF format
-pybastion report --template executive --format pdf results.json
+Dagger report --template executive --format pdf results.json
 
 # Open report automatically
-pybastion report --open --format html results.json
+Dagger report --open --format html results.json
 ```
 
 ### Configuration Management
@@ -130,25 +130,25 @@ pybastion report --open --format html results.json
 **PowerShell:**
 ```powershell
 # Show current configuration
-pybastion config --show
+Dagger config --show
 
 # Set default output format
-pybastion config --set output_format json
+Dagger config --set output_format json
 
 # Reset to defaults
-pybastion config --reset
+Dagger config --reset
 ```
 
 **Bash:**
 ```bash
 # Show current configuration
-pybastion config --show
+Dagger config --show
 
 # Set default output format
-pybastion config --set output_format json
+Dagger config --set output_format json
 
 # Reset to defaults
-pybastion config --reset
+Dagger config --reset
 ```
 
 ## 🎛️ Global Options
@@ -203,10 +203,10 @@ The CLI supports the following configuration options:
 The CLI is accessible via:
 ```python
 # Direct import
-from pybastion.cli.main import main
+from Dagger.cli.main import main
 
 # Package entry point (pyproject.toml)
-pybastion = "pybastion.cli.main:main"
+Dagger = "Dagger.cli.main:main"
 ```
 
 ### Extensibility
@@ -259,12 +259,12 @@ Optional enhancement dependencies:
    
    **PowerShell:**
    ```powershell
-   python -m pybastion.cli.main --help
+   python -m Dagger.cli.main --help
    ```
    
    **Bash:**
    ```bash
-   python -m pybastion.cli.main --help
+   python -m Dagger.cli.main --help
    ```
 
 3. **Run Example**
@@ -284,19 +284,19 @@ Optional enhancement dependencies:
    **PowerShell:**
    ```powershell
    # Run with development dependencies
-   uv run python -m pybastion.cli.main analyze --help
+   uv run python -m Dagger.cli.main analyze --help
    
    # Command chaining (use semicolon)
-   uv sync; uv run python -m pybastion.cli.main --version
+   uv sync; uv run python -m Dagger.cli.main --version
    ```
    
    **Bash:**
    ```bash
    # Run with development dependencies
-   uv run python -m pybastion.cli.main analyze --help
+   uv run python -m Dagger.cli.main analyze --help
    
    # Command chaining (use &&)
-   uv sync && uv run python -m pybastion.cli.main --version
+   uv sync && uv run python -m Dagger.cli.main --version
    ```
 
-This CLI structure provides a solid foundation for PyBastion's command-line interface with room for expansion as the core functionality is implemented.
+This CLI structure provides a solid foundation for Dagger's command-line interface with room for expansion as the core functionality is implemented.

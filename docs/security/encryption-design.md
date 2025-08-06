@@ -1,6 +1,6 @@
 # Encryption Design
 
-PyBastion implements a comprehensive field-level encryption system to protect sensitive network configuration data at rest and in transit.
+Dagger implements a comprehensive field-level encryption system to protect sensitive network configuration data at rest and in transit.
 
 ## Overview
 
@@ -15,17 +15,17 @@ The encryption system provides:
 
 ### Core Components
 
-1. **EncryptionService** (`pybastion.core.encryption`)
+1. **EncryptionService** (`Dagger.core.encryption`)
    - Handles all cryptographic operations
    - Tenant-specific key derivation
    - Authenticated encryption/decryption
 
-2. **EncryptedField** (`pybastion.models.base.encryption`)
+2. **EncryptedField** (`Dagger.models.base.encryption`)
    - Python descriptor for transparent field access
    - Automatic encryption/decryption
    - Caching for performance
 
-3. **PyBastionBaseModel** (`pybastion.models.base.base`)
+3. **DaggerBaseModel** (`Dagger.models.base.base`)
    - SQLModel integration
    - Encryption service injection
    - Encrypted data serialization
@@ -79,7 +79,7 @@ tenant_key = derive_key(runtime_key, tenant_id, salt)
 Sensitive fields are transparently encrypted:
 
 ```python
-class IPAddress(PyBastionBaseModel):
+class IPAddress(DaggerBaseModel):
     original_address: str | None = EncryptedField(default=None)
     normalized_address: str | None = EncryptedField(default=None)
 ```
@@ -88,8 +88,8 @@ class IPAddress(PyBastionBaseModel):
 
 ```python
 from uuid import uuid4
-from pybastion.core.encryption import EncryptionServiceManager
-from pybastion.models.normalized.ip_address import IPAddress
+from Dagger.core.encryption import EncryptionServiceManager
+from Dagger.models.normalized.ip_address import IPAddress
 
 # Initialize encryption
 runtime_key = EncryptionServiceManager.generate_runtime_key()

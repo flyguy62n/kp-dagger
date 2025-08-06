@@ -1,5 +1,5 @@
 """
-Core encryption service for PyBastion.
+Core encryption service for Dagger.
 
 Provides field-level encryption using AES256-GCM with tenant-specific
 key derivation using Argon2id KDF. All encryption is performed with

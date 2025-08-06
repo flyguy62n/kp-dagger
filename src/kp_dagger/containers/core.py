@@ -1,4 +1,4 @@
-"""Core services container for PyBastion."""
+"""Core services container for Dagger."""
 
 from dependency_injector import containers, providers
 
@@ -6,7 +6,7 @@ from kp_dagger.core.database import DatabaseManager
 
 
 class CoreContainer(containers.DeclarativeContainer):
-    """Container for core PyBastion services."""
+    """Container for core Dagger services."""
 
     config = providers.Configuration()
 

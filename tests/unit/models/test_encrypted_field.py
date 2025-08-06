@@ -6,11 +6,11 @@ import pytest
 from sqlmodel import Field
 
 from kp_dagger.core.encryption import EncryptionServiceManager, TenantEncryptionService
-from kp_dagger.models.base.base import PyBastionBaseModel
+from kp_dagger.models.base.base import DaggerBaseModel
 from kp_dagger.models.base.encryption import EncryptedField
 
 
-class TestModel(PyBastionBaseModel, table=True):
+class TestModel(DaggerBaseModel, table=True):
     """Test model with encrypted field."""
 
     __tablename__ = "test_models"

@@ -1,6 +1,6 @@
-# PyBastion Development Issues
+# Dagger Development Issues
 
-This document contains a comprehensive list of GitHub issues to create for tracking PyBastion development. Copy each section as a separate GitHub issue.
+This document contains a comprehensive list of GitHub issues to create for tracking Dagger development. Copy each section as a separate GitHub issue.
 
 ---
 
@@ -15,7 +15,7 @@ This document contains a comprehensive list of GitHub issues to create for track
 Implement the base parser architecture that all device-specific parsers will inherit from.
 
 **Acceptance Criteria:**
-- [ ] Complete `src/pybastion/parsers/base/parser.py` with abstract base class
+- [ ] Complete `src/Dagger/parsers/base/parser.py` with abstract base class
 - [ ] Define common parsing interfaces and methods
 - [ ] Implement error handling and validation
 - [ ] Add logging support
@@ -23,7 +23,7 @@ Implement the base parser architecture that all device-specific parsers will inh
 - [ ] Document parser development guidelines
 
 **Related Files:**
-- `src/pybastion/parsers/base/parser.py`
+- `src/Dagger/parsers/base/parser.py`
 - `tests/unit/parsers/test_base_parser.py`
 
 ---
@@ -37,7 +37,7 @@ Implement the base parser architecture that all device-specific parsers will inh
 Complete the database layer implementation using DuckDB for storing parsed configuration data and analysis results.
 
 **Acceptance Criteria:**
-- [ ] Complete `src/pybastion/core/database.py` implementation
+- [ ] Complete `src/Dagger/core/database.py` implementation
 - [ ] Define database schema for all supported device types
 - [ ] Implement connection management and transactions
 - [ ] Add database migration support
@@ -47,8 +47,8 @@ Complete the database layer implementation using DuckDB for storing parsed confi
 - [ ] Performance optimization for large configurations
 
 **Related Files:**
-- `src/pybastion/core/database.py`
-- `src/pybastion/models/` (all model files)
+- `src/Dagger/core/database.py`
+- `src/Dagger/models/` (all model files)
 - `tests/unit/core/test_database.py`
 
 ---
@@ -62,7 +62,7 @@ Complete the database layer implementation using DuckDB for storing parsed confi
 Complete the core scanner that orchestrates parsing, analysis, and reporting.
 
 **Acceptance Criteria:**
-- [ ] Complete `src/pybastion/core/scanner.py` implementation
+- [ ] Complete `src/Dagger/core/scanner.py` implementation
 - [ ] Implement file discovery and batching
 - [ ] Add progress tracking and reporting
 - [ ] Implement parallel processing for large sets
@@ -72,7 +72,7 @@ Complete the core scanner that orchestrates parsing, analysis, and reporting.
 - [ ] Unit tests and integration tests
 
 **Related Files:**
-- `src/pybastion/core/scanner.py`
+- `src/Dagger/core/scanner.py`
 - `tests/unit/core/test_scanner.py`
 
 ---
@@ -100,9 +100,9 @@ Implement comprehensive Cisco IOS configuration parser.
 - [ ] Documentation and examples
 
 **Related Files:**
-- `src/pybastion/parsers/cisco_ios/parser.py`
-- `src/pybastion/parsers/cisco_ios/commands/`
-- `src/pybastion/models/cisco_ios/`
+- `src/Dagger/parsers/cisco_ios/parser.py`
+- `src/Dagger/parsers/cisco_ios/commands/`
+- `src/Dagger/models/cisco_ios/`
 - `tests/unit/parsers/test_cisco_ios_parser.py`
 - `tests/fixtures/configs/cisco_ios/`
 
@@ -129,9 +129,9 @@ Implement comprehensive Cisco ASA firewall configuration parser.
 - [ ] Documentation and examples
 
 **Related Files:**
-- `src/pybastion/parsers/cisco_asa/parser.py`
-- `src/pybastion/parsers/cisco_asa/commands/`
-- `src/pybastion/models/cisco_asa/`
+- `src/Dagger/parsers/cisco_asa/parser.py`
+- `src/Dagger/parsers/cisco_asa/commands/`
+- `src/Dagger/models/cisco_asa/`
 - `tests/unit/parsers/test_cisco_asa_parser.py`
 
 ---
@@ -157,9 +157,9 @@ Implement comprehensive FortiGate FortiOS configuration parser.
 - [ ] Documentation and examples
 
 **Related Files:**
-- `src/pybastion/parsers/fortigate/parser.py`
-- `src/pybastion/parsers/fortigate/commands/`
-- `src/pybastion/models/fortigate/`
+- `src/Dagger/parsers/fortigate/parser.py`
+- `src/Dagger/parsers/fortigate/commands/`
+- `src/Dagger/models/fortigate/`
 - `tests/unit/parsers/test_fortigate_parser.py`
 
 ---
@@ -185,9 +185,9 @@ Implement comprehensive PaloAlto PAN-OS configuration parser.
 - [ ] Documentation and examples
 
 **Related Files:**
-- `src/pybastion/parsers/paloalto/parser.py`
-- `src/pybastion/parsers/paloalto/commands/`
-- `src/pybastion/models/paloalto/`
+- `src/Dagger/parsers/paloalto/parser.py`
+- `src/Dagger/parsers/paloalto/commands/`
+- `src/Dagger/models/paloalto/`
 - `tests/unit/parsers/test_paloalto_parser.py`
 
 ---
@@ -212,8 +212,8 @@ Implement CIS Level 1 benchmark checks for Cisco IOS devices.
 - [ ] Documentation of check implementations
 
 **Related Files:**
-- `src/pybastion/analyzers/rules/cis_benchmarks/cisco.py`
-- `src/pybastion/analyzers/queries/security.py`
+- `src/Dagger/analyzers/rules/cis_benchmarks/cisco.py`
+- `src/Dagger/analyzers/queries/security.py`
 - `tests/unit/analyzers/test_cis_cisco.py`
 
 ---
@@ -237,8 +237,8 @@ Implement comprehensive security risk analysis for network configurations.
 - [ ] Unit tests and validation
 
 **Related Files:**
-- `src/pybastion/analyzers/sql/analyzer.py`
-- `src/pybastion/analyzers/queries/security.py`
+- `src/Dagger/analyzers/sql/analyzer.py`
+- `src/Dagger/analyzers/queries/security.py`
 - `tests/unit/analyzers/test_security_analysis.py`
 
 ---
@@ -262,8 +262,8 @@ Integrate with CVE Details and End of Life APIs for vulnerability assessment.
 - [ ] Integration tests
 
 **Related Files:**
-- `src/pybastion/api_clients/cve_details.py`
-- `src/pybastion/api_clients/endoflife.py`
+- `src/Dagger/api_clients/cve_details.py`
+- `src/Dagger/api_clients/endoflife.py`
 - `tests/unit/api_clients/`
 
 ---
@@ -291,7 +291,7 @@ Implement comprehensive command-line interface using Click.
 - [ ] Shell completion support
 
 **Related Files:**
-- `src/pybastion/cli/`
+- `src/Dagger/cli/`
 - `tests/unit/cli/`
 
 ---
@@ -316,8 +316,8 @@ Implement comprehensive report generation in multiple formats.
 - [ ] Unit tests for all formats
 
 **Related Files:**
-- `src/pybastion/reports/generator.py`
-- `src/pybastion/reports/templates/`
+- `src/Dagger/reports/generator.py`
+- `src/Dagger/reports/templates/`
 - `tests/unit/reports/`
 
 ---
@@ -370,7 +370,7 @@ Prepare for production release on PyPI.
 **Related Files:**
 - `pyproject.toml`
 - `CHANGELOG.md`
-- `src/pybastion/__init__.py`
+- `src/Dagger/__init__.py`
 
 ---
 
@@ -467,4 +467,4 @@ Add clear indicators throughout the codebase showing development status.
 
 ---
 
-This roadmap provides a comprehensive development plan for PyBastion. Each issue should be created individually on GitHub with the appropriate labels and milestone assignments.
+This roadmap provides a comprehensive development plan for Dagger. Each issue should be created individually on GitHub with the appropriate labels and milestone assignments.

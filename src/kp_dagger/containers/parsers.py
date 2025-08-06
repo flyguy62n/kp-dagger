@@ -1,4 +1,4 @@
-"""Parser services container for PyBastion."""
+"""Parser services container for Dagger."""
 
 from dependency_injector import containers, providers
 

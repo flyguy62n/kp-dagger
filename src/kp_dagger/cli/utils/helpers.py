@@ -1,5 +1,5 @@
 """
-Common utilities for PyBastion CLI.
+Common utilities for Dagger CLI.
 
 Contains helper functions and utilities used across different CLI commands.
 """

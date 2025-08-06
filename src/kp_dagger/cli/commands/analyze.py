@@ -1,5 +1,5 @@
 """
-Analyze command for PyBastion CLI.
+Analyze command for Dagger CLI.
 
 Handles configuration file analysis including parsing, security analysis,
 and compliance checking.
@@ -99,16 +99,16 @@ def analyze(
 
     Examples:
         # Analyze a single configuration file
-        pybastion analyze router-config.txt
+        Dagger analyze router-config.txt
 
         # Analyze multiple files with specific device type
-        pybastion analyze --device-type cisco-ios *.cfg
+        Dagger analyze --device-type cisco-ios *.cfg
 
         # Run full analysis with CIS benchmarks and vulnerability checks
-        pybastion analyze --cis-benchmarks --vulnerability-check config.txt
+        Dagger analyze --cis-benchmarks --vulnerability-check config.txt
 
         # Save results to JSON file
-        pybastion analyze --format json --output results.json config.txt
+        Dagger analyze --format json --output results.json config.txt
 
     """
     verbose = ctx.obj.get("verbose", 0)

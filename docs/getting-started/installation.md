@@ -1,6 +1,6 @@
 # Installation
 
-PyBastion can be installed using pip or uv (recommended).
+Dagger can be installed using pip or uv (recommended).
 
 ## Requirements
 
@@ -10,7 +10,7 @@ PyBastion can be installed using pip or uv (recommended).
 
 ## Using UV (Recommended)
 
-UV is the fastest Python package manager and is recommended for PyBastion.
+UV is the fastest Python package manager and is recommended for Dagger.
 
 ### Install UV
 
@@ -22,30 +22,30 @@ irm https://astral.sh/uv/install.ps1 | iex
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-### Install PyBastion
+### Install Dagger
 
 ```bash
 # Install latest stable version
-uv pip install pybastion
+uv pip install Dagger
 
 # Install with development dependencies
-uv pip install pybastion[dev]
+uv pip install Dagger[dev]
 
 # Install with documentation dependencies
-uv pip install pybastion[docs]
+uv pip install Dagger[docs]
 ```
 
 ## Using Pip
 
 ```bash
 # Install latest stable version
-pip install pybastion
+pip install Dagger
 
 # Install with development dependencies
-pip install pybastion[dev]
+pip install Dagger[dev]
 
 # Install with documentation dependencies
-pip install pybastion[docs]
+pip install Dagger[docs]
 ```
 
 ## Development Installation
@@ -54,8 +54,8 @@ For development or to get the latest features:
 
 ```bash
 # Clone the repository
-git clone https://github.com/flyguy62n/pybastion.git
-cd pybastion
+git clone https://github.com/flyguy62n/Dagger.git
+cd Dagger
 
 # Install with UV
 uv pip install -e .[dev,docs]
@@ -69,8 +69,8 @@ pip install -e .[dev,docs]
 Verify your installation:
 
 ```bash
-pybastion --version
-pybastion --help
+Dagger --version
+Dagger --help
 ```
 
 ## Next Steps

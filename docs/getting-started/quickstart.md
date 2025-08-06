@@ -1,13 +1,13 @@
 # Quick Start
 
-Get up and running with PyBastion in minutes.
+Get up and running with Dagger in minutes.
 
 ## Installation
 
-First, install PyBastion:
+First, install Dagger:
 
 ```bash
-uv pip install pybastion
+uv pip install Dagger
 ```
 
 ## Basic Usage
@@ -16,36 +16,36 @@ uv pip install pybastion
 
 ```bash
 # Analyze a Cisco IOS configuration
-pybastion analyze cisco-ios router-config.txt
+Dagger analyze cisco-ios router-config.txt
 
 # Analyze a Cisco ASA configuration
-pybastion analyze cisco-asa firewall-config.txt
+Dagger analyze cisco-asa firewall-config.txt
 
 # Analyze a Fortigate configuration
-pybastion analyze fortigate fortigate-config.txt
+Dagger analyze fortigate fortigate-config.txt
 
 # Analyze a PaloAlto configuration
-pybastion analyze paloalto panos-config.xml
+Dagger analyze paloalto panos-config.xml
 ```
 
 ### 2. Generate a Report
 
 ```bash
 # Generate HTML report
-pybastion report --format html --output security-report.html
+Dagger report --format html --output security-report.html
 
 # Generate JSON report
-pybastion report --format json --output security-report.json
+Dagger report --format json --output security-report.json
 
 # Generate PDF report (requires additional dependencies)
-pybastion report --format pdf --output security-report.pdf
+Dagger report --format pdf --output security-report.pdf
 ```
 
 ### 3. Validate Configuration Syntax
 
 ```bash
 # Validate configuration file syntax
-pybastion validate cisco-ios router-config.txt
+Dagger validate cisco-ios router-config.txt
 ```
 
 ## Configuration
@@ -53,9 +53,9 @@ pybastion validate cisco-ios router-config.txt
 Create a configuration file for your organization:
 
 ```yaml
-# ~/.pybastion/config.yaml
+# ~/.Dagger/config.yaml
 database:
-  path: "./pybastion.sqlite"
+  path: "./Dagger.sqlite"
   encryption_enabled: true
 
 tenants:
@@ -84,21 +84,21 @@ reporting:
 
 ```bash
 # 1. Set up tenant
-pybastion tenant create "acme-corp" --description "ACME Corporation"
+Dagger tenant create "acme-corp" --description "ACME Corporation"
 
 # 2. Analyze multiple devices
-pybastion analyze cisco-ios devices/router-1.txt --tenant acme-corp
-pybastion analyze cisco-asa devices/firewall-1.txt --tenant acme-corp
-pybastion analyze fortigate devices/fortigate-1.txt --tenant acme-corp
+Dagger analyze cisco-ios devices/router-1.txt --tenant acme-corp
+Dagger analyze cisco-asa devices/firewall-1.txt --tenant acme-corp
+Dagger analyze fortigate devices/fortigate-1.txt --tenant acme-corp
 
 # 3. Generate comprehensive report
-pybastion report --tenant acme-corp --format html \
+Dagger report --tenant acme-corp --format html \
   --output acme-corp-security-report.html \
   --include-executive-summary \
   --include-recommendations
 
 # 4. Export findings for remediation
-pybastion export findings --tenant acme-corp --format csv \
+Dagger export findings --tenant acme-corp --format csv \
   --output acme-corp-findings.csv
 ```
 
@@ -106,12 +106,12 @@ pybastion export findings --tenant acme-corp --format csv \
 
 | Command | Description |
 |---------|-------------|
-| `pybastion analyze <type> <file>` | Analyze configuration file |
-| `pybastion report` | Generate security report |
-| `pybastion validate <type> <file>` | Validate configuration syntax |
-| `pybastion tenant list` | List configured tenants |
-| `pybastion status` | Show analysis status |
-| `pybastion export` | Export findings data |
+| `Dagger analyze <type> <file>` | Analyze configuration file |
+| `Dagger report` | Generate security report |
+| `Dagger validate <type> <file>` | Validate configuration syntax |
+| `Dagger tenant list` | List configured tenants |
+| `Dagger status` | Show analysis status |
+| `Dagger export` | Export findings data |
 
 ## Supported Device Types
 

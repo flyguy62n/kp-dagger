@@ -1,25 +1,25 @@
 # First Analysis
 
-This guide walks you through performing your first security analysis with PyBastion.
+This guide walks you through performing your first security analysis with Dagger.
 
 ## Prerequisites
 
 Before starting, ensure you have:
 
-- [Installed PyBastion](installation.md)
+- [Installed Dagger](installation.md)
 - A network device configuration file
 - Basic familiarity with command line interfaces
 
 ## Sample Configuration Files
 
-PyBastion includes sample configuration files for testing. You can also use your own configuration files.
+Dagger includes sample configuration files for testing. You can also use your own configuration files.
 
 ### Download Test Data
 
 ```bash
 # Clone the repository for test data
-git clone https://github.com/flyguy62n/pybastion.git
-cd pybastion/testdata
+git clone https://github.com/flyguy62n/Dagger.git
+cd Dagger/testdata
 ```
 
 ## Step 1: Validate Configuration
@@ -28,13 +28,13 @@ First, validate that your configuration file is properly formatted:
 
 ```bash
 # Validate a Cisco IOS configuration
-pybastion validate cisco-ios testdata/router-config.txt
+Dagger validate cisco-ios testdata/router-config.txt
 
 # Validate a Cisco ASA configuration  
-pybastion validate cisco-asa firewall-config.txt
+Dagger validate cisco-asa firewall-config.txt
 
 # Validate syntax and show parsing results
-pybastion validate cisco-ios router-config.txt --verbose
+Dagger validate cisco-ios router-config.txt --verbose
 ```
 
 ### Expected Output
@@ -58,13 +58,13 @@ Run a comprehensive security analysis:
 
 ```bash
 # Basic analysis
-pybastion analyze cisco-ios testdata/router-config.txt
+Dagger analyze cisco-ios testdata/router-config.txt
 
 # Analysis with specific benchmark level
-pybastion analyze cisco-ios router-config.txt --cis-level 1
+Dagger analyze cisco-ios router-config.txt --cis-level 1
 
 # Analysis with custom output directory
-pybastion analyze cisco-ios router-config.txt --output-dir ./analysis-results
+Dagger analyze cisco-ios router-config.txt --output-dir ./analysis-results
 ```
 
 ### Analysis Process
@@ -80,7 +80,7 @@ The analysis performs several checks:
 ### Expected Output
 
 ```
-🔍 PyBastion Security Analysis
+🔍 Dagger Security Analysis
 📄 Analyzing: router-config.txt (Cisco IOS)
 
 ✅ Configuration parsed successfully
@@ -123,13 +123,13 @@ Focus on critical and high-severity findings first:
 
 ```bash
 # Show only critical findings
-pybastion findings --severity critical
+Dagger findings --severity critical
 
 # Show findings for specific category
-pybastion findings --category access_control
+Dagger findings --category access_control
 
 # Export findings to CSV for tracking
-pybastion export findings --format csv --output findings.csv
+Dagger export findings --format csv --output findings.csv
 ```
 
 ### Example Critical Finding
@@ -168,26 +168,26 @@ Create formatted reports for different audiences:
 
 ```bash
 # Generate comprehensive HTML report
-pybastion report --format html --output security-report.html
+Dagger report --format html --output security-report.html
 
 # Include executive summary  
-pybastion report --format html --output report.html --include-executive-summary
+Dagger report --format html --output report.html --include-executive-summary
 
 # Custom template and branding
-pybastion report --format html --template custom.j2 --logo company-logo.png
+Dagger report --format html --template custom.j2 --logo company-logo.png
 ```
 
 ### Other Report Formats
 
 ```bash
 # JSON for automated processing
-pybastion report --format json --output security-data.json
+Dagger report --format json --output security-data.json
 
 # CSV for spreadsheet analysis
-pybastion report --format csv --output findings.csv
+Dagger report --format csv --output findings.csv
 
 # PDF for management (requires additional dependencies)
-pybastion report --format pdf --output executive-report.pdf
+Dagger report --format pdf --output executive-report.pdf
 ```
 
 ## Step 5: Address Findings
@@ -211,13 +211,13 @@ pybastion report --format pdf --output executive-report.pdf
 
 ```bash
 # Mark findings as resolved
-pybastion findings update <finding-id> --status resolved
+Dagger findings update <finding-id> --status resolved
 
 # Add comments to findings
-pybastion findings comment <finding-id> "Fixed in maintenance window MW-2024-001"
+Dagger findings comment <finding-id> "Fixed in maintenance window MW-2024-001"
 
 # Generate progress report
-pybastion report --show-resolved --format html --output progress-report.html
+Dagger report --show-resolved --format html --output progress-report.html
 ```
 
 ## Understanding Report Structure
@@ -262,19 +262,19 @@ ls -la router-config.txt
 **Unknown device type**
 ```bash
 # Specify device type explicitly
-pybastion analyze cisco-ios router-config.txt
+Dagger analyze cisco-ios router-config.txt
 ```
 
 **Parsing errors**
 ```bash
 # Use verbose mode for detailed error information
-pybastion validate cisco-ios router-config.txt --verbose
+Dagger validate cisco-ios router-config.txt --verbose
 ```
 
 **No findings generated**
 ```bash
 # Check if analysis rules are enabled
-pybastion config show analysis
+Dagger config show analysis
 ```
 
 For more troubleshooting help, see the [Troubleshooting Guide](../user-guide/troubleshooting.md).

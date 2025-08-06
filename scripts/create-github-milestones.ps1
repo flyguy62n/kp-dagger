@@ -1,7 +1,7 @@
-# GitHub Milestones Creation Script for PyBastion
+# GitHub Milestones Creation Script for Dagger
 # Run this script from PowerShell after installing GitHub CLI
 
-Write-Host "Creating GitHub milestones for PyBastion..." -ForegroundColor Green
+Write-Host "Creating GitHub milestones for Dagger..." -ForegroundColor Green
 
 # Define milestones with descriptions and due dates
 $milestones = @(
@@ -43,7 +43,7 @@ try {
 
 # Check if we're in a git repository
 if (-not (Test-Path ".git")) {
-    Write-Error "Please run this script from the root of your PyBastion repository"
+    Write-Error "Please run this script from the root of your Dagger repository"
     exit 1
 }
 
@@ -65,4 +65,4 @@ foreach ($milestone in $milestones) {
 
 Write-Host ""
 Write-Host "Milestone creation complete!" -ForegroundColor Green
-Write-Host "You can view all milestones at: https://github.com/flyguy62n/pybastion/milestones" -ForegroundColor Cyan
+Write-Host "You can view all milestones at: https://github.com/flyguy62n/Dagger/milestones" -ForegroundColor Cyan

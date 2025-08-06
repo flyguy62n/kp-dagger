@@ -1,8 +1,8 @@
-# Master GitHub Setup Script for PyBastion
+# Master GitHub Setup Script for Dagger
 # This script creates labels, milestones, and issues in the correct order
 
 Write-Host "========================================" -ForegroundColor Blue
-Write-Host "PyBastion GitHub Project Setup" -ForegroundColor Blue
+Write-Host "Dagger GitHub Project Setup" -ForegroundColor Blue
 Write-Host "========================================" -ForegroundColor Blue
 Write-Host ""
 
@@ -19,7 +19,7 @@ try {
 
 # Check if we're in a git repository
 if (-not (Test-Path ".git")) {
-    Write-Error "Please run this script from the root of your PyBastion repository"
+    Write-Error "Please run this script from the root of your Dagger repository"
     exit 1
 }
 
@@ -78,10 +78,10 @@ Write-Host "GitHub Project Setup Complete!" -ForegroundColor Blue
 Write-Host "========================================" -ForegroundColor Blue
 Write-Host ""
 Write-Host "Next steps:" -ForegroundColor Green
-Write-Host "1. Visit your repository: https://github.com/flyguy62n/pybastion" -ForegroundColor Cyan
-Write-Host "2. Review the created labels: https://github.com/flyguy62n/pybastion/labels" -ForegroundColor Cyan
-Write-Host "3. Check the milestones: https://github.com/flyguy62n/pybastion/milestones" -ForegroundColor Cyan
-Write-Host "4. Review the issues: https://github.com/flyguy62n/pybastion/issues" -ForegroundColor Cyan
+Write-Host "1. Visit your repository: https://github.com/flyguy62n/Dagger" -ForegroundColor Cyan
+Write-Host "2. Review the created labels: https://github.com/flyguy62n/Dagger/labels" -ForegroundColor Cyan
+Write-Host "3. Check the milestones: https://github.com/flyguy62n/Dagger/milestones" -ForegroundColor Cyan
+Write-Host "4. Review the issues: https://github.com/flyguy62n/Dagger/issues" -ForegroundColor Cyan
 Write-Host "5. Create a project board to track progress" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "Recommended next actions:" -ForegroundColor Green

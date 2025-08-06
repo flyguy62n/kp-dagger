@@ -18,7 +18,7 @@ from kp_dagger.cli.main import main
 
 def demo_help_pages() -> None:
     """Demonstrate Rich-formatted help pages."""
-    print("🎨 PyBastion Rich Help Demo")
+    print("🎨 Dagger Rich Help Demo")
     print("=" * 50)
 
     # Test main help

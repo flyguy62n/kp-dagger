@@ -1,7 +1,7 @@
-# PyBastion Development Roadmap
+# Dagger Development Roadmap
 
 ## Overview
-This document outlines the development roadmap for PyBastion, a network device configuration security analysis tool.
+This document outlines the development roadmap for Dagger, a network device configuration security analysis tool.
 
 ## Current Status: Pre-Alpha (v0.0.1)
 - 🟢 **Completed**: Basic project structure and PyPI name reservation
@@ -200,9 +200,9 @@ This roadmap is a living document. Contributions and feedback are welcome:
 ## Contact
 
 - **Project Lead**: Randy Bartels (rjbartels@outlook.com)
-- **Repository**: https://github.com/flyguy62n/pybastion
-- **Issues**: https://github.com/flyguy62n/pybastion/issues
-- **Discussions**: https://github.com/flyguy62n/pybastion/discussions
+- **Repository**: https://github.com/flyguy62n/Dagger
+- **Issues**: https://github.com/flyguy62n/Dagger/issues
+- **Discussions**: https://github.com/flyguy62n/Dagger/discussions
 
 ---
 

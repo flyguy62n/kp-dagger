@@ -1,5 +1,5 @@
 """
-Timestamp utility functions for PyBastion.
+Timestamp utility functions for Dagger.
 
 This module provides utilities for generating timestamps in various formats,
 commonly used for file naming, logging, and data serialization.

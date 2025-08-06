@@ -1,1 +1,1 @@
-"""Examples package for PyBastion."""
+"""Examples package for Dagger."""

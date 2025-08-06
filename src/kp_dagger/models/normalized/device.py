@@ -4,11 +4,11 @@ from uuid import UUID
 
 from sqlmodel import Field
 
-from kp_dagger.models.base.base import PyBastionBaseModel
+from kp_dagger.models.base.base import DaggerBaseModel
 from kp_dagger.models.base.enums import DeviceType
 
 
-class Device(PyBastionBaseModel, table=True):
+class Device(DaggerBaseModel, table=True):
     """Device information and metadata."""
 
     __tablename__ = "devices"

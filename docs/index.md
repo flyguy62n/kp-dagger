@@ -1,10 +1,10 @@
-# PyBastion Documentation
+# Dagger Documentation
 
-Welcome to PyBastion, a comprehensive network device configuration security analysis tool designed for modern enterprise environments.
+Welcome to Dagger, a comprehensive network device configuration security analysis tool designed for modern enterprise environments.
 
-## What is PyBastion?
+## What is Dagger?
 
-PyBastion is a Python-based security analysis tool that helps network administrators and security professionals:
+Dagger is a Python-based security analysis tool that helps network administrators and security professionals:
 
 - **Analyze network device configurations** for security vulnerabilities and compliance issues
 - **Support multiple vendor platforms** including Cisco IOS/ASA, Fortinet FortiOS, and Palo Alto PAN-OS
@@ -40,26 +40,26 @@ PyBastion is a Python-based security analysis tool that helps network administra
 ## Quick Start
 
 ```bash
-# Install PyBastion
-pip install pybastion
+# Install Dagger
+pip install Dagger
 
 # Analyze a configuration file
-pybastion analyze --config-file router-config.txt --device-type cisco-ios
+Dagger analyze --config-file router-config.txt --device-type cisco-ios
 
 # Generate security report
-pybastion report --tenant my-company --format html
+Dagger report --tenant my-company --format html
 ```
 
 ## Documentation Structure
 
 ### 📚 **Getting Started**
-New to PyBastion? Start here for installation, configuration, and your first analysis.
+New to Dagger? Start here for installation, configuration, and your first analysis.
 
 ### 👥 **User Guide**
-Learn how to use PyBastion effectively for day-to-day security analysis tasks.
+Learn how to use Dagger effectively for day-to-day security analysis tasks.
 
 ### 🏗 **Architecture**
-Understand PyBastion's design, data models, and security architecture.
+Understand Dagger's design, data models, and security architecture.
 
 ### 📖 **API Reference**
 Complete API documentation auto-generated from the source code.
@@ -68,22 +68,22 @@ Complete API documentation auto-generated from the source code.
 In-depth security design, threat model, and compliance information.
 
 ### 💻 **Development**
-Contributing guidelines, development setup, and extending PyBastion.
+Contributing guidelines, development setup, and extending Dagger.
 
 ### 💡 **Examples**
 Practical examples and use cases for common scenarios.
 
 ## Community & Support
 
-- **GitHub Repository**: [flyguy62n/pybastion](https://github.com/flyguy62n/pybastion)
+- **GitHub Repository**: [flyguy62n/Dagger](https://github.com/flyguy62n/Dagger)
 - **Issue Tracker**: Report bugs and request features
 - **Discussions**: Ask questions and share use cases
 
 ## License
 
-PyBastion is licensed under the MIT License. See the [LICENSE](https://github.com/flyguy62n/pybastion/blob/main/LICENSE) file for details.
+Dagger is licensed under the MIT License. See the [LICENSE](https://github.com/flyguy62n/Dagger/blob/main/LICENSE) file for details.
 
 ---
 
 !!! warning "Development Status"
-    PyBastion is currently in **pre-alpha development**. While the core functionality is operational, the API may change before the first stable release. Use in production environments is not recommended at this time.
+    Dagger is currently in **pre-alpha development**. While the core functionality is operational, the API may change before the first stable release. Use in production environments is not recommended at this time.

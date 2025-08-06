@@ -1,5 +1,5 @@
 """
-Tenant command for PyBastion CLI.
+Tenant command for Dagger CLI.
 
 Handles tenant management including creation, deletion, and listing of tenants.
 """
@@ -31,7 +31,7 @@ def create(name: str) -> None:
 
     Examples:
         # Create a new tenant:
-        pybastion tenant create "my-tenant"
+        Dagger tenant create "my-tenant"
 
     """
     success_console.print(f"✅ Created tenant configuration for: {name}")
@@ -46,7 +46,7 @@ def list_tenants() -> None:
 
     Examples:
         # List all tenants:
-        pybastion tenant list
+        Dagger tenant list
 
     """
     success_console.print("📋 Listing all tenant configurations...")
@@ -69,10 +69,10 @@ def delete(name: str, *, force: bool = False) -> None:
 
     Examples:
         # Delete a tenant with confirmation:
-        pybastion tenant delete "my-tenant"
+        Dagger tenant delete "my-tenant"
 
         # Force delete without confirmation:
-        pybastion tenant delete "my-tenant" --force
+        Dagger tenant delete "my-tenant" --force
 
     """
     if not force and not click.confirm(

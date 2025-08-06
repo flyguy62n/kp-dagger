@@ -1,70 +1,77 @@
 # Architecture Overview
 
-PyBastion is designed as a modular, extensible network device configuration analysis platform.
+Dagger is designed as a modular, extensible network device configuration analysis platform.
 
 ## High-Level Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    CLI Interface                        │
-│                 (Click-based)                          │
-└─────────────────────┬───────────────────────────────────┘
-                      │
-┌─────────────────────┴───────────────────────────────────┐
-│                  Core Engine                           │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐   │
-│  │   Parser    │ │  Analyzer   │ │     Reporter    │   │
-│  │   Factory   │ │   Engine    │ │    Generator    │   │
-│  └─────────────┘ └─────────────┘ └─────────────────┘   │
-└─────────────────────┬───────────────────────────────────┘
-                      │
-┌─────────────────────┴───────────────────────────────────┐
-│                  Data Layer                            │
-│  ┌─────────────┐ ┌─────────────┐ ┌─────────────────┐   │
-│  │   Models    │ │  Database   │ │   Encryption    │   │
-│  │ (SQLModel)  │ │  (DuckDB)   │ │   Service       │   │
-│  └─────────────┘ └─────────────┘ └─────────────────┘   │
-└─────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TB
+    subgraph CLI ["CLI Interface (Click-based)"]
+        A[Command Line Interface]
+    end
+    
+    subgraph Core ["Core Engine"]
+        B[Parser Factory]
+        C[Analyzer Engine]
+        D[Reporter Generator]
+    end
+    
+    subgraph Data ["Data Layer"]
+        E["Models (SQLModel)"]
+        F["Database (DuckDB)"]
+        G[Encryption Service]
+    end
+    
+    A --> B
+    A --> C
+    A --> D
+    B --> E
+    C --> F
+    D --> G
+    
+    style CLI fill:#e1f5fe
+    style Core fill:#f3e5f5
+    style Data fill:#e8f5e8
 ```
 
 ## Core Components
 
-### 1. CLI Interface (`pybastion.cli`)
+### 1. CLI Interface (`Dagger.cli`)
 
 - **Click-based commands** for user interaction
 - **Sub-commands** for different operations (analyze, report, validate)
 - **Configuration management** through YAML files
 - **Progress indication** and user feedback
 
-### 2. Parser Factory (`pybastion.parsers`)
+### 2. Parser Factory (`Dagger.parsers`)
 
 - **Device-specific parsers** for each supported platform
 - **Extensible design** for adding new device types
 - **Normalized output** format for consistent analysis
 - **Error handling** for malformed configurations
 
-### 3. Analysis Engine (`pybastion.analyzers`)
+### 3. Analysis Engine (`Dagger.analyzers`)
 
 - **CIS Benchmark compliance** checking
 - **Security rule analysis** for ACLs and firewall rules
 - **Vulnerability detection** using CVE databases
 - **End-of-life checks** for firmware versions
 
-### 4. Data Models (`pybastion.models`)
+### 4. Data Models (`Dagger.models`)
 
 - **SQLModel integration** for ORM and validation
 - **Multi-tenant support** with tenant isolation
 - **Field-level encryption** for sensitive data
 - **Normalized schemas** across device types
 
-### 5. Database Layer (`pybastion.core.database`)
+### 5. Database Layer (`Dagger.core.database`)
 
 - **DuckDB** for local, high-performance storage
 - **Encrypted data** with Argon2id key derivation
 - **ACID compliance** for data integrity
 - **Schema migrations** for version upgrades
 
-### 6. Reporting System (`pybastion.reports`)
+### 6. Reporting System (`Dagger.reports`)
 
 - **Multiple output formats** (HTML, JSON, PDF, CSV)
 - **Customizable templates** using Jinja2
@@ -75,14 +82,19 @@ PyBastion is designed as a modular, extensible network device configuration anal
 
 ### Analysis Pipeline
 
-```
-Configuration File → Parser → Normalized Model → Database
-                                     ↓
-                              Analysis Engine
-                                     ↓
-                               Security Findings → Database
-                                     ↓
-                              Report Generator → Output
+```mermaid
+flowchart TD
+    A[Configuration File] --> B[Parser]
+    B --> C[Normalized Model]
+    C --> D[Database]
+    C --> E[Analysis Engine]
+    E --> F[Security Findings]
+    F --> D
+    F --> G[Report Generator]
+    G --> H[Output]
+    
+    style A fill:#fff2cc
+    style H fill:#d5e8d4
 ```
 
 ### Detailed Flow
@@ -151,10 +163,31 @@ Optimized for handling large configurations:
 
 ### Tenant Isolation
 
-```
-Tenant A ←→ Encryption Key A ←→ Database Partition A
-Tenant B ←→ Encryption Key B ←→ Database Partition B
-Tenant C ←→ Encryption Key C ←→ Database Partition C
+```mermaid
+flowchart LR
+    subgraph TenantA ["Tenant A"]
+        A1[Data A]
+    end
+    
+    subgraph TenantB ["Tenant B"]
+        B1[Data B]
+    end
+    
+    subgraph TenantC ["Tenant C"]
+        C1[Data C]
+    end
+    
+    A1 <--> A2[Encryption Key A]
+    B1 <--> B2[Encryption Key B]
+    C1 <--> C2[Encryption Key C]
+    
+    A2 <--> A3[Database Partition A]
+    B2 <--> B3[Database Partition B]
+    C2 <--> C3[Database Partition C]
+    
+    style TenantA fill:#e3f2fd
+    style TenantB fill:#f3e5f5
+    style TenantC fill:#e8f5e8
 ```
 
 ### Benefits

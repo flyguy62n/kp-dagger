@@ -1,5 +1,5 @@
 """
-Configuration utilities for PyBastion CLI.
+Configuration utilities for Dagger CLI.
 
 Handles configuration file loading, validation, and management for the CLI interface.
 """
@@ -38,7 +38,7 @@ class ConfigManager:
     def _get_default_config_path(self) -> Path:
         """Get the default configuration file path."""
         # Use user's home directory for config
-        config_dir = Path.home() / ".pybastion"
+        config_dir = Path.home() / ".Dagger"
         config_dir.mkdir(exist_ok=True)
         return config_dir / "config.json"
 
@@ -92,7 +92,7 @@ class ConfigManager:
         """Display current configuration."""
         from rich.table import Table
 
-        table = Table(title="PyBastion Configuration")
+        table = Table(title="Dagger Configuration")
         table.add_column("Setting", style="cyan")
         table.add_column("Value", style="white")
 
@@ -130,19 +130,19 @@ def config(
     set_option: tuple[tuple[str, str], ...],
 ) -> None:
     """
-    Manage PyBastion CLI configuration.
+    Manage Dagger CLI configuration.
 
     ⚠️  WARNING: This is a development version and is not ready for production use.
 
     Examples:
         # Show current configuration
-        pybastion config --show
+        Dagger config --show
 
         # Set default output format
-        pybastion config --set output_format json
+        Dagger config --set output_format json
 
         # Reset to defaults
-        pybastion config --reset
+        Dagger config --reset
 
     """
     config_manager = ConfigManager()

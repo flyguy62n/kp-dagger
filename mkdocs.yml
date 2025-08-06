@@ -1,8 +1,8 @@
-site_name: PyBastion Documentation
+site_name: KP Dagger Documentation
 site_description: Network device configuration security analysis tool
-site_url: https://pybastion.readthedocs.io
-repo_url: https://github.com/flyguy62n/pybastion
-repo_name: flyguy62n/pybastion
+site_url: https://flyguy62n.github.io/kp-dagger
+repo_url: https://github.com/flyguy62n/kp-dagger
+repo_name: flyguy62n/kp-dagger
 
 theme:
   name: material
@@ -32,55 +32,22 @@ theme:
 nav:
   - Home: index.md
   - Getting Started:
-    - getting-started/installation.md
-    - getting-started/quick-start.md
-    - getting-started/configuration.md
-  - User Guide:
-    - user-guide/cli-commands.md
-    - user-guide/configuration-analysis.md
-    - user-guide/security-reports.md
-    - user-guide/supported-devices.md
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/index.md
+    - First Analysis: getting-started/first-analysis.md
   - Architecture:
-    - architecture/overview.md
-    - architecture/data-models.md
-    - architecture/encryption.md
-    - architecture/multi-tenancy.md
-    - architecture/parsers.md
-  - API Reference:
-    - Core:
-      - api-reference/core/encryption.md
-      - api-reference/core/database.md
-      - api-reference/core/scanner.md
-    - Models:
-      - api-reference/models/base.md
-      - api-reference/models/normalized.md
-      - api-reference/models/device-specific.md
-    - Parsers:
-      - api-reference/parsers/base.md
-      - api-reference/parsers/cisco-ios.md
-      - api-reference/parsers/cisco-asa.md
-      - api-reference/parsers/fortigate.md
-      - api-reference/parsers/paloalto.md
-    - CLI:
-      - api-reference/cli/commands.md
-      - api-reference/cli/utils.md
+    - Overview: architecture/overview.md
+    - Data Models: architecture/data-models.md
+    - Dependency Injection: architecture/dependency-injection.md
+    - Project Structure: architecture/PROJECT_STRUCTURE.md
   - Security:
-    - security/encryption-design.md
-    - security/threat-model.md
-    - security/compliance.md
-    - security/best-practices.md
+    - Encryption Design: security/encryption-design.md
+    - Implementation Summary: security/implementation-summary.md
   - Development:
-    - Development Guide: development/contributing.md
-    - development/development-setup.md
-    - development/coding-standards.md
-    - development/testing.md
-    - development/adding-parsers.md
-    - development/release-process.md
-  - Examples:
-    - examples/basic-usage.md
-    - examples/custom-rules.md
-    - examples/encryption-examples.md
-    - examples/api-examples.md
+    - Contributing: development/contributing.md
+    - GitHub Issues: development/GITHUB_ISSUES.md
+    - Roadmap: development/ROADMAP.md
+    - Dependency Injection Implementation: implementation/DEPENDENCY_INJECTION_IMPLEMENTATION.md
 
 plugins:
   - search
@@ -98,7 +65,6 @@ plugins:
             show_symbol_type_toc: true
             members_order: source
             merge_init_into_class: true
-  - mermaid2
 
 markdown_extensions:
   - pymdownx.highlight:
@@ -111,7 +77,7 @@ markdown_extensions:
       custom_fences:
         - name: mermaid
           class: mermaid
-          format: !!python/name:pymdownx.superfences.fence_code_format
+          format: !!python/name:pymdownx.superfences.fence_div_format
   - admonition
   - pymdownx.details
   - pymdownx.tabbed:
@@ -121,12 +87,15 @@ markdown_extensions:
   - toc:
       permalink: true
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/flyguy62n/pybastion
+      link: https://github.com/flyguy62n/kp-dagger
   version:
     provider: mike
+
+extra_javascript:
+  - https://unpkg.com/mermaid@10.4.0/dist/mermaid.min.js

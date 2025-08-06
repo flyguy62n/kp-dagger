@@ -1,4 +1,4 @@
-"""Dependency injection containers for PyBastion."""
+"""Dependency injection containers for Dagger."""
 
 from kp_dagger.containers.application import ApplicationContainer
 

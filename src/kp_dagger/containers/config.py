@@ -123,8 +123,8 @@ class ScannerConfig(BaseModel):
     parallel_workers: int = Field(default=4, description="Number of parallel workers")
 
 
-class PyBastionConfig(BaseModel):
-    """Main PyBastion configuration."""
+class DaggerConfig(BaseModel):
+    """Main Dagger configuration."""
 
     core: CoreConfig
     api_clients: ApiClientConfig
@@ -155,7 +155,7 @@ def load_config(config_path: str | Path) -> dict[str, Any]:
         return yaml.safe_load(f)
 
 
-def validate_config(config_dict: dict[str, Any]) -> PyBastionConfig:
+def validate_config(config_dict: dict[str, Any]) -> DaggerConfig:
     """
     Validate configuration dictionary.
 
@@ -166,4 +166,4 @@ def validate_config(config_dict: dict[str, Any]) -> PyBastionConfig:
         Validated configuration object
 
     """
-    return PyBastionConfig.model_validate(config_dict)
+    return DaggerConfig.model_validate(config_dict)

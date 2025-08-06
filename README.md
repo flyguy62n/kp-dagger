@@ -1,4 +1,4 @@
-# PyBastion
+# Dagger
 
 ⚠️ **DEVELOPMENT VERSION - NOT PRODUCTION READY** ⚠️
 
@@ -55,7 +55,7 @@ A comprehensive Python application for analyzing network security device configu
 ### Install from PyPI (Development Version)
 
 ```bash
-pip install pybastion
+pip install Dagger
 ```
 
 **Note**: The PyPI version currently provides only basic structure and will display warnings when imported. Most functionality is not yet implemented.
@@ -65,8 +65,8 @@ pip install pybastion
 To work with the actual development code:
 
 ```bash
-git clone https://github.com/flyguy62n/pybastion.git
-cd pybastion
+git clone https://github.com/flyguy62n/Dagger.git
+cd Dagger
 uv sync
 ```
 
@@ -74,41 +74,41 @@ uv sync
 
 ### Planned Usage (Coming Soon)
 
-Once development is complete, PyBastion will support:
+Once development is complete, Dagger will support:
 
 ```bash
 # Scan a single configuration file
-pybastion scan files router.cfg
+Dagger scan files router.cfg
 
 # Scan multiple files with device type specification
-pybastion scan files --device-type cisco-ios *.cfg
+Dagger scan files --device-type cisco-ios *.cfg
 
 # Scan directory recursively
-pybastion scan files --recursive /path/to/configs/
+Dagger scan files --recursive /path/to/configs/
 
 # Generate HTML report
-pybastion scan files --format html --output report.html *.cfg
+Dagger scan files --format html --output report.html *.cfg
 ```
 
 ### Generate Reports
 
 ```bash
 # Generate report from database
-pybastion report generate --database scan.db --format excel --output report.xlsx
+Dagger report generate --database scan.db --format excel --output report.xlsx
 ```
 
 ### Validate Configurations
 
 ```bash
 # Validate configuration syntax
-pybastion validate config router.cfg --device-type cisco-ios
+Dagger validate config router.cfg --device-type cisco-ios
 ```
 
 ## Contributing
 
 We welcome contributions! Since this is in early development:
 
-1. Check the [Issues](https://github.com/flyguy62n/pybastion/issues) for current tasks
+1. Check the [Issues](https://github.com/flyguy62n/Dagger/issues) for current tasks
 2. Fork the repository
 3. Create a feature branch
 4. Submit a pull request
@@ -116,8 +116,8 @@ We welcome contributions! Since this is in early development:
 ### Development Setup
 
 ```bash
-git clone https://github.com/flyguy62n/pybastion.git
-cd pybastion
+git clone https://github.com/flyguy62n/Dagger.git
+cd Dagger
 uv sync --group dev
 uv run pytest
 ```
@@ -127,7 +127,7 @@ uv run pytest
 The application follows a modular, extensible architecture:
 
 ```
-src/pybastion/
+src/Dagger/
 ├── cli/                    # Command-line interface
 ├── core/                   # Core scanning logic
 ├── models/                 # Data models and schemas
@@ -163,8 +163,8 @@ src/pybastion/
 
 ```bash
 # Clone repository
-git clone https://github.com/flyguy62n/pybastion.git
-cd pybastion
+git clone https://github.com/flyguy62n/Dagger.git
+cd Dagger
 
 # Install dependencies
 uv sync --group dev
@@ -200,5 +200,5 @@ This project is licensed under the MIT License.
 
 - **Author**: Randy Bartels
 - **Email**: rjbartels@outlook.com
-- **Repository**: https://github.com/flyguy62n/pybastion
-- **Issues**: https://github.com/flyguy62n/pybastion/issues
+- **Repository**: https://github.com/flyguy62n/Dagger
+- **Issues**: https://github.com/flyguy62n/Dagger/issues

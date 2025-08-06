@@ -1,10 +1,10 @@
 # Development Guide
 
-This comprehensive guide covers all aspects of developing PyBastion. For quick contribution steps, see the [main CONTRIBUTING.md](../../CONTRIBUTING.md) file.
+This comprehensive guide covers all aspects of developing Dagger. For quick contribution steps, see the [main CONTRIBUTING.md](../../CONTRIBUTING.md) file.
 
 ## Overview
 
-This development guide provides detailed information for contributors who want to understand PyBastion's architecture, add new features, or maintain the codebase.
+This development guide provides detailed information for contributors who want to understand Dagger's architecture, add new features, or maintain the codebase.
 
 ## Quick Start for Contributors
 
@@ -50,8 +50,8 @@ git push origin main
 
 1. **Fork and Clone**
    ```bash
-   git clone https://github.com/your-username/pybastion.git
-   cd pybastion
+   git clone https://github.com/your-username/Dagger.git
+   cd Dagger
    ```
 
 2. **Install Development Dependencies**
@@ -71,7 +71,7 @@ git push origin main
 4. **Verify Installation**
    ```bash
    pytest tests/
-   pybastion --version
+   Dagger --version
    mkdocs serve
    ```
 
@@ -94,7 +94,7 @@ Follow the coding standards and guidelines below.
 pytest
 
 # Run tests with coverage
-pytest --cov=src/pybastion
+pytest --cov=src/Dagger
 
 # Run specific test file
 pytest tests/unit/parsers/test_cisco_ios.py
@@ -173,7 +173,7 @@ Use specific exception types:
 
 ```python
 # ✅ Good - Specific exceptions
-from pybastion.core.exceptions import ParseError, ValidationError
+from Dagger.core.exceptions import ParseError, ValidationError
 
 def parse_config(content: str) -> dict[str, Any]:
     if not content.strip():
@@ -190,7 +190,7 @@ def parse_config(content: str) -> dict[str, Any]:
 
 1. **Create Parser Module**
    ```
-   src/pybastion/parsers/new_vendor/
+   src/Dagger/parsers/new_vendor/
    ├── __init__.py
    ├── parser.py
    └── models.py
@@ -198,7 +198,7 @@ def parse_config(content: str) -> dict[str, Any]:
 
 2. **Implement Base Parser**
    ```python
-   from pybastion.parsers.base import BaseParser
+   from Dagger.parsers.base import BaseParser
    
    class NewVendorParser(BaseParser):
        def parse(self, content: str) -> dict[str, Any]:
@@ -208,7 +208,7 @@ def parse_config(content: str) -> dict[str, Any]:
 
 3. **Register Parser**
    ```python
-   # In src/pybastion/parsers/factory.py
+   # In src/Dagger/parsers/factory.py
    from .new_vendor.parser import NewVendorParser
    
    PARSER_REGISTRY = {
@@ -227,8 +227,8 @@ def parse_config(content: str) -> dict[str, Any]:
 
 1. **Create Rule Module**
    ```python
-   # src/pybastion/analyzers/rules/new_rule.py
-   from pybastion.analyzers.base import SecurityRule
+   # src/Dagger/analyzers/rules/new_rule.py
+   from Dagger.analyzers.base import SecurityRule
    
    class NewSecurityRule(SecurityRule):
        rule_id = "NEW-001"
@@ -242,7 +242,7 @@ def parse_config(content: str) -> dict[str, Any]:
 
 2. **Register Rule**
    ```python
-   # In src/pybastion/analyzers/__init__.py
+   # In src/Dagger/analyzers/__init__.py
    from .rules.new_rule import NewSecurityRule
    
    RULE_REGISTRY = [
@@ -255,8 +255,8 @@ def parse_config(content: str) -> dict[str, Any]:
 
 1. **Create Report Handler**
    ```python
-   # src/pybastion/reports/formatters/new_format.py
-   from pybastion.reports.base import BaseReportFormatter
+   # src/Dagger/reports/formatters/new_format.py
+   from Dagger.reports.base import BaseReportFormatter
    
    class NewFormatReporter(BaseReportFormatter):
        format_name = "new-format"
@@ -269,7 +269,7 @@ def parse_config(content: str) -> dict[str, Any]:
 
 2. **Register Handler**
    ```python
-   # In src/pybastion/reports/factory.py
+   # In src/Dagger/reports/factory.py
    from .formatters.new_format import NewFormatReporter
    
    FORMATTER_REGISTRY = {
@@ -298,7 +298,7 @@ tests/
 
 ```python
 import pytest
-from pybastion.parsers.cisco_ios import CiscoIOSParser
+from Dagger.parsers.cisco_ios import CiscoIOSParser
 
 class TestCiscoIOSParser:
     @pytest.fixture
@@ -331,7 +331,7 @@ Maintain high test coverage:
 
 ```bash
 # Generate coverage report
-pytest --cov=src/pybastion --cov-report=html
+pytest --cov=src/Dagger --cov-report=html
 
 # View coverage
 open htmlcov/index.html
@@ -458,7 +458,7 @@ We follow Semantic Versioning (SemVer):
 
 ### Release Steps (Maintainers)
 
-1. Update version in `src/pybastion/__init__.py`
+1. Update version in `src/Dagger/__init__.py`
 2. Update CHANGELOG.md
 3. Create release PR
 4. Tag release after merge
@@ -474,4 +474,4 @@ Contributors are recognized in:
 - Documentation credits
 - GitHub contributor graphs
 
-Thank you for contributing to PyBastion! 🎉
+Thank you for contributing to Dagger! 🎉

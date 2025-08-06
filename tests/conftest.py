@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 
 from kp_dagger.core.database import DatabaseManager
-from kp_dagger.core.scanner import PyBastionScanner
+from kp_dagger.core.scanner import DaggerScanner
 
 
 @pytest.fixture
@@ -35,9 +35,9 @@ def memory_database() -> DatabaseManager:
 
 
 @pytest.fixture
-def test_scanner() -> PyBastionScanner:
+def test_scanner() -> DaggerScanner:
     """Create a test scanner instance."""
-    return PyBastionScanner(database_path=":memory:")
+    return DaggerScanner(database_path=":memory:")
 
 
 @pytest.fixture

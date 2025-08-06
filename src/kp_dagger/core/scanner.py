@@ -1,4 +1,4 @@
-"""Core PyBastion scanner implementation."""
+"""Core Dagger scanner implementation."""
 
 from pathlib import Path
 from typing import Any
@@ -15,7 +15,7 @@ from kp_dagger.models.base.enums import DeviceType, ReportFormat
 from kp_dagger.parsers.factory import ParserFactory
 
 
-class PyBastionScanner:
+class DaggerScanner:
     """Main scanner class for analyzing network device configurations."""
 
     @inject
@@ -319,5 +319,5 @@ class PyBastionScanner:
 
 
 # Keep backward compatibility
-Scanner = PyBastionScanner
-NetworkScanner = PyBastionScanner  # Backward compatibility alias
+Scanner = DaggerScanner
+NetworkScanner = DaggerScanner  # Backward compatibility alias

@@ -1,5 +1,5 @@
 """
-PyBastion.
+Dagger.
 
 A comprehensive tool for analyzing network device configurations for security
 vulnerabilities, compliance issues, and best practices violations.
@@ -24,7 +24,7 @@ Features:
 __version__ = "0.0.1-dev"
 __author__ = "Randy Bartels"
 __email__ = "rjbartels@outlook.com"
-__url__ = "https://github.com/flyguy62n/pybastion"
+__url__ = "https://github.com/flyguy62n/Dagger"
 
 
 __all__: list[str] = [

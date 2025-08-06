@@ -1,0 +1,18 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+        {
+            "label": "serve_docs",
+            "type": "shell",
+            "command": "uv",
+            "args": [
+                "run",
+                "mkdocs",
+                "serve"
+            ],
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        }
+    ]
+}

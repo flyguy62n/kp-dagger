@@ -1,4 +1,4 @@
-"""Main application container for PyBastion."""
+"""Main application container for Dagger."""
 
 from dependency_injector import containers, providers
 
@@ -45,9 +45,9 @@ class ApplicationContainer(containers.DeclarativeContainer):
     )
 
     # NOTE: Main application services will be added as dependencies are implemented
-    # Example for when PyBastionScanner is updated:
+    # Example for when DaggerScanner is updated:
     # scanner = providers.Factory(
-    #     PyBastionScanner,
+    #     DaggerScanner,
     #     database_manager=core_container.database_manager,
     #     parser_factory=parser_container.parser_factory,
     #     analyzers=analyzer_container,
@@ -60,9 +60,9 @@ class ApplicationContainer(containers.DeclarativeContainer):
         # NOTE: Modules will be wired as they're updated to use DI
         # self.wire(
         #     modules=[
-        #         "pybastion.cli.main",
-        #         "pybastion.cli.commands.analyze",
-        #         "pybastion.cli.commands.report",
-        #         "pybastion.cli.commands.validate",
+        #         "Dagger.cli.main",
+        #         "Dagger.cli.commands.analyze",
+        #         "Dagger.cli.commands.report",
+        #         "Dagger.cli.commands.validate",
         #     ],
         # )

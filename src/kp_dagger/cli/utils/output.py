@@ -1,5 +1,5 @@
 """
-Output utilities for PyBastion CLI.
+Output utilities for Dagger CLI.
 
 Provides console utilities, logging configuration, and formatted output functions
 using Rich for enhanced terminal experience.
@@ -34,8 +34,8 @@ __all__ = [
     "success_console",
 ]
 
-# Custom theme for PyBastion CLI
-PYBASTION_THEME = Theme(
+# Custom theme for Dagger CLI
+Dagger_THEME = Theme(
     {
         "info": "cyan",
         "warning": "yellow",
@@ -47,9 +47,9 @@ PYBASTION_THEME = Theme(
 )
 
 # Console instances for different output types
-console = Console(theme=PYBASTION_THEME)
-error_console = Console(stderr=True, theme=PYBASTION_THEME, style="error")
-success_console = Console(theme=PYBASTION_THEME, style="success")
+console = Console(theme=Dagger_THEME)
+error_console = Console(stderr=True, theme=Dagger_THEME, style="error")
+success_console = Console(theme=Dagger_THEME, style="success")
 
 
 def setup_logging(verbose: int = 0, quiet: bool = False) -> None:  # noqa: FBT001, FBT002
@@ -88,7 +88,7 @@ def setup_logging(verbose: int = 0, quiet: bool = False) -> None:  # noqa: FBT00
     )
 
     # Set logger for our package
-    logger = logging.getLogger("pybastion")
+    logger = logging.getLogger("Dagger")
     logger.setLevel(log_level)
 
 
@@ -230,7 +230,7 @@ class RichGroup(click.Group):
         # Display the formatted help
         panel = Panel(
             help_content,
-            title="PyBastion CLI Help",
+            title="Dagger CLI Help",
             border_style="blue",
             padding=(1, 2),
         )
@@ -319,7 +319,7 @@ class RichCommand(click.Command):
         # Display the formatted help
         panel = Panel(
             help_content,
-            title=f"PyBastion - {self.name}",
+            title=f"Dagger - {self.name}",
             border_style="blue",
             padding=(1, 2),
         )

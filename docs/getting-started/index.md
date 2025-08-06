@@ -1,23 +1,23 @@
 # Getting Started
 
-Welcome to PyBastion! This section will help you get up and running quickly with network device configuration security analysis.
+Welcome to Dagger! This section will help you get up and running quickly with network device configuration security analysis.
 
 ## Overview
 
-PyBastion is a powerful tool for analyzing network device configurations for security compliance, best practices, and vulnerabilities. It supports multiple vendor platforms and provides detailed security reports.
+Dagger is a powerful tool for analyzing network device configurations for security compliance, best practices, and vulnerabilities. It supports multiple vendor platforms and provides detailed security reports.
 
 ## What You'll Learn
 
 In this section, you'll learn how to:
 
-- **[Install PyBastion](installation.md)** on your system
+- **[Install Dagger](installation.md)** on your system
 - **[Perform your first analysis](quickstart.md)** with sample data
 - **[Complete a detailed analysis](first-analysis.md)** with real configuration files
 
 ## Quick Navigation
 
-### New to PyBastion?
-Start with [Installation](installation.md) to set up PyBastion on your system.
+### New to Dagger?
+Start with [Installation](installation.md) to set up Dagger on your system.
 
 ### Ready to Analyze?
 Jump to [Quick Start](quickstart.md) for a rapid introduction to basic commands.
@@ -36,7 +36,7 @@ Before you begin, you should have:
 
 ## Supported Platforms
 
-PyBastion currently supports:
+Dagger currently supports:
 
 | Vendor | Platform | File Format | Status |
 |--------|----------|-------------|---------|
@@ -50,15 +50,15 @@ PyBastion currently supports:
 After completing the getting started guides, explore:
 
 - **[User Guide](../user-guide/)** - Detailed feature documentation
-- **[Architecture](../architecture/)** - Understanding PyBastion's design
+- **[Architecture](../architecture/)** - Understanding Dagger's design
 - **[Examples](../examples/)** - Real-world usage scenarios
 - **[API Reference](../api-reference/)** - Complete API documentation
 
 ## Need Help?
 
 - 📖 Browse the [User Guide](../user-guide/) for detailed information
-- 🐛 Report issues on [GitHub Issues](https://github.com/flyguy62n/pybastion/issues)
-- 💬 Ask questions in [GitHub Discussions](https://github.com/flyguy62n/pybastion/discussions)
+- 🐛 Report issues on [GitHub Issues](https://github.com/flyguy62n/Dagger/issues)
+- 💬 Ask questions in [GitHub Discussions](https://github.com/flyguy62n/Dagger/discussions)
 - 📧 Contact the development team for enterprise support
 
 Let's get started with [Installation](installation.md)!

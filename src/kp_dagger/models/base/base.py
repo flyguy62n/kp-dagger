@@ -1,7 +1,7 @@
 """
-Base model for PyBastion application.
+Base model for Dagger application.
 
-This module defines the PyBastionBaseModel that serves as the foundation
+This module defines the DaggerBaseModel that serves as the foundation
 for all other SQLModel-based models in the application.
 """
 
@@ -18,16 +18,16 @@ if TYPE_CHECKING:
     from kp_dagger.core.encryption import TenantEncryptionService
 
 
-class PyBastionConfigMixin(SQLModel):
+class DaggerConfigMixin(SQLModel):
     """
-    Abstract base class providing shared configuration for all PyBastion models.
+    Abstract base class providing shared configuration for all Dagger models.
 
     This mixin defines common Pydantic configuration settings that should be
     inherited by all models in the application, ensuring consistency across
     the entire data model hierarchy.
     """
 
-    # Shared configuration for all PyBastion models
+    # Shared configuration for all Dagger models
     model_config = ConfigDict(
         # Validate data when fields are modified after model creation
         validate_assignment=True,
@@ -40,9 +40,9 @@ class PyBastionConfigMixin(SQLModel):
         abstract = True
 
 
-class PyBastionBaseModel(PyBastionConfigMixin):
+class DaggerBaseModel(DaggerConfigMixin):
     """
-    Base model class for all PyBastion application models with multi-tenant support.
+    Base model class for all Dagger application models with multi-tenant support.
 
     This class provides common fields and functionality that should be
     inherited by all other models in the application. It includes:
@@ -80,7 +80,7 @@ class PyBastionBaseModel(PyBastionConfigMixin):
     )
 
     # Extended configuration for models with encryption support
-    model_config = PyBastionConfigMixin.model_config | ConfigDict(
+    model_config = DaggerConfigMixin.model_config | ConfigDict(
         # Allow arbitrary types for encryption service and descriptors
         arbitrary_types_allowed=True,
         # Ignore descriptor types

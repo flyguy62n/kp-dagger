@@ -9,13 +9,13 @@ sys.path.insert(0, str(Path(__file__).parent / "src"))
 
 try:
     from kp_dagger.core.exceptions import NetworkScannerError
-    from kp_dagger.core.scanner import PyBastionScanner
+    from kp_dagger.core.scanner import DaggerScanner
     from kp_dagger.models.base.enums import DeviceType
 
     print("✓ All imports successful")
 
     # Test basic scanner initialization
-    scanner = PyBastionScanner(database_path=":memory:")
+    scanner = DaggerScanner(database_path=":memory:")
     print("✓ Scanner initialized successfully")
 
     # Test device type detection
@@ -48,7 +48,7 @@ try:
     print("✓ HTML report generation successful")
 
     print("\n🎉 All basic functionality tests passed!")
-    print("PyBastion is ready for development.")
+    print("Dagger is ready for development.")
 
 except ImportError as e:
     print(f"❌ Import error: {e}")

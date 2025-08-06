@@ -1,5 +1,5 @@
 """
-Normalized IP Address model for PyBastion.
+Normalized IP Address model for Dagger.
 
 This model represents IP addresses in a normalized format that can be used
 across different device types and configurations. It supports both IPv4 and IPv6
@@ -10,11 +10,11 @@ from uuid import UUID
 
 from sqlmodel import Field
 
-from kp_dagger.models.base.base import PyBastionBaseModel
+from kp_dagger.models.base.base import DaggerBaseModel
 from kp_dagger.models.base.enums import IPVersion
 
 
-class IPAddress(PyBastionBaseModel, table=True):
+class IPAddress(DaggerBaseModel, table=True):
     """
     Normalized IP address model with encryption support.
 

@@ -1,4 +1,4 @@
-"""Report services container for PyBastion."""
+"""Report services container for Dagger."""
 
 from dependency_injector import containers, providers
 

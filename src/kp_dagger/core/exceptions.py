@@ -1,7 +1,7 @@
-"""Core exceptions for PyBastion."""
+"""Core exceptions for Dagger."""
 
 
-class PyBastionError(Exception):
+class DaggerError(Exception):
     """Base exception for network scanner errors."""
 
     def __init__(self, message: str, details: dict[str, str] | None = None) -> None:
@@ -11,11 +11,11 @@ class PyBastionError(Exception):
         self.details = details or {}
 
 
-class ConfigurationError(PyBastionError):
+class ConfigurationError(DaggerError):
     """Configuration-related errors."""
 
 
-class ParsingError(PyBastionError):
+class ParsingError(DaggerError):
     """Device configuration parsing errors."""
 
     def __init__(
@@ -31,11 +31,11 @@ class ParsingError(PyBastionError):
         self.line_number = line_number
 
 
-class DatabaseError(PyBastionError):
+class DatabaseError(DaggerError):
     """Database operation errors."""
 
 
-class ValidationError(PyBastionError):
+class ValidationError(DaggerError):
     """Data validation errors."""
 
     def __init__(
@@ -51,15 +51,15 @@ class ValidationError(PyBastionError):
         self.value = value
 
 
-class AnalysisError(PyBastionError):
+class AnalysisError(DaggerError):
     """Security analysis errors."""
 
 
-class ReportError(PyBastionError):
+class ReportError(DaggerError):
     """Report generation errors."""
 
 
-class UnsupportedDeviceError(PyBastionError):
+class UnsupportedDeviceError(DaggerError):
     """Unsupported device type errors."""
 
     def __init__(
@@ -76,7 +76,7 @@ class UnsupportedDeviceError(PyBastionError):
         self.supported_types = supported_types or []
 
 
-class APIError(PyBastionError):
+class APIError(DaggerError):
     """External API errors."""
 
     def __init__(
@@ -93,8 +93,8 @@ class APIError(PyBastionError):
 
 
 # Aliases for backward compatibility
-NetworkScannerError = PyBastionError
-NetworkSecurityScannerError = PyBastionError
+NetworkScannerError = DaggerError
+NetworkSecurityScannerError = DaggerError
 ParserError = ParsingError
 NormalizationError = ValidationError
 APIClientError = APIError

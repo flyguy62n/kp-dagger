@@ -1,8 +1,8 @@
 """
-PyBastion package entry point for python -m pybastion usage.
+Dagger package entry point for python -m Dagger usage.
 
-This module enables running PyBastion as a module:
-    python -m pybastion [commands...]
+This module enables running Dagger as a module:
+    python -m Dagger [commands...]
 """
 
 from kp_dagger.cli.main import main

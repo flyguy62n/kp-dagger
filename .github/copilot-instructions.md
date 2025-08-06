@@ -21,7 +21,7 @@ After I provide instructions to implement a solution, you will:
 7. Do not use relative module imports.  Only use absolute imports for all modules and packages.
 8. All type hints and linting will be checked using Ruff.  The ruff configuration file is available at https://raw.githubusercontent.com/flyguy62n/dotfiles/refs/heads/main/ruff.toml.
 
-You are developing a Python application named PyBastion.  The application will be a network device configuration compliance and security review tool.  The following are some of the key requirements and design principles for the application:
+You are developing a Python application named KP-Dagger.  The application will be a network device configuration compliance and security review tool.  The following are some of the key requirements and design principles for the application:
 1. You will use SQLModel for the combined ORM (SQLAlchemy) and data validation (Pydantic) library:
     - Pydantic will be used for data validation and serialization.
     - SQLAlchemy will be used for database interactions.

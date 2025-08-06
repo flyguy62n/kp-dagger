@@ -26,7 +26,7 @@ If applicable, add screenshots to help explain your problem.
 **Environment (please complete the following information):**
  - OS: [e.g. Windows, Linux, macOS]
  - Python version: [e.g. 3.12.0]
- - PyBastion version: [e.g. 0.1.0]
+ - Dagger version: [e.g. 0.1.0]
  - Device type: [e.g. Cisco IOS, ASA, FortiGate]
 
 **Configuration file**

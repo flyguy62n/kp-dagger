@@ -1,20 +1,20 @@
-# PyBastion Encryption System Implementation Summary
+# Dagger Encryption System Implementation Summary
 
 ## ✅ Successfully Implemented
 
-### 1. Core Encryption Service (`src/pybastion/core/encryption.py`)
+### 1. Core Encryption Service (`src/Dagger/core/encryption.py`)
 - **Argon2id KDF** as primary key derivation function 
 - **PBKDF2 fallback** with 600,000 iterations
 - **AES256-GCM** authenticated encryption
 - **Tenant isolation** through tenant-specific key derivation
 - **Modern type hints** using `str | None` instead of `Optional[str]`
 
-### 2. Encrypted Field Support (`src/pybastion/models/base/encryption.py`)
+### 2. Encrypted Field Support (`src/Dagger/models/base/encryption.py`)
 - **EncryptedField descriptor** for transparent field-level encryption
 - **Caching mechanism** for decrypted values
 - **Error handling** for corrupted data
 
-### 3. Updated Base Model (`src/pybastion/models/base/base.py`)
+### 3. Updated Base Model (`src/Dagger/models/base/base.py`)
 - **Encryption service integration** 
 - **model_dump_encrypted()** method for database storage
 
@@ -46,9 +46,9 @@
 
 ```python
 from uuid import uuid4
-from pybastion.core.encryption import EncryptionServiceManager
-from pybastion.models.normalized.ip_address import IPAddress
-from pybastion.models.base.enums import IPVersion
+from Dagger.core.encryption import EncryptionServiceManager
+from Dagger.models.normalized.ip_address import IPAddress
+from Dagger.models.base.enums import IPVersion
 
 # Initialize encryption
 runtime_key = EncryptionServiceManager.generate_runtime_key()

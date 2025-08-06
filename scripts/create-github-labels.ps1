@@ -1,7 +1,7 @@
-# GitHub Labels Creation Script for PyBastion
+# GitHub Labels Creation Script for Dagger
 # Run this script from PowerShell after installing GitHub CLI
 
-Write-Host "Creating GitHub labels for PyBastion..." -ForegroundColor Green
+Write-Host "Creating GitHub labels for Dagger..." -ForegroundColor Green
 
 # Define labels with descriptions and colors
 $labels = @(
@@ -42,7 +42,7 @@ try {
 
 # Check if we're in a git repository
 if (-not (Test-Path ".git")) {
-    Write-Error "Please run this script from the root of your PyBastion repository"
+    Write-Error "Please run this script from the root of your Dagger repository"
     exit 1
 }
 
@@ -64,4 +64,4 @@ foreach ($label in $labels) {
 
 Write-Host ""
 Write-Host "Label creation complete!" -ForegroundColor Green
-Write-Host "You can view all labels at: https://github.com/flyguy62n/pybastion/labels" -ForegroundColor Cyan
+Write-Host "You can view all labels at: https://github.com/flyguy62n/Dagger/labels" -ForegroundColor Cyan

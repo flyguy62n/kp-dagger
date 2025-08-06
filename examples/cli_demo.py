@@ -1,5 +1,5 @@
 """
-Example script demonstrating PyBastion CLI usage.
+Example script demonstrating Dagger CLI usage.
 
 This script shows how to use the various CLI commands and options.
 """
@@ -7,16 +7,16 @@ This script shows how to use the various CLI commands and options.
 
 def run_command(cmd: list[str]) -> None:
     """Run a CLI command and display the result."""
-    print(f"\n$ pybastion {' '.join(cmd)}")
+    print(f"\n$ Dagger {' '.join(cmd)}")
     print("-" * 50)
 
     try:
         # In a real implementation, you would call the CLI directly
         # For demonstration, we'll just show what the command would do
         if cmd[0] == "--help":
-            print("PyBastion CLI Help")
+            print("Dagger CLI Help")
         elif cmd[0] == "--version":
-            print("PyBastion v0.0.1-dev")
+            print("Dagger v0.0.1-dev")
         elif cmd[0] == "analyze":
             print("🔍 Starting Configuration Analysis")
             print("📄 Processing configuration files...")
@@ -29,7 +29,7 @@ def run_command(cmd: list[str]) -> None:
             print("📊 Generating Report")
             print("✅ Report generated successfully!")
         elif cmd[0] == "config":
-            print("🔧 PyBastion Configuration")
+            print("🔧 Dagger Configuration")
             print("Current settings displayed...")
 
     except Exception as e:
@@ -38,7 +38,7 @@ def run_command(cmd: list[str]) -> None:
 
 def main() -> None:
     """Demonstrate CLI functionality."""
-    print("PyBastion CLI Examples")
+    print("Dagger CLI Examples")
     print("=" * 50)
 
     # Example commands
@@ -75,7 +75,7 @@ def main() -> None:
 
     print("\nNext Steps:")
     print("1. Install dependencies: uv add click rich")
-    print("2. Test CLI: python -m pybastion.cli.main --help")
+    print("2. Test CLI: python -m Dagger.cli.main --help")
     print("3. Implement core analysis logic")
     print("4. Add device-specific parsers")
 

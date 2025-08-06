@@ -1,12 +1,12 @@
 # Data Models
 
-PyBastion uses SQLModel to combine SQLAlchemy ORM capabilities with Pydantic validation for robust data handling.
+Dagger uses SQLModel to combine SQLAlchemy ORM capabilities with Pydantic validation for robust data handling.
 
 ## Base Models
 
-### PyBastionBaseModel
+### DaggerBaseModel
 
-All models inherit from `PyBastionBaseModel`, which provides:
+All models inherit from `DaggerBaseModel`, which provides:
 
 - **Tenant isolation** through `tenant_id` field
 - **Encryption service integration** for sensitive data
@@ -14,7 +14,7 @@ All models inherit from `PyBastionBaseModel`, which provides:
 - **Validation** using Pydantic
 
 ```python
-class PyBastionBaseModel(SQLModel):
+class DaggerBaseModel(SQLModel):
     id: uuid.UUID | None = Field(default_factory=uuid4, primary_key=True)
     tenant_id: uuid.UUID = Field(foreign_key="tenant.id", index=True)
     created_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
@@ -30,7 +30,7 @@ class PyBastionBaseModel(SQLModel):
 Provides multi-tenant support:
 
 ```python
-class Tenant(PyBastionTenantModel, table=True):
+class Tenant(DaggerTenantModel, table=True):
     name: str = Field(max_length=255)
     description: str | None = Field(default=None, max_length=1000)
     is_active: bool = Field(default=True)
@@ -44,7 +44,7 @@ class Tenant(PyBastionTenantModel, table=True):
 Common fields across all device types:
 
 ```python
-class Device(PyBastionBaseModel, table=True):
+class Device(DaggerBaseModel, table=True):
     hostname: str | None = EncryptedField(default=None)
     management_ip: str | None = EncryptedField(default=None)
     device_type: DeviceType
@@ -65,7 +65,7 @@ class Device(PyBastionBaseModel, table=True):
 Network interface information:
 
 ```python
-class Interface(PyBastionBaseModel, table=True):
+class Interface(DaggerBaseModel, table=True):
     device_id: uuid.UUID = Field(foreign_key="device.id")
     name: str = Field(max_length=100)
     interface_type: InterfaceType
@@ -87,7 +87,7 @@ class Interface(PyBastionBaseModel, table=True):
 Stores parsed configuration data:
 
 ```python
-class Configuration(PyBastionBaseModel, table=True):
+class Configuration(DaggerBaseModel, table=True):
     device_id: uuid.UUID = Field(foreign_key="device.id")
     filename: str = Field(max_length=255)
     file_hash: str = Field(max_length=64)  # SHA256
@@ -106,7 +106,7 @@ class Configuration(PyBastionBaseModel, table=True):
 Security rules and ACLs:
 
 ```python
-class AccessList(PyBastionBaseModel, table=True):
+class AccessList(DaggerBaseModel, table=True):
     device_id: uuid.UUID = Field(foreign_key="device.id")
     interface_id: uuid.UUID | None = Field(foreign_key="interface.id", default=None)
     name: str = Field(max_length=255)
@@ -130,7 +130,7 @@ class AccessList(PyBastionBaseModel, table=True):
 Results from security analysis:
 
 ```python
-class SecurityFinding(PyBastionBaseModel, table=True):
+class SecurityFinding(DaggerBaseModel, table=True):
     configuration_id: uuid.UUID = Field(foreign_key="configuration.id")
     rule_id: str = Field(max_length=100)  # CIS benchmark ID
     category: FindingCategory
@@ -151,7 +151,7 @@ class SecurityFinding(PyBastionBaseModel, table=True):
 CVE and vulnerability tracking:
 
 ```python
-class Vulnerability(PyBastionBaseModel, table=True):
+class Vulnerability(DaggerBaseModel, table=True):
     cve_id: str = Field(max_length=20, unique=True)
     cvss_score: float | None = Field(default=None)
     cvss_vector: str | None = Field(default=None, max_length=200)
@@ -211,7 +211,7 @@ class FindingCategory(str, Enum):
 Sensitive data is automatically encrypted using `EncryptedField`:
 
 ```python
-class IPAddress(PyBastionBaseModel, table=True):
+class IPAddress(DaggerBaseModel, table=True):
     original_address: str | None = EncryptedField(default=None)
     normalized_address: str | None = EncryptedField(default=None)
     version: IPVersion

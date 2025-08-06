@@ -1,4 +1,4 @@
-"""API client services container for PyBastion."""
+"""API client services container for Dagger."""
 
 from dependency_injector import containers, providers
 

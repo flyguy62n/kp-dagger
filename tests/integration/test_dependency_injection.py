@@ -7,7 +7,7 @@ from unittest.mock import Mock, patch
 import pytest
 
 from kp_dagger.containers import ApplicationContainer
-from kp_dagger.containers.config import PyBastionConfig, load_config, validate_config
+from kp_dagger.containers.config import DaggerConfig, load_config, validate_config
 
 
 class TestDependencyInjectionIntegration:
@@ -42,7 +42,7 @@ class TestDependencyInjectionIntegration:
         assert container.report_container is not None
         assert container.api_client_container is not None
 
-    @patch("pybastion.core.database.DatabaseManager.initialize")
+    @patch("Dagger.core.database.DatabaseManager.initialize")
     def test_scanner_creation_integration(self, mock_db_init: Mock) -> None:  # noqa: ARG002
         """Test that scanner can be created with all dependencies."""
         container = ApplicationContainer()
@@ -99,7 +99,7 @@ scanner:
         try:
             # Load config from file
             config_dict: dict[str, str | int | bool] = load_config(config_file_path)
-            config: PyBastionConfig = validate_config(config_dict)
+            config: DaggerConfig = validate_config(config_dict)
 
             # Verify config was loaded correctly
             assert config.core.encryption.master_key == "file-test-key"

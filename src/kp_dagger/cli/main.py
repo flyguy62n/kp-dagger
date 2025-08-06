@@ -1,7 +1,7 @@
 """
-Main CLI entry point for PyBastion.
+Main CLI entry point for Dagger.
 
-This module provides the main command-line interface for PyBastion using Click.
+This module provides the main command-line interface for Dagger using Click.
 It serves as the entry point for all CLI operations.
 """
 
@@ -58,7 +58,7 @@ def main(
     config_file: str | None,
 ) -> None:
     """
-    PyBastion - Network Device Configuration Security Analysis Tool.
+    Dagger - Network Device Configuration Security Analysis Tool.
 
     A comprehensive tool for analyzing network device configurations for security
     vulnerabilities, compliance issues, and best practices violations.
@@ -80,8 +80,8 @@ def main(
     # NOTE: Container and DI integration will be added when all services are implemented
     # if config_file:
     #     try:
-    #         from pybastion.containers.config import load_config
-    #         from pybastion.containers import ApplicationContainer
+    #         from Dagger.containers.config import load_config
+    #         from Dagger.containers import ApplicationContainer
     #
     #         config_data = load_config(config_file)
     #         container = ApplicationContainer()
@@ -108,7 +108,7 @@ def show_version() -> None:
         from kp_dagger import __author__, __url__, __version__
 
         version_text = Text()
-        version_text.append("PyBastion ", style="bold blue")
+        version_text.append("Dagger ", style="bold blue")
         version_text.append(f"v{__version__}", style="bold green")
         version_text.append(f"\nBy {__author__}", style="dim")
         version_text.append(f"\nWebsite: {__url__}", style="dim")
@@ -128,7 +128,7 @@ def show_version() -> None:
 def show_welcome() -> None:
     """Display welcome message."""
     welcome_text = Text()
-    welcome_text.append("🏰 PyBastion\n", style="bold blue")
+    welcome_text.append("🏰 Dagger\n", style="bold blue")
     welcome_text.append(
         "Network Device Configuration Security Analysis\n\n",
         style="blue",

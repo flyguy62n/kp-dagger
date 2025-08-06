@@ -1,4 +1,4 @@
-"""Database management for PyBastion."""
+"""Database management for Dagger."""
 
 import uuid
 from pathlib import Path
@@ -12,7 +12,7 @@ from kp_dagger.models.base.enums import DeviceType
 
 
 class DatabaseManager:
-    """Manages database operations for PyBastion."""
+    """Manages database operations for Dagger."""
 
     def __init__(self, database_path: str | Path | None = None) -> None:
         """

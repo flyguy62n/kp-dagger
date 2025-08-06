@@ -1,4 +1,4 @@
-# PyBastion Dependency Injection Implementation
+# Dagger Dependency Injection Implementation
 
 ## Implementation Summary
 
@@ -21,15 +21,15 @@
 
 ⚠️ **Requires Future Implementation**
 Several service classes referenced in containers don't exist yet (2025-07-02):
-- `pybastion.core.encryption.EncryptionService`
-- `pybastion.analyzers.*` modules
-- `pybastion.reports.*` modules  
-- `pybastion.api_clients.*` modules
+- `Dagger.core.encryption.EncryptionService`
+- `Dagger.analyzers.*` modules
+- `Dagger.reports.*` modules  
+- `Dagger.api_clients.*` modules
 
 ## Code Structure
 
 ```
-src/pybastion/
+src/Dagger/
 ├── containers/                    # Dependency injection containers
 │   ├── __init__.py               # Main exports
 │   ├── application.py            # Main application container
@@ -50,7 +50,7 @@ src/pybastion/
 
 ### Basic Container Usage
 ```python
-from pybastion.containers import ApplicationContainer
+from Dagger.containers import ApplicationContainer
 
 # Initialize container
 container = ApplicationContainer()
@@ -95,7 +95,7 @@ class MyService:
 ```yaml
 core:
   database:
-    path: "./pybastion.db"
+    path: "./Dagger.db"
   encryption:
     master_key: "production-key"
     salt: "production-salt"
@@ -111,7 +111,7 @@ scanner:
 
 ### Loading Configuration
 ```python
-from pybastion.containers.config import load_config, validate_config
+from Dagger.containers.config import load_config, validate_config
 
 config_dict = load_config("config.yml")
 config = validate_config(config_dict)
@@ -146,11 +146,11 @@ container.config.from_dict(config_dict)
 Create the service classes referenced in containers:
 
 ```python
-# pybastion/core/encryption.py
+# Dagger/core/encryption.py
 class EncryptionService:
     def __init__(self, master_key: str, salt: str): ...
 
-# pybastion/analyzers/compliance_analyzer.py  
+# Dagger/analyzers/compliance_analyzer.py  
 class ComplianceAnalyzer:
     def __init__(self, database_manager: DatabaseManager, config: dict): ...
 
@@ -179,9 +179,9 @@ Add modules to container wiring as they're updated:
 ```python
 def wire_modules(self) -> None:
     self.wire(modules=[
-        "pybastion.cli.main",
-        "pybastion.cli.commands.analyze", 
-        "pybastion.core.scanner",
+        "Dagger.cli.main",
+        "Dagger.cli.commands.analyze", 
+        "Dagger.core.scanner",
         # Add new modules here...
     ])
 ```
