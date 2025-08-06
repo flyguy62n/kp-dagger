@@ -2,6 +2,130 @@
 
 Dagger uses the `dependency-injector` library to implement a comprehensive dependency injection pattern. This promotes modularity, testability, and maintainability throughout the application.
 
+## Package Layout
+
+```
+src/kp_dagger/
+├── services/
+│   ├── __init__.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── database/
+│   │   │   ├── __init__.py          # from .service import DatabaseService
+│   │   │   ├── interfaces.py        # IDatabaseService
+│   │   │   ├── service.py           # DatabaseService
+│   │   │   └── manager.py           # DatabaseManager (move from core/)
+│   │   ├── encryption/
+│   │   │   ├── __init__.py          # from .service import EncryptionService
+│   │   │   ├── interfaces.py        # IEncryptionService
+│   │   │   ├── service.py           # EncryptionService
+│   │   │   └── crypto_engine.py     # Move from core/encryption.py
+│   │   ├── rich_output/
+│   │   │   ├── __init__.py          # from .service import RichOutputService
+│   │   │   ├── interfaces.py        # IRichOutputService
+│   │   │   ├── service.py           # RichOutputService
+│   │   │   ├── formatters.py        # Rich formatting components
+│   │   │   └── themes.py            # Color themes and styling
+│   │   ├── file_handling/
+│   │   │   ├── __init__.py          # from .service import FileHandlingService
+│   │   │   ├── interfaces.py        # IFileHandlingService
+│   │   │   ├── service.py           # FileHandlingService
+│   │   │   ├── encoding_detector.py # Move from utils/get_file_encoding.py
+│   │   │   └── hash_generator.py    # Move from utils/hash_generator.py
+│   │   ├── parallel_processing/
+│   │   │   ├── __init__.py          # from .service import ParallelProcessingService
+│   │   │   ├── interfaces.py        # IParallelProcessingService
+│   │   │   ├── service.py           # ParallelProcessingService
+│   │   │   ├── worker_pool.py       # ProcessPoolExecutor management
+│   │   │   └── task_coordinator.py  # Task distribution and aggregation
+│   │   ├── logging/
+│   │   │   ├── __init__.py          # from .service import LoggingService
+│   │   │   ├── interfaces.py        # ILoggingService
+│   │   │   ├── service.py           # LoggingService
+│   │   │   ├── handlers.py          # Custom log handlers
+│   │   │   └── formatters.py        # Log formatting (JSON, structured)
+│   │   └── timestamp/
+│   │       ├── __init__.py          # from .service import TimestampService
+│   │       ├── interfaces.py        # ITimestampService
+│   │       ├── service.py           # TimestampService
+│   │       └── generator.py         # Move from utils/get_timestamp.py
+│   │   ├── events/
+│   │   │   ├── __init__.py          # from .service import EventBusService
+│   │   │   ├── interfaces.py        # IEventBusService
+│   │   │   ├── service.py           # EventBusService
+│   │   │   └── models.py            # Event base classes and common events
+│   │   ├── workflow/
+│   │   │   ├── __init__.py          # from .service import WorkflowService
+│   │   │   ├── interfaces.py        # IWorkflowService, IProgressReporter
+│   │   │   ├── service.py           # WorkflowService
+│   │   │   └── progress.py          # Progress reporting base classes
+│   ├── parsing/
+│   │   ├── __init__.py
+│   │   ├── interfaces.py            # IParsingService
+│   │   ├── service.py               # ParsingService (orchestrates parsers)
+│   │   ├── factory.py               # ParserFactory (move from parsers/)
+│   │   └── utils.py                 # Network validation utilities for parsing
+│   ├── analysis/
+│   │   ├── __init__.py
+│   │   ├── interfaces.py            # IAnalysisService
+│   │   ├── service.py               # AnalysisService (orchestrates analyzers)
+│   │   ├── compliance/
+│   │   │   ├── __init__.py
+│   │   │   └── analyzer.py          # ComplianceAnalyzer
+│   │   ├── vulnerability/
+│   │   │   ├── __init__.py
+│   │   │   └── analyzer.py          # VulnerabilityAnalyzer
+│   │   └── risk/
+│   │       ├── __init__.py
+│   │       └── analyzer.py          # RiskAnalyzer
+│   └── reporting/
+│       ├── __init__.py
+│       ├── interfaces.py            # IReportingService
+│       ├── service.py               # ReportingService (orchestrates reporters)
+│       ├── json/
+│       │   ├── __init__.py
+│       │   └── reporter.py          # JsonReporter
+│       ├── html/
+│       │   ├── __init__.py
+│       │   └── reporter.py          # HtmlReporter
+│       └── excel/
+│           ├── __init__.py
+│           └── reporter.py          # ExcelReporter
+├── containers/
+│   ├── __init__.py
+│   ├── application.py               # ApplicationContainer
+│   ├── core.py                      # CoreContainer
+│   ├── parsers.py                   # ParserContainer
+│   ├── analyzers.py                 # AnalyzerContainer
+│   ├── reports.py                   # ReportContainer
+│   ├── api_clients.py               # ApiClientContainer
+│   └── config.py                    # Configuration models
+├── cli/
+├── models/
+├── parsers/                         # Implementation classes only
+│   ├── __init__.py
+│   ├── base/
+│   ├── cisco_ios/
+│   ├── cisco_asa/
+│   ├── fortigate/
+│   └── paloalto/
+├── analyzers/                       # Implementation classes only
+│   ├── __init__.py
+│   ├── queries/
+│   ├── rules/
+│   └── sql/
+├── reports/                         # Implementation classes only
+│   ├── __init__.py
+│   ├── generator.py
+│   ├── queries/
+│   └── templates/
+└── api_clients/
+    ├── __init__.py
+    ├── cve_details.py
+    └── endoflife.py
+```
+
+
 ## Architecture Overview
 
 The dependency injection system is organized into service-specific containers that manage related dependencies:
@@ -14,18 +138,28 @@ flowchart TD
     A --> E[ReportContainer]
     A --> F[ApiClientContainer]
     
-    B --> B1[DatabaseManager]
+    B --> B1[DatabaseService]
     B --> B2[EncryptionService]
+    B --> B3[RichOutputService]
+    B --> B4[FileHandlingService]
+    B --> B5[ParallelProcessingService]
+    B --> B6[LoggingService]
+    B --> B7[TimestampService]
+    B --> B8[EventBusService]
+    B --> B9[WorkflowService]
     
-    C --> C1[ParserFactory]
+    C --> C1[ParsingService]
+    C --> C2[ParserFactory]
     
-    D --> D1[ComplianceAnalyzer]
-    D --> D2[VulnerabilityAnalyzer]
-    D --> D3[RiskAnalyzer]
+    D --> D1[AnalysisService]
+    D --> D2[ComplianceAnalyzer]
+    D --> D3[VulnerabilityAnalyzer]
+    D --> D4[RiskAnalyzer]
     
-    E --> E1[JsonReporter]
-    E --> E2[HtmlReporter]
-    E --> E3[ExcelReporter]
+    E --> E1[ReportingService]
+    E --> E2[JsonReporter]
+    E --> E3[HtmlReporter]
+    E --> E4[ExcelReporter]
     
     F --> F1[CveClient]
     F --> F2[EolClient]
@@ -63,21 +197,31 @@ scanner = container.scanner()
 
 #### CoreContainer
 Manages core infrastructure services:
-- `DatabaseManager` - DuckDB database operations
+- `DatabaseService` - SQLite database operations with encryption support
 - `EncryptionService` - Data encryption/decryption
+- `RichOutputService` - CLI presentation and formatting
+- `FileHandlingService` - Unified file operations (encoding, hashing, reading)
+- `ParallelProcessingService` - CPU-bound task coordination with ProcessPoolExecutor
+- `LoggingService` - Process-safe structured logging
+- `TimestampService` - Timestamp generation and formatting
+- `EventBusService` - UI-agnostic event communication system
+- `WorkflowService` - End-to-end process orchestration with progress reporting
 
 #### ParserContainer
 Manages configuration parsing services:
+- `ParsingService` - Orchestrates parsing operations
 - `ParserFactory` - Creates device-specific parsers
 
 #### AnalyzerContainer
 Manages security analysis services:
+- `AnalysisService` - Orchestrates analysis operations
 - `ComplianceAnalyzer` - CIS benchmark compliance
 - `VulnerabilityAnalyzer` - CVE and security checks
 - `RiskAnalyzer` - Risk assessment
 
 #### ReportContainer
 Manages report generation services:
+- `ReportingService` - Orchestrates report generation
 - `JsonReporter` - JSON format reports
 - `HtmlReporter` - HTML format reports
 - `ExcelReporter` - Excel format reports
