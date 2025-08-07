@@ -109,7 +109,6 @@ class ComplianceViolation(BaseEvent):
     recommendation: str = Field(min_length=10, description="Remediation recommendation")
     line_number: int | None = Field(default=None, ge=1, description="Line number of violation")
 ```
-```
 
 ### Service Implementation
 
