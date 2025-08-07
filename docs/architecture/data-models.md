@@ -2,6 +2,8 @@
 
 Dagger uses SQLModel to combine SQLAlchemy ORM capabilities with Pydantic validation for robust data handling.
 
+**ALL DATABASE SCHEMA MANAGEMENT WILL BE DONE THROUGH SQLMODEL.  DIRECT INTERACTIONS THROUGH DDL WILL BE AVOIDED**
+
 ## Base Models
 
 ### KPDaggerBaseModel

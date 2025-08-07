@@ -4,23 +4,35 @@ This document outlines the complete project structure for Dagger, a Python-based
 
 ## Overview
 
-Dagger is designed with a modular, extensible architecture that:
+KP-Dagger is designed with a **service-oriented architecture using dependency injection** that:
+- Uses service layer pattern with dependency injection containers for modularity and testability
 - Parses network device configurations from multiple vendors (Cisco IOS/ASA, FortiGate, PAN-OS)
-- Normalizes device-specific data into a common database schema using DuckDB
-- Performs SQL-based security analysis and compliance checking
+- Normalizes device-specific data into a common database schema using SQLite
+- Performs SQL-based security analysis and compliance checking through service orchestration
 - Generates comprehensive reports in multiple formats (JSON, HTML, Excel)
+- Provides UI-agnostic event system for flexible user interface implementation
 
 ## Project Structure
 
 ```
 Dagger/
 ├── .github/                          # GitHub configuration and workflows
-├── src/Dagger/     # Main application source code
+├── src/kp_dagger/                    # Main application source code
+│   ├── services/                     # Service layer with dependency injection
+│   ├── containers/                   # Dependency injection containers
+│   ├── cli/                          # Command line interface
+│   ├── core/                         # Legacy core components (transitioning)
+│   ├── models/                       # Data models (SQLModel/Pydantic)
+│   ├── parsers/                      # Device-specific parser implementations
+│   ├── analyzers/                    # Security analysis implementations  
+│   ├── reports/                      # Report generation implementations
+│   ├── api_clients/                  # External API client implementations
+│   └── utils/                        # Legacy utilities (transitioning to services)
 ├── tests/                            # Test suite
 ├── sql/                              # Database schema and queries
 ├── docs/                             # Documentation
 ├── scripts/                          # Development and build scripts
-└── [configuration files]            # Project configuration
+└── [configuration files]             # Project configuration
 ```
 
 ## Detailed Component Description
@@ -62,22 +74,144 @@ cli/
 - Supports batch operations, configuration management, and report generation
 - Handles user input validation and error reporting
 
-#### `core/` - Core Application Logic
+#### `services/` - Service Layer Architecture
+Service-oriented architecture using dependency injection for modularity and testability.
+
+##### `services/core/` - Core Infrastructure Services
 ```
-core/
+services/core/
 ├── __init__.py
-├── database.py                       # DuckDB connection and management
-├── config.py                         # Application configuration handling
-├── exceptions.py                     # Custom exception classes
-├── scanner.py                        # Main scanning orchestrator
-└── normalizer.py                     # Parser output → DB normalization
+├── database/
+│   ├── __init__.py                   # from .service import DatabaseService
+│   ├── interfaces.py                 # IDatabaseService
+│   ├── service.py                    # DatabaseService
+│   └── manager.py                    # DatabaseManager (SQLite operations)
+├── encryption/
+│   ├── __init__.py                   # from .service import EncryptionService
+│   ├── interfaces.py                 # IEncryptionService
+│   ├── service.py                    # EncryptionService
+│   └── crypto_engine.py              # Encryption implementation
+├── rich_output/
+│   ├── __init__.py                   # from .service import RichOutputService
+│   ├── interfaces.py                 # IRichOutputService
+│   ├── service.py                    # RichOutputService
+│   ├── formatters.py                 # Rich formatting components
+│   └── themes.py                     # Color themes and styling
+├── file_handling/
+│   ├── __init__.py                   # from .service import FileHandlingService
+│   ├── interfaces.py                 # IFileHandlingService
+│   ├── service.py                    # FileHandlingService
+│   ├── encoding_detector.py          # File encoding detection
+│   └── hash_generator.py             # File integrity hashing
+├── parallel_processing/
+│   ├── __init__.py                   # from .service import ParallelProcessingService
+│   ├── interfaces.py                 # IParallelProcessingService
+│   ├── service.py                    # ParallelProcessingService
+│   ├── worker_pool.py                # ProcessPoolExecutor management
+│   └── task_coordinator.py           # Task distribution and aggregation
+├── logging/
+│   ├── __init__.py                   # from .service import LoggingService
+│   ├── interfaces.py                 # ILoggingService
+│   ├── service.py                    # LoggingService
+│   ├── handlers.py                   # Custom log handlers
+│   └── formatters.py                 # Log formatting (JSON, structured)
+├── timestamp/
+│   ├── __init__.py                   # from .service import TimestampService
+│   ├── interfaces.py                 # ITimestampService
+│   ├── service.py                    # TimestampService
+│   └── generator.py                  # Timestamp generation utilities
+├── events/
+│   ├── __init__.py                   # from .service import EventBusService
+│   ├── interfaces.py                 # IEventBusService
+│   ├── service.py                    # EventBusService
+│   └── models.py                     # Event base classes and common events
+└── workflow/
+    ├── __init__.py                   # from .service import WorkflowService
+    ├── interfaces.py                 # IWorkflowService, IProgressReporter
+    ├── service.py                    # WorkflowService
+    └── progress.py                   # Progress reporting base classes
+```
+
+##### `services/parsing/` - Configuration Parsing Services
+```
+services/parsing/
+├── __init__.py
+├── interfaces.py                     # IParsingService
+├── service.py                        # ParsingService (orchestrates parsers)
+├── factory.py                        # ParserFactory (moved from parsers/)
+└── utils.py                          # Network validation utilities for parsing
+```
+
+##### `services/analysis/` - Security Analysis Services
+```
+services/analysis/
+├── __init__.py
+├── interfaces.py                     # IAnalysisService
+├── service.py                        # AnalysisService (orchestrates analyzers)
+├── compliance/
+│   ├── __init__.py
+│   └── analyzer.py                   # ComplianceAnalyzer
+├── vulnerability/
+│   ├── __init__.py
+│   └── analyzer.py                   # VulnerabilityAnalyzer
+└── risk/
+    ├── __init__.py
+    └── analyzer.py                   # RiskAnalyzer
+```
+
+##### `services/reporting/` - Report Generation Services
+```
+services/reporting/
+├── __init__.py
+├── interfaces.py                     # IReportingService
+├── service.py                        # ReportingService (orchestrates reporters)
+├── json/
+│   ├── __init__.py
+│   └── reporter.py                   # JsonReporter
+├── html/
+│   ├── __init__.py
+│   └── reporter.py                   # HtmlReporter
+└── excel/
+    ├── __init__.py
+    └── reporter.py                   # ExcelReporter
 ```
 
 **Purpose:**
-- **`database.py`**: DuckDB connection management, schema creation, migrations
-- **`scanner.py`**: Coordinates parsing, normalization, and analysis workflows
-- **`normalizer.py`**: Converts device-specific models to normalized database models
-- **`config.py`**: Handles application settings, API keys, and user preferences
+- **Core Services**: Infrastructure services (database, encryption, file handling, etc.)
+- **Parsing Services**: Orchestrates device configuration parsing operations
+- **Analysis Services**: Coordinates security analysis across multiple analyzers  
+- **Reporting Services**: Manages report generation in multiple formats
+- **Dependency Injection**: Services are injected via containers for modularity and testability
+
+#### `containers/` - Dependency Injection Containers
+```
+containers/
+├── __init__.py
+├── application.py                    # ApplicationContainer (main orchestrator)
+├── core.py                          # CoreContainer (infrastructure services)
+├── parsers.py                       # ParserContainer (parsing services)
+├── analyzers.py                     # AnalyzerContainer (analysis services)
+├── reports.py                       # ReportContainer (reporting services)
+├── api_clients.py                   # ApiClientContainer (external API clients)
+└── config.py                        # Configuration models and loading
+```
+
+**Purpose:**
+- **ApplicationContainer**: Main container orchestrating all service containers
+- **Service Containers**: Manage lifecycle and dependencies for specific service domains
+- **Configuration**: Pydantic models for type-safe configuration management
+- **Wiring**: Automatic dependency injection across application modules
+
+#### `core/` - Legacy Core Components (Transitioning)
+```
+core/
+├── __init__.py
+├── exceptions.py                     # Custom exception classes
+└── scanner.py                        # Main scanning orchestrator (being replaced by WorkflowService)
+```
+
+**Purpose:**
+- **`exceptions.py`**: Application-specific exception definitions
 
 #### `models/` - Data Models Package
 Comprehensive data model definitions using SQLModel for both validation and ORM.
@@ -170,151 +304,116 @@ models/api_clients/
 - Provides validation for third-party data integration
 - Normalizes vendor information across different APIs
 
-#### `parsers/` - Configuration Parsing Package
-Device-specific configuration file parsers with normalization capabilities.
+#### `parsers/` - Configuration Parsing Implementation
+Device-specific configuration file parsers (implementation classes only).
 
-##### `parsers/base/` - Parser Foundation
 ```
-parsers/base/
+parsers/
 ├── __init__.py
-├── parser.py                         # Abstract base parser interface
-├── lexer.py                          # Base tokenization functionality
-├── ast_nodes.py                      # Configuration AST node definitions
-├── normalizer.py                     # Base normalization interface
-└── exceptions.py                     # Parser-specific exceptions
+├── base/
+│   ├── __init__.py
+│   ├── parser.py                     # Abstract base parser interface
+│   ├── lexer.py                      # Base tokenization functionality
+│   ├── ast_nodes.py                  # Configuration AST node definitions
+│   ├── normalizer.py                 # Base normalization interface
+│   └── exceptions.py                 # Parser-specific exceptions
+├── cisco_ios/                        # Cisco IOS parser implementation
+│   ├── __init__.py
+│   ├── parser.py                     # Main parser orchestrator
+│   ├── lexer.py                      # Device-specific tokenization
+│   ├── normalizer.py                 # IOS models → normalized models
+│   ├── commands/                     # Command-specific parsing modules
+│   │   ├── access_list.py            # ACL parsing logic
+│   │   ├── interface.py              # Interface configuration parsing
+│   │   ├── routing.py                # Routing protocol parsing
+│   │   ├── security.py               # Security feature parsing
+│   │   └── system.py                 # System configuration parsing
+│   └── utils.py                      # Parser utility functions
+├── cisco_asa/                        # Cisco ASA parser implementation
+├── fortigate/                        # FortiGate parser implementation
+└── paloalto/                         # PAN-OS parser implementation
 ```
 
 **Purpose:**
-- Defines common parser interface for all device types
-- Provides shared lexical analysis and AST building functionality
-- Ensures consistent error handling across all parsers
-
-##### `parsers/{device_type}/` - Device-Specific Parsers
-```
-parsers/cisco_ios/                    # Example: Cisco IOS parser
-├── __init__.py
-├── parser.py                         # Main parser orchestrator
-├── lexer.py                          # Device-specific tokenization
-├── normalizer.py                     # IOS models → normalized models
-├── commands/                         # Command-specific parsing modules
-│   ├── access_list.py                # ACL parsing logic
-│   ├── interface.py                  # Interface configuration parsing
-│   ├── routing.py                    # Routing protocol parsing
-│   ├── security.py                   # Security feature parsing
-│   └── system.py                     # System configuration parsing
-└── utils.py                          # Parser utility functions
-```
-
-**Purpose:**
-- Handles device-specific configuration syntax and command structures
+- Implementation classes for device-specific parsing logic
+- Orchestrated by services/parsing/ParsingService
+- Factory pattern managed by services/parsing/factory.py
 - Converts raw configuration text into structured data models
-- Normalizes device configurations into common database format
 
-#### `analyzers/` - Security Analysis Engine
-SQL-based analysis modules for security assessment and compliance checking.
+#### `analyzers/` - Security Analysis Implementation
+SQL-based analysis modules (implementation classes only).
 
-##### `analyzers/sql/` - Analysis Modules
 ```
-analyzers/sql/
-├── acl_analyzer.py                   # Access control list analysis
-├── compliance_analyzer.py            # CIS benchmark compliance checking
-├── vulnerability_analyzer.py         # CVE and vulnerability assessment
-├── network_analyzer.py               # Network topology and configuration analysis
-├── routing_analyzer.py               # Routing protocol security analysis
-└── policy_analyzer.py                # Security policy consistency checking
-```
-
-**Purpose:**
-- Performs database-driven security analysis using SQL queries
-- Implements CIS Level 1 benchmark checking
-- Identifies risky configurations and policy violations
-
-##### `analyzers/queries/` - SQL Query Library
-```
-analyzers/queries/
-├── risky_rules.sql                   # Queries for identifying risky ACL rules
-├── compliance_checks.sql             # CIS compliance validation queries
-├── network_analysis.sql              # Network configuration analysis
-├── routing_analysis.sql              # Routing security assessment queries
-└── policy_conflicts.sql              # Policy consistency checking
-```
-
-**Purpose:**
-- Reusable SQL queries for common security analysis patterns
-- Optimized queries for performance on large datasets
-- Standardized analysis logic across all device types
-
-##### `analyzers/rules/` - Analysis Rules and Benchmarks
-```
-analyzers/rules/
-├── cis_benchmarks/                   # CIS benchmark implementations
-│   ├── level1_checks.py              # Generic Level 1 security checks
-│   ├── network_rules.py              # Network-related CIS rules
-│   ├── routing_rules.py              # Routing protocol security rules
-│   ├── access_rules.py               # Access control CIS rules
-│   └── system_rules.py               # System configuration CIS rules
-├── risk_patterns.py                  # Common security risk patterns
-└── vulnerability_rules.py            # Vulnerability assessment rules
-```
-
-**Purpose:**
-- Implements industry-standard security benchmarks (CIS Level 1)
-- Defines risk assessment criteria and scoring
-- Provides extensible framework for adding new security rules
-
-#### `api_clients/` - External API Integration
-```
-api_clients/
+analyzers/
 ├── __init__.py
-├── base.py                           # Base API client with rate limiting
-├── cve_client.py                     # CVE Details API client
-├── eol_client.py                     # End of Life API client
-└── exceptions.py                     # API client specific exceptions
+├── queries/                          # SQL query library
+│   ├── risky_rules.sql               # Queries for identifying risky ACL rules
+│   ├── compliance_checks.sql         # CIS compliance validation queries
+│   ├── network_analysis.sql          # Network configuration analysis
+│   ├── routing_analysis.sql          # Routing security assessment queries
+│   └── policy_conflicts.sql          # Policy consistency checking
+├── rules/                            # Analysis rules and benchmarks
+│   ├── cis_benchmarks/               # CIS benchmark implementations
+│   │   ├── level1_checks.py          # Generic Level 1 security checks
+│   │   ├── network_rules.py          # Network-related CIS rules
+│   │   ├── routing_rules.py          # Routing protocol security rules
+│   │   ├── access_rules.py           # Access control CIS rules
+│   │   └── system_rules.py           # System configuration CIS rules
+│   ├── risk_patterns.py              # Common security risk patterns
+│   └── vulnerability_rules.py        # Vulnerability assessment rules
+└── sql/                              # Analysis implementation modules
+    ├── acl_analyzer.py               # Access control list analysis
+    ├── compliance_analyzer.py        # CIS benchmark compliance checking
+    ├── vulnerability_analyzer.py     # CVE and vulnerability assessment
+    ├── network_analyzer.py           # Network topology and configuration analysis
+    ├── routing_analyzer.py           # Routing protocol security analysis
+    └── policy_analyzer.py            # Security policy consistency checking
 ```
 
 **Purpose:**
-- Integrates with external vulnerability and lifecycle databases
-- Provides rate limiting and error handling for API calls
-- Normalizes external data for internal use
+- Implementation classes for security analysis logic
+- Orchestrated by services/analysis/AnalysisService
+- SQL-based analysis for device-agnostic security assessment
+- CIS Level 1 benchmark implementations
 
-#### `reports/` - Report Generation System
-Multi-format report generation with templates and customization.
+#### `reports/` - Report Generation Implementation  
+Multi-format report generation (implementation classes only).
 
 ```
 reports/
 ├── __init__.py
-├── base.py                           # Base reporter interface
-├── json_reporter.py                  # Machine-readable JSON reports
-├── html_reporter.py                  # Web-based HTML reports with styling
-├── excel_reporter.py                 # Rich Excel reports with charts
+├── generator.py                      # Base report generator
 ├── templates/                        # Report templates
 │   ├── security_report_template.xlsx # Executive security report template
 │   ├── compliance_template.xlsx      # CIS compliance report template
 │   └── vulnerability_template.xlsx   # Vulnerability tracking template
 └── queries/                          # Report-specific database queries
-    ├── summary_stats.sql              # Executive summary statistics
-    ├── findings_detail.sql            # Detailed findings queries
-    └── compliance_report.sql          # Compliance reporting queries
+    ├── summary_stats.sql             # Executive summary statistics
+    ├── findings_detail.sql           # Detailed findings queries
+    └── compliance_report.sql         # Compliance reporting queries
 ```
 
 **Purpose:**
-- Generates professional reports for different audiences
-- Provides templated Excel reports with charts and formatting
-- Supports both technical detail and executive summary formats
+- Implementation classes for report generation
+- Orchestrated by services/reporting/ReportingService
+- Template-based report generation with professional formatting
+- Support for JSON, HTML, and Excel output formats
 
 #### `utils/` - Utility Functions
 ```
 utils/
-├── logging.py                        # Centralized logging configuration
-├── validation.py                     # Data validation utilities
-├── sql_helpers.py                    # SQL utility functions and query builders
-└── helpers.py                        # General purpose utility functions
+├── __init__.py
+├── get_file_encoding.py              # File encoding detection (transitioning to services/core/file_handling/)
+├── get_timestamp.py                  # Timestamp utilities (transitioning to services/core/timestamp/)
+├── hash_generator.py                 # File integrity hashing (transitioning to services/core/file_handling/)
+├── logging.py                        # Legacy logging configuration (transitioning to services/core/logging/)
+└── network.py                        # Network validation utilities (moving to services/parsing/)
 ```
 
 **Purpose:**
-- Common functionality shared across all modules
-- Centralized logging and error handling
-- Database and validation utilities
+- Legacy utility functions being transitioned to service-based architecture
+- Common functionality shared across modules
+- Being gradually migrated to appropriate service packages
 
 ### `tests/` - Test Suite
 Comprehensive testing strategy covering unit, integration, and SQL testing.
@@ -424,37 +523,50 @@ main.py                               # Application entry point wrapper
 
 ## Key Architectural Principles
 
-### 1. **Extensibility**
+### 1. **Service-Oriented Architecture with Dependency Injection**
+- Service layer pattern with clear interfaces and implementations
+- Dependency injection containers for modularity and testability
+- UI-agnostic services with event bus pattern for flexible interfaces
+- Configuration-driven service behavior through Pydantic models
+
+### 2. **Extensibility**
 - Plugin-based architecture for adding new device types
 - Clear interfaces for parsers, analyzers, and reporters
 - Device-agnostic analysis through normalized data models
+- Container-based service registration for new functionality
 
-### 2. **Separation of Concerns**
-- Parsing logic isolated from analysis logic
-- Device-specific complexity contained in parser packages
-- Database-driven analysis for consistency and performance
+### 3. **Separation of Concerns**
+- Service orchestration separated from implementation logic
+- Device-specific complexity contained in implementation packages
+- Database-driven analysis coordinated through service layer
+- Event system decouples UI from business logic
 
-### 3. **Data Normalization**
+### 4. **Data Normalization**
 - Device configurations normalized into common database schema
-- SQL-based analysis works across all device types
+- SQL-based analysis works across all device types through service coordination
 - Consistent reporting regardless of source device type
+- SQLModel provides both ORM and validation capabilities
 
-### 4. **Comprehensive Testing**
-- Unit tests for individual components
-- Integration tests for complete workflows
-- SQL query validation and performance testing
+### 5. **Comprehensive Testing**
+- Dependency injection enables easy mocking and testing
+- Unit tests for individual service components
+- Integration tests for complete service workflows
+- Container-based test fixtures for isolated testing
 
-### 5. **Professional Reporting**
-- Multiple output formats for different audiences
+### 6. **Professional Reporting**
+- Service-orchestrated report generation across multiple formats
 - Rich Excel reports with charts and conditional formatting
 - Executive summaries and detailed technical reports
+- Template-based report generation through reporting services
 
 ## Development Workflow
 
-1. **Configuration Parsing**: Device configs → Device-specific models
-2. **Data Normalization**: Device models → Normalized database models
-3. **Security Analysis**: SQL queries → Analysis results
-4. **Report Generation**: Analysis results → Formatted reports
-5. **External Integration**: API calls → Vulnerability and lifecycle data
+1. **Service Initialization**: ApplicationContainer → Service containers → Individual services
+2. **Configuration Parsing**: ParsingService → Device parsers → Device-specific models
+3. **Data Normalization**: ParsingService → Device models → Normalized database models
+4. **Security Analysis**: AnalysisService → SQL analyzers → Analysis results
+5. **Report Generation**: ReportingService → Format-specific reporters → Formatted reports
+6. **External Integration**: API client services → External APIs → Vulnerability and lifecycle data
+7. **Event Communication**: EventBusService → UI-agnostic events → Multiple UI implementations
 
-This structure provides a robust, maintainable, and extensible foundation for comprehensive network security analysis.
+This service-oriented structure provides a robust, maintainable, and extensible foundation for comprehensive network security analysis with dependency injection enabling modularity, testability, and flexible deployment patterns.
