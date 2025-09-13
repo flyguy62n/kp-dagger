@@ -39,7 +39,7 @@ flowchart TB
 ### 1. CLI Interface (`Dagger.cli`)
 
 - **Click-based commands** for user interaction
-- **Sub-commands** for different operations (analyze, report, validate)
+- **Sub-commands** for different operations (analyze, report)
 - **Configuration management** through YAML files
 - **Progress indication** and user feedback
 

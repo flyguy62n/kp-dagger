@@ -76,5 +76,5 @@ Dagger --help
 ## Next Steps
 
 - [Quick Start Guide](../getting-started/quickstart.md)
-- [Configuration](../user-guide/configuration.md)
+See the main documentation for configuration details.
 - [Your First Analysis](../getting-started/first-analysis.md)

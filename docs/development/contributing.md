@@ -1,6 +1,6 @@
 # Development Guide
 
-This comprehensive guide covers all aspects of developing Dagger. For quick contribution steps, see the [main CONTRIBUTING.md](../../CONTRIBUTING.md) file.
+This comprehensive guide covers all aspects of developing Dagger. For quick contribution steps, see the [main CONTRIBUTING.md](https://github.com/flyguy62n/kp-dagger/blob/main/CONTRIBUTING.md) file.
 
 ## Overview
 
@@ -8,7 +8,7 @@ This development guide provides detailed information for contributors who want t
 
 ## Quick Start for Contributors
 
-If you're new to contributing, start with the [main CONTRIBUTING.md](../../CONTRIBUTING.md) which covers:
+If you're new to contributing, start with the [main CONTRIBUTING.md](https://github.com/flyguy62n/kp-dagger/blob/main/CONTRIBUTING.md) which covers:
 - Basic setup steps
 - Issue creation and PR process  
 - Community guidelines

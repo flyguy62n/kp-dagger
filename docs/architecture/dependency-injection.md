@@ -44,11 +44,11 @@ src/kp_dagger/
 │   │   │   ├── service.py           # LoggingService
 │   │   │   ├── handlers.py          # Custom log handlers
 │   │   │   └── formatters.py        # Log formatting (JSON, structured)
-│   │   └── timestamp/
-│   │       ├── __init__.py          # from .service import TimestampService
-│   │       ├── interfaces.py        # ITimestampService
-│   │       ├── service.py           # TimestampService
-│   │       └── generator.py         # Move from utils/get_timestamp.py
+│   │   ├── timestamp/
+│   │   │   ├── __init__.py          # from .service import TimestampService
+│   │   │   ├── interfaces.py        # ITimestampService
+│   │   │   ├── service.py           # TimestampService
+│   │   │   └── generator.py         # Move from utils/get_timestamp.py
 │   │   ├── events/
 │   │   │   ├── __init__.py          # from .service import EventBusService
 │   │   │   ├── interfaces.py        # IEventBusService
@@ -131,45 +131,34 @@ src/kp_dagger/
 The dependency injection system is organized into service-specific containers that manage related dependencies:
 
 ```mermaid
-flowchart TD
-    A[ApplicationContainer] --> B[CoreContainer]
-    A --> C[ParserContainer]
-    A --> D[AnalyzerContainer]
-    A --> E[ReportContainer]
-    A --> F[ApiClientContainer]
-    
-    B --> B1[DatabaseService]
-    B --> B2[EncryptionService]
-    B --> B3[RichOutputService]
-    B --> B4[FileHandlingService]
-    B --> B5[ParallelProcessingService]
-    B --> B6[LoggingService]
-    B --> B7[TimestampService]
-    B --> B8[EventBusService]
-    B --> B9[WorkflowService]
-    
-    C --> C1[ParsingService]
-    C --> C2[ParserFactory]
-    
-    D --> D1[AnalysisService]
-    D --> D2[ComplianceAnalyzer]
-    D --> D3[VulnerabilityAnalyzer]
-    D --> D4[RiskAnalyzer]
-    
-    E --> E1[ReportingService]
-    E --> E2[JsonReporter]
-    E --> E3[HtmlReporter]
-    E --> E4[ExcelReporter]
-    
-    F --> F1[CveClient]
-    F --> F2[EolClient]
-    
-    style A fill:#e3f2fd
-    style B fill:#fff3e0
-    style C fill:#f3e5f5
-    style D fill:#e8f5e8
-    style E fill:#fce4ec
-    style F fill:#f1f8e9
+mindmap
+  root((ApplicationContainer))
+    CoreContainer
+      DatabaseService
+      EncryptionService
+      RichOutputService
+      FileHandlingService
+      ParallelProcessingService
+      LoggingService
+      TimestampService
+      EventBusService
+      WorkflowService
+    ParserContainer
+      ParsingService
+      ParserFactory
+    AnalyzerContainer
+      AnalysisService
+      ComplianceAnalyzer
+      VulnerabilityAnalyzer
+      RiskAnalyzer
+    ReportContainer
+      ReportingService
+      JsonReporter
+      HtmlReporter
+      ExcelReporter
+    ApiClientContainer
+      CveClient
+      EolClient
 ```
 
 ## Container Structure

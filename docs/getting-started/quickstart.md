@@ -41,13 +41,6 @@ Dagger report --format json --output security-report.json
 Dagger report --format pdf --output security-report.pdf
 ```
 
-### 3. Validate Configuration Syntax
-
-```bash
-# Validate configuration file syntax
-Dagger validate cisco-ios router-config.txt
-```
-
 ## Configuration
 
 Create a configuration file for your organization:
@@ -108,7 +101,6 @@ Dagger export findings --tenant acme-corp --format csv \
 |---------|-------------|
 | `Dagger analyze <type> <file>` | Analyze configuration file |
 | `Dagger report` | Generate security report |
-| `Dagger validate <type> <file>` | Validate configuration syntax |
 | `Dagger tenant list` | List configured tenants |
 | `Dagger status` | Show analysis status |
 | `Dagger export` | Export findings data |
@@ -144,7 +136,4 @@ After running an analysis, you'll see output like:
 
 ## Next Steps
 
-- [Configuration Guide](../user-guide/configuration.md)
-- [Understanding Reports](../user-guide/reports.md)
-- [Supported Devices](../user-guide/device-support.md)
-- [API Reference](../api-reference/cli.md)
+See the main documentation for configuration, reports, supported devices, and API reference.

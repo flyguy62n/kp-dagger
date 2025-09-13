@@ -63,8 +63,7 @@ cli/
 ├── commands/                         # CLI command implementations
 │   ├── scan.py                       # Scanning operations
 │   ├── report.py                     # Report generation commands
-│   ├── config.py                     # Configuration management
-│   └── validate.py                   # Configuration validation
+│   └── config.py                     # Configuration management
 ├── options.py                        # Reusable Click options and parameters
 └── utils.py                          # CLI utility functions
 ```

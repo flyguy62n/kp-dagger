@@ -49,14 +49,11 @@ Dagger currently supports:
 
 After completing the getting started guides, explore:
 
-- **[User Guide](../user-guide/)** - Detailed feature documentation
-- **[Architecture](../architecture/)** - Understanding Dagger's design
-- **[Examples](../examples/)** - Real-world usage scenarios
-- **[API Reference](../api-reference/)** - Complete API documentation
+See the main documentation for feature documentation, architecture, examples, and API reference.
 
 ## Need Help?
 
-- 📖 Browse the [User Guide](../user-guide/) for detailed information
+See the main documentation for detailed information.
 - 🐛 Report issues on [GitHub Issues](https://github.com/flyguy62n/Dagger/issues)
 - 💬 Ask questions in [GitHub Discussions](https://github.com/flyguy62n/Dagger/discussions)
 - 📧 Contact the development team for enterprise support

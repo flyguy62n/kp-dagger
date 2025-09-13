@@ -14,6 +14,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 **Goal**: Establish solid foundation for all future development
 
 #### Key Deliverables:
+
 - [ ] **Base Parser Architecture** - Abstract classes and interfaces for all device parsers
 - [ ] **Database Layer** - Complete DuckDB integration with schema design
 - [ ] **Core Scanner Logic** - Orchestration engine for parsing and analysis
@@ -22,6 +23,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 - [ ] **Unit Test Foundation** - Test framework and initial test coverage
 
 #### Success Criteria:
+
 - All base classes implemented and documented
 - Database can store/retrieve basic configuration data
 - Scanner can process simple configuration files
@@ -33,6 +35,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 **Goal**: Implement parsers for all four supported device types
 
 #### Key Deliverables:
+
 - [ ] **Cisco IOS Parser** - Complete implementation with all major config sections
 - [ ] **Cisco ASA Parser** - Firewall-specific parsing with security focus
 - [ ] **FortiGate Parser** - FortiOS configuration parsing
@@ -42,6 +45,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 - [ ] **Normalized Data Models** - Common data structure for all device types
 
 #### Success Criteria:
+
 - All parsers handle real-world configuration files
 - Parser can identify device type automatically
 - Normalized output enables cross-platform analysis
@@ -53,6 +57,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 **Goal**: Implement comprehensive security analysis capabilities
 
 #### Key Deliverables:
+
 - [ ] **CIS Benchmark Checks** - Level 1 compliance for all device types
 - [ ] **Security Risk Analysis** - ACL/firewall rule assessment
 - [ ] **Vulnerability Assessment** - CVE and EOL integration
@@ -61,6 +66,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 - [ ] **Custom Rule Engine** - Extensible security rule framework
 
 #### Success Criteria:
+
 - CIS Level 1 benchmarks implemented for all devices
 - API integrations working with rate limiting
 - Risk scores accurately reflect security posture
@@ -72,6 +78,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 **Goal**: Complete user interface and reporting capabilities
 
 #### Key Deliverables:
+
 - [ ] **Complete CLI Interface** - All commands and options implemented
 - [ ] **Multi-format Reporting** - JSON, HTML, Excel output
 - [ ] **Interactive Reports** - Rich HTML with charts and graphs
@@ -80,6 +87,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 - [ ] **Shell Integration** - Tab completion and aliases
 
 #### Success Criteria:
+
 - CLI is intuitive and well-documented
 - Reports provide actionable insights
 - Performance is acceptable for enterprise use
@@ -91,6 +99,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 **Goal**: Prepare for stable release and production deployment
 
 #### Key Deliverables:
+
 - [ ] **Comprehensive Documentation** - User guides, API docs, examples
 - [ ] **Performance Optimization** - Memory usage and speed improvements
 - [ ] **Security Review** - Code audit and vulnerability assessment
@@ -99,6 +108,7 @@ This document outlines the development roadmap for Dagger, a network device conf
 - [ ] **Community Guidelines** - Contributing docs and issue templates
 
 #### Success Criteria:
+
 - Version 1.0.0 release candidate ready
 - Documentation is complete and accurate
 - Performance meets enterprise requirements

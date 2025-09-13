@@ -35,6 +35,7 @@ dependencies = [
     "argon2-cffi>=23.0.0",
     "mypy>=1.16.1",
     "dependency-injector>=4.41.0",
+    "ciscoconfparse2>=0.8.34",
 ]
 
 [project.optional-dependencies]

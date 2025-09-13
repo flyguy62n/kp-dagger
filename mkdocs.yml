@@ -31,15 +31,28 @@ theme:
 
 nav:
   - Home: index.md
+  - MVP Scope: mvp.md
+  - Copilot Documentation Instructions: copilot-documentation-instructions.md
   - Getting Started:
     - Installation: getting-started/installation.md
-    - Quick Start: getting-started/index.md
+    - Quick Start: getting-started/quickstart.md
     - First Analysis: getting-started/first-analysis.md
+    - Index: getting-started/index.md
   - Architecture:
     - Overview: architecture/overview.md
     - Data Models: architecture/data-models.md
+    - Database Design: architecture/database-design.md
     - Dependency Injection: architecture/dependency-injection.md
     - Project Structure: architecture/PROJECT_STRUCTURE.md
+    - Protocols vs ABCs: architecture/protocols-vs-abcs.md
+    - UI-Service Communication:
+      - Overview: architecture/ui-service-communication/index.md
+      - Event Bus Pattern: architecture/ui-service-communication/event-bus-pattern.md
+      - Memory Management: architecture/ui-service-communication/memory-management.md
+      - Progress Callbacks: architecture/ui-service-communication/progress-callbacks.md
+      - Workflow Orchestration: architecture/ui-service-communication/workflow-orchestration.md
+      - Testing Patterns: architecture/ui-service-communication/testing-patterns.md
+      - Benefits and Design: architecture/ui-service-communication/benefits-and-design.md
   - Security:
     - Encryption Design: security/encryption-design.md
     - Implementation Summary: security/implementation-summary.md
@@ -47,6 +60,7 @@ nav:
     - Contributing: development/contributing.md
     - GitHub Issues: development/GITHUB_ISSUES.md
     - Roadmap: development/ROADMAP.md
+  - Implementation:
     - Dependency Injection Implementation: implementation/DEPENDENCY_INJECTION_IMPLEMENTATION.md
 
 plugins:

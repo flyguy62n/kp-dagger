@@ -22,39 +22,9 @@ git clone https://github.com/flyguy62n/Dagger.git
 cd Dagger/testdata
 ```
 
-## Step 1: Validate Configuration
+## Step 1: Perform Security Analysis
 
-First, validate that your configuration file is properly formatted:
-
-```bash
-# Validate a Cisco IOS configuration
-Dagger validate cisco-ios testdata/router-config.txt
-
-# Validate a Cisco ASA configuration  
-Dagger validate cisco-asa firewall-config.txt
-
-# Validate syntax and show parsing results
-Dagger validate cisco-ios router-config.txt --verbose
-```
-
-### Expected Output
-
-```
-✅ Configuration validation successful
-📄 File: router-config.txt
-📊 Statistics:
-   • Lines processed: 245
-   • Configuration sections: 12
-   • Interfaces found: 8
-   • Access lists: 3
-   • Routes: 15
-
-⏱️  Parsing completed in 0.12 seconds
-```
-
-## Step 2: Perform Security Analysis
-
-Run a comprehensive security analysis:
+Run a comprehensive security analysis on your configuration file:
 
 ```bash
 # Basic analysis
@@ -71,7 +41,7 @@ Dagger analyze cisco-ios router-config.txt --output-dir ./analysis-results
 
 The analysis performs several checks:
 
-1. **Configuration Parsing** - Validates syntax and structure
+1. **Configuration Parsing** - Parses syntax and structure
 2. **CIS Benchmark Compliance** - Checks against security standards
 3. **Access Control Review** - Analyzes ACLs and firewall rules
 4. **Vulnerability Assessment** - Checks for known vulnerabilities
@@ -115,7 +85,7 @@ The analysis performs several checks:
 ⏱️  Analysis completed in 3.45 seconds
 ```
 
-## Step 3: Review Findings
+## Step 2: Review Findings
 
 ### Critical Issues
 
@@ -160,7 +130,7 @@ References:
 - NIST SP 800-53 - IA-5 Authenticator Management
 ```
 
-## Step 4: Generate Reports
+## Step 3: Generate Reports
 
 Create formatted reports for different audiences:
 
@@ -190,7 +160,7 @@ Dagger report --format csv --output findings.csv
 Dagger report --format pdf --output executive-report.pdf
 ```
 
-## Step 5: Address Findings
+## Step 4: Address Findings
 
 ### Prioritization
 
@@ -244,10 +214,7 @@ Dagger report --show-resolved --format html --output progress-report.html
 
 ## Next Steps
 
-- [Configuration Management](../user-guide/configuration.md)
-- [Understanding Reports](../user-guide/reports.md)
-- [Multi-Device Analysis](../user-guide/multi-device.md)
-- [Automated Workflows](../examples/automation.md)
+See the main documentation for configuration management, reports, multi-device analysis, and automated workflows.
 
 ## Troubleshooting
 
@@ -267,8 +234,8 @@ Dagger analyze cisco-ios router-config.txt
 
 **Parsing errors**
 ```bash
-# Use verbose mode for detailed error information
-Dagger validate cisco-ios router-config.txt --verbose
+# Use verbose mode for detailed error information  
+Dagger analyze cisco-ios router-config.txt --verbose
 ```
 
 **No findings generated**
@@ -277,4 +244,4 @@ Dagger validate cisco-ios router-config.txt --verbose
 Dagger config show analysis
 ```
 
-For more troubleshooting help, see the [Troubleshooting Guide](../user-guide/troubleshooting.md).
+For more troubleshooting help, see the main documentation index.
