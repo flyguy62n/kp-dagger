@@ -6,7 +6,7 @@ from kp_dagger.core.exceptions import UnsupportedDeviceError
 from kp_dagger.models.base.enums import DeviceType
 
 if TYPE_CHECKING:
-    from kp_dagger.parsers.base.parser import BaseParser
+    from kp_dagger.parsers.base.protocols import BaseParser
 
 
 class ParserFactory:

@@ -1,9 +1,7 @@
 """Test base parser functionality."""
 
-from kp_dagger.parsers.base.parser import BaseParser
 
-
-class TestParser(BaseParser):
+class TestParser:
     """Test implementation of BaseParser."""
 
     def parse(self, config_text: str) -> dict:

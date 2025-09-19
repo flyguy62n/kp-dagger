@@ -2,7 +2,7 @@
 
 from typing import Any
 
-from kp_dagger.parsers.base.parser import BaseParser
+from kp_dagger.parsers.base.protocols import BaseParser
 
 
 class CiscoASAParser(BaseParser):

@@ -103,7 +103,7 @@ class BaseParser(ABC):
 # Domain model with clear hierarchy
 class BaseAnalyzer(ABC):
     @abstractmethod
-    def analyze(self, config: ParsedConfig) -> AnalysisResult:
+    def analyze(self, config: ParsedDeviceConfig) -> AnalysisResult:
         ...
     
     @abstractmethod
@@ -193,7 +193,7 @@ When you need to check types at runtime:
 ```python
 class BaseParser(ABC):
     @abstractmethod
-    def parse(self, content: str) -> ParsedConfig:
+    def parse(self, content: str) -> ParsedDeviceConfig:
         ...
 
 # Later in code:
@@ -270,7 +270,7 @@ Often, the best solution combines both patterns:
 # ABC for core business logic
 class BaseAnalyzer(ABC):
     @abstractmethod
-    def analyze(self, config: ParsedConfig) -> AnalysisResult:
+    def analyze(self, config: ParsedDeviceConfig) -> AnalysisResult:
         ...
 
 # Protocol for optional UI dependency
@@ -319,7 +319,7 @@ class MockEventPublisher:
 ```python
 # Must inherit for proper testing
 class MockAnalyzer(BaseAnalyzer):
-    def analyze(self, config: ParsedConfig) -> AnalysisResult:
+    def analyze(self, config: ParsedDeviceConfig) -> AnalysisResult:
         return AnalysisResult()
 
 # But benefits from shared implementation and isinstance() checks

@@ -12,6 +12,27 @@ wheels = [
 ]
 
 [[package]]
+name = "antlr4-python3-runtime"
+version = "4.13.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/33/5f/2cdf6f7aca3b20d3f316e9f505292e1f256a32089bd702034c29ebde6242/antlr4_python3_runtime-4.13.2.tar.gz", hash = "sha256:909b647e1d2fc2b70180ac586df3933e38919c85f98ccc656a96cd3f25ef3916", size = 117467, upload-time = "2024-08-03T19:00:12.757Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/89/03/a851e84fcbb85214dc637b6378121ef9a0dd61b4c65264675d8a5c9b1ae7/antlr4_python3_runtime-4.13.2-py3-none-any.whl", hash = "sha256:fe3835eb8d33daece0e799090eda89719dbccee7aa39ef94eed3818cafa5a7e8", size = 144462, upload-time = "2024-08-03T19:00:11.134Z" },
+]
+
+[[package]]
+name = "antlr4-tools"
+version = "0.2.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "install-jdk" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/b8/7c/6033a383b196b885476210ba6ba72b501c439508ea81f1560a94ea116834/antlr4_tools-0.2.2.tar.gz", hash = "sha256:8af6fba512fc168e48eb93690ed21bdbe8848ed812d12b365d9d259a26ad6ba3", size = 6177, upload-time = "2025-04-27T16:43:22.593Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/76/e9/f3d327df348a906a83201d2a5e559194945135879b6920dbbce9c1d6fe79/antlr4_tools-0.2.2-py3-none-any.whl", hash = "sha256:79a0b971cf8337db49df076495332e9e401e2217d114ee1ac7797d3b28df001b", size = 4405, upload-time = "2025-04-27T16:43:21.527Z" },
+]
+
+[[package]]
 name = "anyio"
 version = "4.9.0"
 source = { registry = "https://pypi.org/simple" }
@@ -526,6 +547,15 @@ wheels = [
 ]
 
 [[package]]
+name = "install-jdk"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cf/67/502a753533e9b4deb691f3f7ba6303682494f2d8ee651d6253cd78045b66/install_jdk-1.1.0.tar.gz", hash = "sha256:2bfd53caf660e4916df0215a5715519dcb9547fa2a5f07421fd97a8046851eaa", size = 15181, upload-time = "2023-07-21T01:18:36.591Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7e/5e/af84054b0ff9f9fbe49a7079d46ba8b4ee7ab6192a0310d4bd2c91254626/install_jdk-1.1.0-py3-none-any.whl", hash = "sha256:b63f0fcd63f7abab3443d4120ba92716397753b8a8ea3c85762a629925a9936e", size = 15648, upload-time = "2023-07-21T01:18:35.501Z" },
+]
+
+[[package]]
 name = "jinja2"
 version = "3.1.6"
 source = { registry = "https://pypi.org/simple" }
@@ -554,6 +584,8 @@ wheels = [
 name = "kp-dagger"
 source = { editable = "." }
 dependencies = [
+    { name = "antlr4-python3-runtime" },
+    { name = "antlr4-tools" },
     { name = "argon2-cffi" },
     { name = "charset-normalizer" },
     { name = "ciscoconfparse2" },
@@ -568,6 +600,8 @@ dependencies = [
     { name = "openpyxl" },
     { name = "pydantic" },
     { name = "python-dateutil" },
+    { name = "python-magic" },
+    { name = "python-magic-bin", marker = "sys_platform == 'win32'" },
     { name = "pyyaml" },
     { name = "rich" },
     { name = "sqlmodel" },
@@ -603,6 +637,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "antlr4-python3-runtime", specifier = ">=4.13.2" },
+    { name = "antlr4-tools", specifier = ">=0.2.2" },
     { name = "argon2-cffi", specifier = ">=23.0.0" },
     { name = "charset-normalizer", specifier = ">=3.4.2" },
     { name = "ciscoconfparse2", specifier = ">=0.8.34" },
@@ -632,6 +668,8 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.21.0" },
     { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=5.0.0" },
     { name = "python-dateutil", specifier = ">=2.8.0" },
+    { name = "python-magic", specifier = ">=0.4.27" },
+    { name = "python-magic-bin", marker = "sys_platform == 'win32'", specifier = ">=0.4.14" },
     { name = "pyyaml", specifier = ">=6.0.0" },
     { name = "rich", specifier = ">=13.7.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.0" },
@@ -1176,6 +1214,24 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
+]
+
+[[package]]
+name = "python-magic"
+version = "0.4.27"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/da/db/0b3e28ac047452d079d375ec6798bf76a036a08182dbb39ed38116a49130/python-magic-0.4.27.tar.gz", hash = "sha256:c1ba14b08e4a5f5c31a302b7721239695b2f0f058d125bd5ce1ee36b9d9d3c3b", size = 14677, upload-time = "2022-06-07T20:16:59.508Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6c/73/9f872cb81fc5c3bb48f7227872c28975f998f3e7c2b1c16e95e6432bbb90/python_magic-0.4.27-py2.py3-none-any.whl", hash = "sha256:c212960ad306f700aa0d01e5d7a325d20548ff97eb9920dcd29513174f0294d3", size = 13840, upload-time = "2022-06-07T20:16:57.763Z" },
+]
+
+[[package]]
+name = "python-magic-bin"
+version = "0.4.14"
+source = { registry = "https://pypi.org/simple" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/5a/5d/10b9ac745d9fd2f7151a2ab901e6bb6983dbd70e87c71111f54859d1ca2e/python_magic_bin-0.4.14-py2.py3-none-win32.whl", hash = "sha256:34a788c03adde7608028203e2dbb208f1f62225ad91518787ae26d603ae68892", size = 397784, upload-time = "2017-10-02T16:30:15.806Z" },
+    { url = "https://files.pythonhosted.org/packages/07/c2/094e3d62b906d952537196603a23aec4bcd7c6126bf80eb14e6f9f4be3a2/python_magic_bin-0.4.14-py2.py3-none-win_amd64.whl", hash = "sha256:90be6206ad31071a36065a2fc169c5afb5e0355cbe6030e87641c6c62edc2b69", size = 409299, upload-time = "2017-10-02T16:30:18.545Z" },
 ]
 
 [[package]]

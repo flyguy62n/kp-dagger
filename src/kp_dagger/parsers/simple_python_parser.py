@@ -1,7 +1,15 @@
-"""FortiGate configuration parser."""
+"""
+Comparison: Python-based hierarchical configuration parser.
 
+This demonstrates a simpler approach using Python data structures
+and regex patterns instead of ANTLR4 grammar files.
+"""
+
+import logging
 import re
 from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
 class FortigateConfigParser:
@@ -11,11 +19,10 @@ class FortigateConfigParser:
     This approach trades grammar formalism for implementation simplicity.
     """
 
-    def __init__(self, file_processing_service) -> None:
+    def __init__(self):
         self.config_data: dict[str, Any] = {}
         self.context_stack: list[dict[str, Any]] = []
         self.current_path: list[str] = []
-        self.file_processing_service = file_processing_service
 
         # Regex patterns for different line types
         self.patterns = {
@@ -174,3 +181,96 @@ class FortigateConfigParser:
             return value
 
         return value
+
+
+def analyze_interface_security_simple(config_data: dict[str, Any]) -> dict[str, Any]:
+    """
+    Simple interface security analysis using parsed config data.
+
+    This shows how analysis becomes simpler with direct data structures.
+    """
+    # With corrected structure: "system interface" is a single config section
+    interfaces = config_data.get("system interface", {})
+
+    analysis = {
+        "total_interfaces": len(interfaces),
+        "interfaces_up": 0,
+        "interfaces_down": 0,
+        "ipv6_enabled": 0,
+        "dual_stack": 0,
+        "security_issues": [],
+        "interface_details": {},
+    }
+
+    for iface_name, iface_config in interfaces.items():
+        status = iface_config.get("status", "unknown")
+        has_ipv4 = bool(iface_config.get("ip"))
+        has_ipv6 = bool(iface_config.get("ipv6", {}).get("ip6-address"))
+
+        # Count interface states
+        if status == "up":
+            analysis["interfaces_up"] += 1
+        elif status == "down":
+            analysis["interfaces_down"] += 1
+
+        # Count IPv6 and dual-stack
+        if has_ipv6:
+            analysis["ipv6_enabled"] += 1
+        if has_ipv4 and has_ipv6:
+            analysis["dual_stack"] += 1
+
+        # Security analysis
+        allowaccess = iface_config.get("allowaccess", "") or ""
+        if "ssh" in allowaccess or "https" in allowaccess:
+            analysis["security_issues"].append(
+                f"Interface {iface_name} allows management access: {allowaccess}",
+            )
+
+        analysis["interface_details"][iface_name] = {
+            "status": status,
+            "has_ipv4": has_ipv4,
+            "has_ipv6": has_ipv6,
+            "allowaccess": allowaccess,
+            "type": iface_config.get("type", "unknown"),
+        }
+
+    return analysis
+
+
+if __name__ == "__main__":
+    # Enable limited debug logging
+    logging.basicConfig(level=logging.DEBUG, format="%(levelname)s: %(message)s")
+
+    # Test the simple parser
+    parser = ConfigParser()
+
+    # Test with your interface config file
+    config_data = parser.parse_file(
+        r"D:\Users\Randy\Downloads\Git\kp-dagger\src\kp_dagger\parsers\test_interface_ipv6.txt",
+    )
+
+    # Print structure (limited for readability)
+    print("=== PARSED CONFIG STRUCTURE ===")
+    print("Top-level config sections:")
+    for section in config_data.keys():
+        print(f"  - {section}")
+
+    import json
+
+    interfaces = config_data.get("system interface", {})
+    print(f"Found {len(interfaces)} interfaces:")
+    for name in list(interfaces.keys())[:5]:  # Show first 5
+        print(f"  - {name}")
+    if len(interfaces) > 5:
+        print(f"  ... and {len(interfaces) - 5} more")
+
+    # Show first interface detail
+    if interfaces:
+        first_iface = next(iter(interfaces))
+        print(f"\nFirst interface ({first_iface}) details:")
+        print(json.dumps(interfaces[first_iface], indent=2, default=str)[:500] + "...")
+
+    # Analyze interfaces
+    print("\n=== INTERFACE SECURITY ANALYSIS ===")
+    analysis = analyze_interface_security_simple(config_data)
+    print(json.dumps(analysis, indent=2, default=str))

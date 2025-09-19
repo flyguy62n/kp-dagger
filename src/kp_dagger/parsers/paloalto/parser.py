@@ -2,10 +2,8 @@
 
 from typing import Any
 
-from kp_dagger.parsers.base.parser import BaseParser
 
-
-class PaloaltoParser(BaseParser):
+class PaloaltoParser:
     """Parser for PaloAlto PAN-OS device configurations."""
 
     def parse(self, config_text: str) -> dict[str, Any]:

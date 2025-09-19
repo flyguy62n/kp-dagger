@@ -1,0 +1,24 @@
+config system global
+    set admin-console-timeout 0
+    set admin-forticloud-sso-login disable
+    set admin-host ''
+    set admin-hsts-max-age 63072000
+    set admin-https-redirect enable
+    set admin-https-ssl-ciphersuites TLS-AES-128-GCM-SHA256 TLS-AES-256-GCM-SHA384 TLS-CHACHA20-POLY1305-SHA256
+    set admin-https-ssl-versions tlsv1-2 tlsv1-3
+    set admin-lockout-duration 60
+    set admin-lockout-threshold 3
+    set admin-login-max 100
+    set admin-port 8080
+    set admin-scp disable
+    set admin-server-cert "LetsEncrypt - Firewall Admin"
+    set admin-sport 8443
+    set admin-ssh-grace-time 120
+    set admin-ssh-password enable
+    set admin-ssh-port 22
+    set admin-ssh-v1 disable
+    set admin-telnet enable
+    set admin-telnet-port 23
+    set admintimeout 15
+    set remoteauthtimeout 25
+end

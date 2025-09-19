@@ -1,6 +1,6 @@
 """Base model components."""
 
-from kp_dagger.models.base.base import DaggerConfigMixin, KPkp_daggerBaseModel
+from kp_dagger.models.base.base import DaggerConfigMixin, KPDaggerBaseModel
 from kp_dagger.models.base.enums import (
     AddressType,
     ComplianceStatus,

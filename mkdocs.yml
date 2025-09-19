@@ -40,11 +40,16 @@ nav:
     - Index: getting-started/index.md
   - Architecture:
     - Overview: architecture/overview.md
+    - ETL Processing Architecture: architecture/etl-processing-architecture.md
     - Data Models: architecture/data-models.md
     - Database Design: architecture/database-design.md
     - Dependency Injection: architecture/dependency-injection.md
     - Project Structure: architecture/PROJECT_STRUCTURE.md
     - Protocols vs ABCs: architecture/protocols-vs-abcs.md
+    - Device Parsers:
+      - Index: architecture/parsers/index.md
+      - Parser Implementation Decision: architecture/parsers/parser-implementation-decision.md
+      - Parsers Interface: architecture/parsers/parsers-interface.md
     - UI-Service Communication:
       - Overview: architecture/ui-service-communication/index.md
       - Event Bus Pattern: architecture/ui-service-communication/event-bus-pattern.md
@@ -77,6 +82,7 @@ plugins:
             show_root_heading: true
             show_symbol_type_heading: true
             show_symbol_type_toc: true
+            show_if_no_docstring: true
             members_order: source
             merge_init_into_class: true
 

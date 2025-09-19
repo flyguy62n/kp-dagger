@@ -2,10 +2,8 @@
 
 from typing import Any
 
-from kp_dagger.parsers.base.parser import BaseParser
 
-
-class CiscoIOSParser(BaseParser):
+class CiscoIOSParser:
     """Parser for Cisco IOS device configurations."""
 
     def parse(self, config_text: str) -> dict[str, Any]:
