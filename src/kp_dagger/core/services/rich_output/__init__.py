@@ -5,7 +5,7 @@ This module provides a Rich-based output service that implements the RichOutputP
 for dependency injection across the SSF Tools application.
 """
 
-from kp_dagger.core.services.rich_output.interfaces import (
+from kp_dagger.core.services.rich_output.protocols import (
     MessageSeverity,
     RichOutputProtocol,
 )

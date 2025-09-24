@@ -21,7 +21,7 @@ from rich.table import Table
 from rich.theme import Theme
 from rich.tree import Tree
 
-from kp_dagger.core.services.rich_output.interfaces import MessageSeverity
+from kp_dagger.core.services.rich_output.protocols import MessageSeverity
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

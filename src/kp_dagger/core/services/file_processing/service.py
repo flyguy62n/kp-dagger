@@ -4,6 +4,12 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from kp_dagger.models.events import (
+    OperationCompleted,
+    OperationError,
+    OperationStarted,
+)
+
 if TYPE_CHECKING:
     from pathlib import Path
 
@@ -67,13 +73,6 @@ class FileProcessingService:
             Returns empty dict if file validation fails.
 
         """
-        # Import events locally to avoid circular imports
-        from kp_dagger.models.events import (
-            OperationCompleted,
-            OperationError,
-            OperationStarted,
-        )
-
         start_time = self.timestamp_service.utc_now()
 
         # Publish operation started event
@@ -148,7 +147,10 @@ class FileProcessingService:
                     operation_type="file_processing",
                     resource_path=file_path,
                     error_message=str(e),
-                    error_context={"operation": "metadata_extraction", "duration": duration},
+                    error_context={
+                        "operation": "metadata_extraction",
+                        "duration": duration,
+                    },
                 ),
             )
             return {}
@@ -239,15 +241,6 @@ class FileProcessingService:
             List of Path objects for all matching files
 
         """
-        # Import events locally to avoid circular imports
-        from pathlib import Path
-
-        from kp_dagger.models.events import (
-            OperationCompleted,
-            OperationError,
-            OperationStarted,
-        )
-
         start_time = self.timestamp_service.utc_now()
         base_path_obj = Path(base_path)
 
@@ -291,7 +284,11 @@ class FileProcessingService:
                     operation_type="file_discovery",
                     resource_path=base_path_obj,
                     error_message=str(e),
-                    error_context={"pattern": pattern, "recursive": recursive, "duration": duration},
+                    error_context={
+                        "pattern": pattern,
+                        "recursive": recursive,
+                        "duration": duration,
+                    },
                 ),
             )
             return []

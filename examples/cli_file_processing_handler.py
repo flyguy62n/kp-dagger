@@ -5,7 +5,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from kp_dagger.core.services.rich_output.interfaces import RichOutputProtocol
+    from kp_dagger.core.services.rich_output.protocols import RichOutputProtocol
     from kp_dagger.models.events import (
         OperationCompleted,
         OperationError,

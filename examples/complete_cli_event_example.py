@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from kp_dagger.core.services.events import EventBusService
     from kp_dagger.core.services.file_processing.service import FileProcessingService
-    from kp_dagger.core.services.rich_output.interfaces import RichOutputProtocol
+    from kp_dagger.core.services.rich_output.protocols import RichOutputProtocol
 
 from cli_file_processing_handler import FileProcessingCliEventHandler
 

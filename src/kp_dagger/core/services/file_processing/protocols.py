@@ -192,3 +192,129 @@ class ContentStreamer(Protocol):
 
         """
         ...
+
+
+class FileProcessor(Protocol):
+    """Service for all file processing operations."""
+
+    def process_file(self, file_path: Path) -> dict[str, str | bool | None]:
+        """
+        Process a file and return metadata.
+
+        Args:
+            file_path: Path to the file to process
+
+        Returns:
+            Dictionary containing file metadata including encoding, hash, path,
+            MIME type, and text/binary classification.
+            Returns empty dict if file validation fails.
+
+        """
+        ...
+
+    def detect_encoding(self, file_path: Path) -> str | None:
+        """
+        Detect the encoding of a file.
+
+        Args:
+            file_path: Path to the file to analyze
+
+        Returns:
+            The detected encoding name, or None if detection fails
+
+        """
+        ...
+
+    def generate_hash(self, file_path: Path) -> str:
+        """
+        Generate hash for a file.
+
+        Args:
+            file_path: Path to the file to hash
+
+        Returns:
+            The generated hash as a hexadecimal string
+
+        """
+        ...
+
+    def detect_mime_type(self, file_path: Path) -> str | None:
+        """
+        Detect the MIME type of a file.
+
+        Args:
+            file_path: Path to the file to analyze
+
+        Returns:
+            The detected MIME type string, or None if detection fails
+
+        """
+        ...
+
+    def is_text_file(self, file_path: Path) -> bool:
+        """
+        Check if a file is a text file based on its MIME type.
+
+        Args:
+            file_path: Path to the file to check
+
+        Returns:
+            True if the file is detected as a text file, False otherwise
+
+        """
+        ...
+
+    def is_binary_file(self, file_path: Path) -> bool:
+        """
+        Check if a file is a binary file based on its MIME type.
+
+        Args:
+            file_path: Path to the file to check
+
+        Returns:
+            True if the file is detected as a binary file, False otherwise
+
+        """
+        ...
+
+    def discover_files_by_pattern(
+        self,
+        base_path: PathLike,
+        pattern: str = "*",
+        *,
+        recursive: bool = False,
+    ) -> list[Path]:
+        """
+        Discover files matching a pattern in a directory.
+
+        Args:
+            base_path: Directory to search for files
+            pattern: Glob pattern to match files (default: "*")
+            recursive: If True, search subdirectories recursively (default: False)
+
+        Returns:
+            List of Path objects for all matching files
+
+        """
+        ...
+
+    def create_content_streamer(
+        self,
+        file_path: Path,
+        encoding: str | None = None,
+    ) -> ContentStreamer:
+        """
+        Create a content streamer for efficient file reading.
+
+        Args:
+            file_path: Path to the file to stream
+            encoding: Character encoding (auto-detected if None)
+
+        Returns:
+            A ContentStreamer instance for the file
+
+        Raises:
+            ValueError: If encoding cannot be detected or file is invalid
+
+        """
+        ...

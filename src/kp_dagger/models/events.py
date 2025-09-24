@@ -3,21 +3,22 @@
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
-from pathlib import Path
-from typing import TypeVar
+
+# Import locally to avoid circular dependencies during model initialization
+# Does not use dependency-injected timestamp service as Pydantic and DI don't play well
+from datetime import UTC, datetime
+from typing import TYPE_CHECKING, TypeVar
 
 from pydantic import BaseModel, Field
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 EventT = TypeVar("EventT", bound="BaseEvent")
 
 
 def _get_utc_now() -> datetime:
     """Get current UTC timestamp using centralized service approach."""
-    # Import locally to avoid circular dependencies during model initialization
-    # Does not use dependency-injected timestamp service as Pydantic and DI don't play well
-    from datetime import UTC, datetime
-
     return datetime.now(UTC)
 
 
