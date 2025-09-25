@@ -8,13 +8,13 @@ and compliance checking.
 from pathlib import Path
 
 import click
-from rich.console import Console
+from dependency_injector.wiring import Provide, inject
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 
-from kp_dagger.cli.utils.output import RichCommand, error_console, success_console
-
-console = Console()
+from kp_dagger.cli.utils.output import RichCommand, rich_output
+from kp_dagger.containers.application import ApplicationContainer
+from kp_dagger.core.services.events.service import EventBusService
 
 
 @click.command(cls=RichCommand)
@@ -77,9 +77,8 @@ console = Console()
     default=1,
     help="Number of parallel analysis threads (default: 1).",
 )
-@click.pass_context
+@inject
 def analyze(
-    ctx: click.Context,
     config_files: tuple[Path, ...],
     device_type: str,
     output: Path | None,
@@ -89,6 +88,10 @@ def analyze(
     cis_benchmarks: bool,
     vulnerability_check: bool,
     parallel: int,
+    # Injected dependencies
+    event_bus: EventBusService = Provide[
+        ApplicationContainer.core_container.event_bus_service
+    ],
 ) -> None:
     """
     Analyze network device configuration files for security issues.
@@ -111,31 +114,32 @@ def analyze(
         Dagger analyze --format json --output results.json config.txt
 
     """
-    verbose = ctx.obj.get("verbose", 0)
-    quiet = ctx.obj.get("quiet", False)
+    # Always show the starting message for now
+    rich_output.info("\n🔍 [bold blue]Starting Configuration Analysis[/bold blue]\n")
 
-    if not quiet:
-        console.print("\n🔍 [bold blue]Starting Configuration Analysis[/bold blue]\n")
-
-    # Display analysis configuration
-    if verbose > 0:
-        _show_analysis_config(
-            config_files,
-            device_type,
-            output_format,
-            severity,
-            include_passed,
-            cis_benchmarks,
-            vulnerability_check,
-            parallel,
-        )
+    # Display analysis configuration - simplified for testing
+    _show_analysis_config(
+        config_files,
+        device_type,
+        output_format,
+        severity,
+        include_passed,
+        cis_benchmarks,
+        vulnerability_check,
+        parallel,
+    )
 
     try:
-        # TODO: Implement actual analysis logic
+        # Subscribe to events (example: print all events to rich_output)
+        def handle_event(event):
+            rich_output.info(f"[event] {event}")
+
+        event_bus.subscribe(object, handle_event)  # Subscribe to all events for now
+
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
-            console=console,
+            # No console arg: let Progress use default, output via rich_output
         ) as progress:
             # Parse configurations
             parse_task = progress.add_task(
@@ -143,9 +147,8 @@ def analyze(
                 total=len(config_files),
             )
             for config_file in config_files:
-                if verbose > 1:
-                    console.print(f"  📄 Processing: {config_file}")
-                # TODO: Call parser for each file
+                rich_output.debug(f"  📄 Processing: {config_file}")
+                # TODO(kp): Call parser for each file
                 progress.advance(parse_task)
 
             # Security analysis
@@ -162,20 +165,20 @@ def analyze(
                 progress.add_task("Checking vulnerabilities...", total=None)
                 # TODO: Implement vulnerability checks
 
-        # Display results
-        if not quiet:
-            _show_analysis_results(output_format, include_passed)
+        # Display results - always show for now
+        _show_analysis_results(output_format, include_passed)
 
         # Save output if specified
         if output:
             _save_results(output, output_format)
-            success_console.print(f"✅ Results saved to: {output}")
+            rich_output.success(f"✅ Results saved to: {output}")
 
     except Exception as e:
-        error_console.print(f"❌ Analysis failed: {e}")
-        if verbose > 0:
-            console.print_exception()
-        ctx.exit(1)
+        rich_output.error(f"❌ Analysis failed: {e}")
+        import traceback
+
+        rich_output.error(traceback.format_exc())
+        raise SystemExit(1) from e
 
 
 def _show_analysis_config(
@@ -202,14 +205,13 @@ def _show_analysis_config(
     table.add_row("Vulnerability Check", "Yes" if vulnerability_check else "No")
     table.add_row("Parallel Threads", str(parallel))
 
-    console.print(table)
-    console.print()
+    rich_output.info(table)
 
 
 def _show_analysis_results(output_format: str, include_passed: bool) -> None:
     """Display analysis results."""
     # TODO: Replace with actual results
-    console.print("📊 [bold green]Analysis Complete[/bold green]\n")
+    rich_output.success("📊 [bold green]Analysis Complete[/bold green]\n")
 
     # Mock results table
     results_table = Table(title="Security Analysis Results")
@@ -233,7 +235,7 @@ def _show_analysis_results(output_format: str, include_passed: bool) -> None:
     )
     results_table.add_row("SNMP Security", "⚠️  WARN", "LOW", "SNMP v2c in use")
 
-    console.print(results_table)
+    rich_output.info(results_table)
 
 
 def _save_results(output_path: Path, output_format: str) -> None:

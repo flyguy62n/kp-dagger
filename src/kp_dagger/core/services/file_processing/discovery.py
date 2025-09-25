@@ -5,15 +5,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from kp_dagger.core.services.file_processing.protocols import (
-    FileDiscoverer,
-)
-
 if TYPE_CHECKING:
     from kp_dagger.models.base.types import PathLike
 
 
-class FileDiscoveryService(FileDiscoverer):
+class FileDiscoveryService:
     """Service for discovering files in a directory based on a pattern."""
 
     def discover_files_by_pattern(

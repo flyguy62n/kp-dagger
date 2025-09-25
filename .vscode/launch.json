@@ -12,6 +12,17 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "args": "${command:pickArgs}"
+        },
+        {
+            "name": "Python Debugger: Dagger Main Help",
+            "type": "debugpy",
+            "request": "launch",
+            "preLaunchTask": "uv_sync",
+            "program": "${workspaceFolder}/src/kp_dagger/__main__.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--help"
+            ]
         }
     ]
 }

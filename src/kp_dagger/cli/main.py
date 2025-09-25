@@ -5,18 +5,26 @@ This module provides the main command-line interface for Dagger using Click.
 It serves as the entry point for all CLI operations.
 """
 
+from pathlib import Path
+
 import click
-from rich.console import Console
+import yaml
 from rich.panel import Panel
 from rich.text import Text
 
-from kp_dagger.cli.commands.analyze import analyze
-from kp_dagger.cli.commands.report import report
-from kp_dagger.cli.commands.tenant import tenant
 from kp_dagger.cli.utils.config import config
 from kp_dagger.cli.utils.output import RichGroup, error_console, setup_logging
 
-console = Console()
+# Dependency Injection
+from kp_dagger.containers.application import ApplicationContainer
+
+# Initialize global container
+container = ApplicationContainer()
+
+# Import commands after container initialization
+from kp_dagger.cli.commands.analyze import analyze  # noqa: E402
+from kp_dagger.cli.commands.report import report  # noqa: E402
+from kp_dagger.cli.commands.tenant import tenant  # noqa: E402
 
 
 @click.group(invoke_without_command=True, cls=RichGroup)
@@ -49,7 +57,7 @@ console = Console()
     help="Path to configuration file.",
 )
 @click.pass_context
-def main(
+def main(  # noqa: PLR0913
     ctx: click.Context,
     version: bool,  # noqa: FBT001
     verbose: int,
@@ -77,20 +85,24 @@ def main(
     # Setup logging based on verbosity
     setup_logging(verbose, quiet)
 
-    # NOTE: Container and DI integration will be added when all services are implemented
-    # if config_file:
-    #     try:
-    #         from kp_dagger.containers.config import load_config
-    #         from kp_dagger.containers import ApplicationContainer
-    #
-    #         config_data = load_config(config_file)
-    #         container = ApplicationContainer()
-    #         container.config.from_dict(config_data)
-    #         container.wire_modules()
-    #         ctx.obj["container"] = container
-    #     except Exception as e:
-    #         error_console.print(f"❌ Failed to load config: {e}", style="red")
-    #         ctx.exit(1)
+    # Configure and wire DI container
+    try:
+        if config_file:
+            config_path: Path = Path(config_file)
+            with config_path.open(encoding="utf-8") as f:
+                config_data = yaml.safe_load(f)
+            container.config.from_dict(config_data)
+        container.wire(
+            modules=[
+                "kp_dagger.cli.main",
+                "kp_dagger.cli.commands.analyze",
+                "kp_dagger.cli.commands.report",
+                "kp_dagger.cli.commands.tenant",
+            ],
+        )
+    except Exception as e:
+        error_console.print(f"❌ Failed to initialize DI container: {e}", style="red")
+        ctx.exit(1)
 
     if version:
         show_version()
@@ -112,15 +124,14 @@ def show_version() -> None:
         version_text.append(f"v{__version__}", style="bold green")
         version_text.append(f"\nBy {__author__}", style="dim")
         version_text.append(f"\nWebsite: {__url__}", style="dim")
-
         panel = Panel(
             version_text,
             title="Version Information",
             border_style="blue",
             padding=(1, 2),
         )
-        console.print(panel)
-
+        # Use error_console for now (will switch to DI output in commands)
+        error_console.print(panel)
     except ImportError:
         error_console.print("❌ Could not determine version information", style="red")
 
@@ -144,7 +155,7 @@ def show_welcome() -> None:
         border_style="blue",
         padding=(1, 2),
     )
-    console.print(panel)
+    error_console.print(panel)
 
 
 # Add subcommands

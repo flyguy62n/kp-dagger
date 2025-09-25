@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from kp_dagger.models.events import (
@@ -11,8 +12,6 @@ from kp_dagger.models.events import (
 )
 
 if TYPE_CHECKING:
-    from pathlib import Path
-
     from kp_dagger.core.services.events import SafeEventPublisher
     from kp_dagger.core.services.file_processing.protocols import (
         ContentStreamer,

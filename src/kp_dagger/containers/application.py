@@ -56,13 +56,12 @@ class ApplicationContainer(containers.DeclarativeContainer):
     # )
 
     def wire_modules(self) -> None:
-        """Wire dependency injection to modules."""
-        # NOTE: Modules will be wired as they're updated to use DI
-        # self.wire(
-        #     modules=[
-        #         "Dagger.cli.main",
-        #         "Dagger.cli.commands.analyze",
-        #         "Dagger.cli.commands.report",
-        #         "Dagger.cli.commands.validate",
-        #     ],
-        # )
+        """Wire dependency injection to CLI and command modules."""
+        self.wire(
+            modules=[
+                "kp_dagger.cli.main",
+                "kp_dagger.cli.commands.analyze",
+                "kp_dagger.cli.commands.report",
+                "kp_dagger.cli.commands.tenant",
+            ],
+        )

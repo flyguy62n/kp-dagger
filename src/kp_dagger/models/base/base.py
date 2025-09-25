@@ -33,11 +33,8 @@ class DaggerConfigMixin(SQLModel):
         validate_assignment=True,
         # Serialize enums as their values, not enum objects
         use_enum_values=True,
+        abstract=True,
     )
-
-    class Config:
-        # Mark as abstract so SQLAlchemy doesn't create a table
-        abstract = True
 
 
 class KPDaggerBaseModel(DaggerConfigMixin):

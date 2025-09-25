@@ -1,4 +1,3 @@
-# AI-GEN: gpt-4o|2025-01-30|content-streaming-core-service|reviewed:no
 """Content streaming protocols and implementations for file processing service."""
 
 from __future__ import annotations
@@ -6,14 +5,12 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
-from kp_dagger.core.services.file_processing.protocols import ContentStreamer
-
 if TYPE_CHECKING:
     from collections.abc import Generator
     from pathlib import Path
 
 
-class FileContentStreamer(ContentStreamer):
+class FileContentStreamer:
     """
     Implementation of ContentStreamer for file-based content.
 

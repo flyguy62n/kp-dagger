@@ -9,10 +9,8 @@ import magic
 if TYPE_CHECKING:
     from pathlib import Path
 
-from kp_dagger.core.services.file_processing.protocols import MimeTypeDetector
 
-
-class MimeDetector(MimeTypeDetector):
+class MimeDetector:
     """MIME type detector using python-magic library."""
 
     def __init__(self) -> None:

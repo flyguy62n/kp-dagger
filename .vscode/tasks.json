@@ -1,18 +1,73 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-        {
-            "label": "serve_docs",
-            "type": "shell",
-            "command": "uv",
-            "args": [
-                "run",
-                "mkdocs",
-                "serve"
-            ],
-            "group": "build",
-            "isBackground": true,
-            "problemMatcher": []
-        }
-    ]
+        "version": "2.0.0",
+        "tasks": [
+                {
+                        "label": "uv_run_mypy",
+                        "type": "shell",
+                        "command": "uv",
+                        "args": [
+                                "run",
+                                "mypy",
+                                "src"
+                        ],
+                        "problemMatcher": [
+                                "$python"
+                        ],
+                        "group": "build"
+                },
+                {
+                        "label": "uv_mkdocs_serve",
+                        "type": "shell",
+                        "command": "uv",
+                        "args": [
+                                "run",
+                                "mkdocs",
+                                "serve"
+                        ],
+                        "group": "build",
+                        "problemMatcher": [],
+                        "isBackground": true,
+                        "presentation": {
+                                "echo": true,
+                                "reveal": "always",
+                                "focus": false,
+                                "panel": "new"
+                        },
+                        "runOptions": {
+                                "runOn": "folderOpen"
+                        }
+                },
+                {
+                        "label": "uv_run_pytest_all",
+                        "type": "shell",
+                        "command": "uv",
+                        "args": [
+                                "run",
+                                "pytest",
+                                "tests"
+                        ],
+                        "problemMatcher": [
+                                "$python"
+                        ],
+                        "group": "build"
+                },
+                {
+                        "label": "uv_run_pytest_not_slow",
+                        "type": "shell",
+                        "command": "uv",
+                        "args": [
+                                "run",
+                                "pytest",
+                                "tests",
+                                "--disable-warnings",
+                                "-m",
+                                "not slow",
+                                "tests"
+                        ],
+                        "problemMatcher": [
+                                "$python"
+                        ],
+                        "group": "build"
+                }
+        ]
 }

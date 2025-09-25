@@ -1,27 +1,46 @@
 """
-Output utilities for Dagger CLI.
+Rich output utilities for Dagger CLI.
 
-Provides console utilities, logging configuration, and formatted output functions
-using Rich for enhanced terminal experience.
+Provides Rich-based console utilities and formatted output functions
+for enhanced terminal experience using the event-driven architecture.
 """
 
-import logging
+from __future__ import annotations
+
 import sys
-import types
-from typing import Any, Self
+import threading
+from contextlib import contextmanager
+from enum import StrEnum
+from typing import TYPE_CHECKING, Self
+
+if TYPE_CHECKING:
+    import types
 
 import click
 from rich.console import Console
-from rich.logging import RichHandler
 from rich.panel import Panel
+from rich.progress import (
+    BarColumn,
+    Progress,
+    SpinnerColumn,
+    TextColumn,
+    TimeElapsedColumn,
+)
+from rich.prompt import Confirm, Prompt
+from rich.status import Status
+from rich.table import Table
 from rich.text import Text
 from rich.theme import Theme
+from rich.tree import Tree
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 __all__ = [
-    "ProgressReporter",
+    "MessageSeverity",
     "RichCommand",
     "RichGroup",
-    "confirm_action",
+    "RichOutputService",
     "console",
     "error_console",
     "handle_keyboard_interrupt",
@@ -30,117 +49,434 @@ __all__ = [
     "print_info",
     "print_success",
     "print_warning",
-    "setup_logging",
+    "rich_output",
     "success_console",
 ]
 
-# Custom theme for Dagger CLI
-Dagger_THEME = Theme(
-    {
-        "info": "cyan",
-        "warning": "yellow",
-        "error": "bold red",
-        "success": "bold green",
-        "debug": "dim cyan",
-        "highlight": "bold blue",
-    },
-)
 
-# Console instances for different output types
-console = Console(theme=Dagger_THEME)
-error_console = Console(stderr=True, theme=Dagger_THEME, style="error")
-success_console = Console(theme=Dagger_THEME, style="success")
+class MessageSeverity(StrEnum):
+    """Standard severity levels for status messages."""
+
+    SUCCESS = "success"
+    INFO = "info"
+    WARNING = "warning"
+    ERROR = "error"
+    CRITICAL = "critical"
+    DEBUG = "debug"
 
 
-def setup_logging(verbose: int = 0, quiet: bool = False) -> None:  # noqa: FBT001, FBT002
-    """
-    Setup logging configuration based on verbosity level.
+class RichOutputService:
+    """Rich output service for CLI user interface."""
 
-    Args:
-        verbose: Verbosity level (0=INFO, 1=DEBUG, 2+=TRACE)
-        quiet: If True, suppress all output except errors
-
-    """
-    if quiet:
-        log_level = logging.ERROR
-    elif verbose == 0:
-        log_level = logging.WARNING
-    elif verbose == 1:
-        log_level = logging.INFO
-    else:
-        log_level = logging.DEBUG
-
-    # Configure rich handler
-    rich_handler = RichHandler(
-        console=console,
-        show_time=verbose > 1,
-        show_path=verbose > 1,
-        markup=True,
-        rich_tracebacks=True,
+    # Dagger CLI color theme
+    DAGGER_THEME = Theme(
+        {
+            "success": "bold green",
+            "info": "cyan",
+            "warning": "bold yellow",
+            "error": "bold red",
+            "critical": "bold white on red",
+            "debug": "dim white",
+            "highlight": "bold magenta",
+            "path": "blue",
+            "value": "green",
+            "key": "yellow",
+            "panel.border": "blue",
+            "panel.title": "bold blue",
+        },
     )
 
-    # Configure logging
-    logging.basicConfig(
-        level=log_level,
-        format="%(message)s",
-        datefmt="[%X]",
-        handlers=[rich_handler],
-    )
+    def __init__(
+        self,
+        *,
+        quiet: bool = False,
+        verbose: bool = False,
+        no_color: bool = False,
+        width: int | None = None,
+    ) -> None:
+        """
+        Initialize Rich output interface.
 
-    # Set logger for our package
-    logger = logging.getLogger("Dagger")
-    logger.setLevel(log_level)
+        Args:
+            quiet: Suppress non-essential output
+            verbose: Show debug and detailed messages
+            no_color: Disable color output
+            width: Force console width
 
+        """
+        self.quiet = quiet
+        self.verbose = verbose
 
-def print_info(message: str, **kwargs: dict[str, Any]) -> None:
-    """Print an info message."""
-    console.print(f"ℹ️ {message}", style="info", **kwargs)  # noqa: RUF001
+        # Create consoles with appropriate settings
+        self.console = Console(
+            theme=self.DAGGER_THEME,
+            force_terminal=not no_color,
+            width=width,
+        )
+        self.error_console = Console(
+            stderr=True,
+            theme=self.DAGGER_THEME,
+            force_terminal=not no_color,
+            width=width,
+        )
 
+        # Thread safety for concurrent operations
+        self._lock = threading.Lock()
 
-def print_warning(message: str, **kwargs: dict[str, Any]) -> None:
-    """Print a warning message."""
-    console.print(f"⚠️ {message}", style="warning", **kwargs)
+    def success(self, message: str) -> None:
+        """
+        Display success message.
 
+        Args:
+            message: Success message to display
 
-def print_error(message: str, **kwargs: dict[str, Any]) -> None:
-    """Print an error message."""
-    error_console.print(f"❌ {message}", style="error", **kwargs)
+        """
+        if not self.quiet:
+            with self._lock:
+                self.console.print(f"[success]✅[/success] {message}")
 
+    def info(self, message: str) -> None:
+        """
+        Display informational message.
 
-def print_success(message: str, **kwargs: dict[str, Any]) -> None:
-    """Print a success message."""
-    success_console.print(f"✅ {message}", style="success", **kwargs)
+        Args:
+            message: Info message to display
 
+        """
+        if not self.quiet:
+            with self._lock:
+                self.console.print(f"[info]i[/info] {message}")
 
-def print_debug(message: str, **kwargs: dict[str, Any]) -> None:
-    """Print a debug message."""
-    console.print(f"🐛 {message}", style="debug", **kwargs)
+    def warning(self, message: str) -> None:
+        """
+        Display warning message.
 
+        Args:
+            message: Warning message to display
 
-def confirm_action(message: str, *, default: bool = False) -> bool:
-    """
-    Ask for user confirmation.
+        """
+        with self._lock:
+            self.console.print(f"[warning]⚠️[/warning] {message}")
 
-    Args:
-        message: Message to display
-        default: Default value if user just presses Enter
+    def error(self, message: str) -> None:
+        """
+        Display error message to stderr.
 
-    Returns:
-        True if user confirms, False otherwise
+        Args:
+            message: Error message to display
 
-    """
-    default_str = "Y/n" if default else "y/N"
-    response = console.input(f"❓ {message} [{default_str}]: ").strip().lower()
+        """
+        with self._lock:
+            self.error_console.print(f"[error]❌[/error] {message}")
 
-    if not response:
-        return default
+    def critical(self, message: str) -> None:
+        """
+        Display critical error message to stderr.
 
-    return response in ("y", "yes", "true", "1")
+        Args:
+            message: Critical error message to display
+
+        """
+        with self._lock:
+            self.error_console.print(f"[critical]💀 CRITICAL:[/critical] {message}")
+
+    def debug(self, message: str) -> None:
+        """
+        Display debug message (only in verbose mode).
+
+        Args:
+            message: Debug message to display
+
+        """
+        if self.verbose:
+            with self._lock:
+                self.console.print(f"[debug]🐛 DEBUG:[/debug] {message}")
+
+    def status(
+        self,
+        message: str,
+        severity: MessageSeverity = MessageSeverity.INFO,
+    ) -> None:
+        """
+        Display status message with appropriate severity.
+
+        Args:
+            message: Status message to display
+            severity: Message severity level
+
+        """
+        severity_methods = {
+            MessageSeverity.SUCCESS: self.success,
+            MessageSeverity.INFO: self.info,
+            MessageSeverity.WARNING: self.warning,
+            MessageSeverity.ERROR: self.error,
+            MessageSeverity.CRITICAL: self.critical,
+            MessageSeverity.DEBUG: self.debug,
+        }
+
+        method = severity_methods.get(severity, self.info)
+        method(message)
+
+    @contextmanager
+    def progress(
+        self,
+        description: str = "Processing...",
+        *,
+        show_speed: bool = False,
+        show_percentage: bool = True,
+    ) -> Iterator[Progress]:
+        """
+        Context manager for progress tracking.
+
+        Args:
+            description: Description of the operation
+            show_speed: Whether to show processing speed
+            show_percentage: Whether to show percentage complete
+
+        Yields:
+            Progress object for task management
+
+        """
+        if self.quiet:
+            # Minimal progress in quiet mode
+            yield None  # type: ignore[misc]
+            return
+
+        columns = [
+            SpinnerColumn(),
+            TextColumn(f"[progress.description]{description}"),
+        ]
+
+        if show_percentage:
+            columns.append(BarColumn())
+            columns.append(TextColumn("[progress.percentage]{task.percentage:>3.0f}%"))
+
+        if show_speed:
+            columns.append(TextColumn("[progress.data.speed]{task.speed}"))
+
+        columns.append(TimeElapsedColumn())
+
+        with Progress(*columns, console=self.console) as progress:
+            yield progress
+
+    @contextmanager
+    def spinner(self, message: str = "Working...") -> Iterator[None]:
+        """
+        Context manager for simple spinner.
+
+        Args:
+            message: Message to display with spinner
+
+        Yields:
+            None
+
+        """
+        if self.quiet:
+            yield
+            return
+
+        with Status(message, console=self.console):
+            yield
+
+    def error_panel(
+        self,
+        error: Exception,
+        context: dict[str, object] | None = None,
+    ) -> None:
+        """
+        Display detailed error information.
+
+        Args:
+            error: Exception to display
+            context: Additional context information
+
+        """
+        error_content = [f"[error]{type(error).__name__}:[/error] {error}"]
+
+        if context:
+            error_content.append("")
+            error_content.append("[key]Context:[/key]")
+            for key, value in context.items():
+                error_content.append(f"  [key]{key}:[/key] [value]{value}[/value]")
+
+        panel = Panel(
+            "\n".join(error_content),
+            title="[error]Error Details[/error]",
+            border_style="red",
+        )
+
+        with self._lock:
+            self.error_console.print(panel)
+
+    def file_error(self, file_path: str, error: str) -> None:
+        """
+        Display file-specific error.
+
+        Args:
+            file_path: Path to the file with error
+            error: Error description
+
+        """
+        with self._lock:
+            self.error_console.print(
+                f"[error]❌[/error] File error in [path]{file_path}[/path]: {error}",
+            )
+
+    def confirm_yes_no(self, question: str, *, default_yes: bool = True) -> bool:
+        """
+        Ask user for yes/no confirmation.
+
+        Args:
+            question: Question to ask the user
+            default_yes: Whether default response is yes
+
+        Returns:
+            True if user confirms, False otherwise
+
+        """
+        with self._lock:
+            return Confirm.ask(question, default=default_yes, console=self.console)
+
+    def prompt(
+        self,
+        question: str,
+        default: str | None = None,
+        choices: list[str] | None = None,
+    ) -> str:
+        """
+        Prompt user for input.
+
+        Args:
+            question: Question to ask the user
+            default: Default value if user just presses enter
+            choices: List of valid choices (for validation)
+
+        Returns:
+            User's input as string
+
+        """
+        with self._lock:
+            result = Prompt.ask(
+                question,
+                default=default,
+                choices=choices,
+                console=self.console,
+            )
+            return result or ""
+
+    def summary_panel(self, title: str, data: dict[str, object]) -> None:
+        """
+        Display summary information panel.
+
+        Args:
+            title: Panel title
+            data: Key-value pairs to display
+
+        """
+        if self.quiet:
+            return
+
+        content_lines = []
+        for key, value in data.items():
+            content_lines.append(f"[key]{key}:[/key] [value]{value}[/value]")
+
+        panel = Panel(
+            "\n".join(content_lines),
+            title=f"[panel.title]{title}[/panel.title]",
+            border_style="blue",
+        )
+
+        with self._lock:
+            self.console.print(panel)
+
+    def results_table(
+        self,
+        data: list[dict[str, object]],
+        columns: list[str],
+        title: str | None = None,
+    ) -> None:
+        """
+        Display results in table format.
+
+        Args:
+            data: List of row data
+            columns: Column names to display
+            title: Optional table title
+
+        """
+        if self.quiet or not data:
+            return
+
+        table = Table(title=title, show_header=True, header_style="bold blue")
+
+        # Add columns
+        for column in columns:
+            table.add_column(column)
+
+        # Add rows
+        for row in data:
+            table.add_row(*[str(row.get(col, "")) for col in columns])
+
+        with self._lock:
+            self.console.print(table)
+
+    def tree(self, title: str) -> Tree:
+        """
+        Create a tree structure for display.
+
+        Args:
+            title: Tree root title
+
+        Returns:
+            Tree object for building hierarchy
+
+        """
+        return Tree(title)
+
+    def print_tree(self, tree: Tree) -> None:
+        """
+        Print a tree structure.
+
+        Args:
+            tree: Tree object to display
+
+        """
+        if not self.quiet:
+            with self._lock:
+                self.console.print(tree)
+
+    def print(self, message: str) -> None:
+        """
+        Print a generic message to stdout.
+
+        Args:
+            message: Message to display
+
+        """
+        if not self.quiet:
+            with self._lock:
+                self.console.print(message)
+
+    def print_code(self, code: str, *, lexer: str = "text") -> None:
+        """
+        Print syntax-highlighted code.
+
+        Args:
+            code: Code content to display
+            lexer: Syntax highlighting language (e.g., "yaml", "json", "python")
+
+        """
+        if not self.quiet:
+            with self._lock:
+                from rich.syntax import Syntax
+
+                syntax = Syntax(code, lexer, theme="monokai", line_numbers=False)
+                self.console.print(syntax)
 
 
 def handle_keyboard_interrupt() -> None:
     """Handle Ctrl+C gracefully."""
-    print_warning("Operation cancelled by user")
+    rich_output.warning("Operation cancelled by user")
     sys.exit(130)  # Standard exit code for SIGINT
 
 
@@ -149,7 +485,7 @@ class ProgressReporter:
 
     def __init__(self, description: str, console: Console | None = None) -> None:
         self.description = description
-        self.console = console or globals()["console"]
+        self.console = console or rich_output.console
         self.progress = None
         self.task = None
 
@@ -234,7 +570,7 @@ class RichGroup(click.Group):
             border_style="blue",
             padding=(1, 2),
         )
-        console.print(panel)
+        rich_output.console.print(panel)
 
 
 class RichCommand(click.Command):
@@ -289,8 +625,8 @@ class RichCommand(click.Command):
         if arguments:
             help_content.append("Arguments:\n", style="bold yellow")
             for param in arguments:
-                arg_name = param.name.upper()
-                arg_desc = f"{param.name} argument"
+                arg_name = (param.name or "").upper()
+                arg_desc = f"{param.name or 'argument'} argument"
                 if param.required:
                     arg_desc += " (required)"
                 help_line = f"  {arg_name:20} {arg_desc}\n"
@@ -323,4 +659,39 @@ class RichCommand(click.Command):
             border_style="blue",
             padding=(1, 2),
         )
-        console.print(panel)
+        rich_output.console.print(panel)
+
+
+# Global instances - can be configured by CLI based on verbosity/quiet settings
+rich_output = RichOutputService()
+
+# Backward compatibility console instances
+console = rich_output.console
+error_console = rich_output.error_console
+success_console = rich_output.console
+
+
+# Backward compatibility functions
+def print_info(message: str) -> None:
+    """Print an info message."""
+    rich_output.info(message)
+
+
+def print_warning(message: str) -> None:
+    """Print a warning message."""
+    rich_output.warning(message)
+
+
+def print_error(message: str) -> None:
+    """Print an error message."""
+    rich_output.error(message)
+
+
+def print_success(message: str) -> None:
+    """Print a success message."""
+    rich_output.success(message)
+
+
+def print_debug(message: str) -> None:
+    """Print a debug message."""
+    rich_output.debug(message)
