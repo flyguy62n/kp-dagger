@@ -90,16 +90,11 @@ class ConfigManager:
 
     def show(self) -> None:
         """Display current configuration."""
-        from rich.table import Table
+        from kp_dagger.cli.utils.output import rich_output
 
-        table = Table(title="Dagger Configuration")
-        table.add_column("Setting", style="cyan")
-        table.add_column("Value", style="white")
-
-        for key, value in sorted(self.config.items()):
-            table.add_row(key, str(value))
-
-        console.print(table)
+        # Convert to sorted dict for display
+        sorted_config = dict(sorted(self.config.items()))
+        rich_output.table(sorted_config, title="Dagger Configuration")
 
 
 @click.command()

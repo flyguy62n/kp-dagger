@@ -10,7 +10,6 @@ from pathlib import Path
 import click
 from dependency_injector.wiring import Provide, inject
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
 
 from kp_dagger.cli.utils.output import RichCommand, rich_output
 from kp_dagger.containers.application import ApplicationContainer
@@ -226,20 +225,17 @@ def _show_analysis_config(
     parallel: int,
 ) -> None:
     """Display analysis configuration details."""
-    table = Table(title="Analysis Configuration", show_header=False)
-    table.add_column("Setting", style="cyan")
-    table.add_column("Value", style="white")
-
-    table.add_row("Files", f"{len(config_files)} configuration file(s)")
-    table.add_row("Device Type", device_type)
-    table.add_row("Output Format", output_format)
-    table.add_row("Severity Filter", severity)
-    table.add_row("Include Passed", "Yes" if include_passed else "No")
-    table.add_row("CIS Benchmarks", "Yes" if cis_benchmarks else "No")
-    table.add_row("Vulnerability Check", "Yes" if vulnerability_check else "No")
-    table.add_row("Parallel Threads", str(parallel))
-
-    rich_output.info(table)
+    config_data = {
+        "Files": f"{len(config_files)} configuration file(s)",
+        "Device Type": device_type,
+        "Output Format": output_format,
+        "Severity Filter": severity,
+        "Include Passed": include_passed,
+        "CIS Benchmarks": cis_benchmarks,
+        "Vulnerability Check": vulnerability_check,
+        "Parallel Threads": str(parallel),
+    }
+    rich_output.table(config_data, title="Analysis Configuration")
 
 
 def _show_analysis_results(output_format: str, include_passed: bool) -> None:
@@ -247,29 +243,31 @@ def _show_analysis_results(output_format: str, include_passed: bool) -> None:
     # TODO: Replace with actual results
     rich_output.success("📊 [bold green]Analysis Complete[/bold green]\n")
 
-    # Mock results table
-    results_table = Table(title="Security Analysis Results")
-    results_table.add_column("Check", style="cyan")
-    results_table.add_column("Status", style="white")
-    results_table.add_column("Severity", style="white")
-    results_table.add_column("Description", style="white")
-
+    # Mock results data
     # TODO: Replace with actual analysis results
-    results_table.add_row(
-        "Password Policy",
-        "❌ FAIL",
-        "HIGH",
-        "Weak password requirements",
-    )
-    results_table.add_row(
-        "SSH Configuration",
-        "✅ PASS",
-        "MEDIUM",
-        "SSH properly configured",
-    )
-    results_table.add_row("SNMP Security", "⚠️  WARN", "LOW", "SNMP v2c in use")
+    results_data = [
+        {
+            "Check": "Password Policy",
+            "Status": "❌ FAIL",
+            "Severity": "HIGH",
+            "Description": "Weak password requirements",
+        },
+        {
+            "Check": "SSH Configuration",
+            "Status": "✅ PASS",
+            "Severity": "MEDIUM",
+            "Description": "SSH properly configured",
+        },
+        {
+            "Check": "SNMP Security",
+            "Status": "⚠️  WARN",
+            "Severity": "LOW",
+            "Description": "SNMP v2c in use",
+        },
+    ]
 
-    rich_output.info(results_table)
+    columns = ["Check", "Status", "Severity", "Description"]
+    rich_output.table(results_data, columns=columns, title="Security Analysis Results")
 
 
 def _detect_device_type(config_file: Path, device_type_hint: str) -> DeviceType | None:

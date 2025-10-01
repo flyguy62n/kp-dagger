@@ -9,7 +9,6 @@ from pathlib import Path
 import click
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn
-from rich.table import Table
 
 from kp_dagger.cli.utils.output import RichCommand, error_console, success_console
 
@@ -176,18 +175,17 @@ def _show_report_config(
     severity_filter: str,
 ) -> None:
     """Display report configuration details."""
-    table = Table(title="Report Configuration", show_header=False)
-    table.add_column("Setting", style="cyan")
-    table.add_column("Value", style="white")
+    from kp_dagger.cli.utils.output import rich_output
 
-    table.add_row("Input File", str(input_file))
-    table.add_row("Output File", str(output))
-    table.add_row("Format", output_format.upper())
-    table.add_row("Template", template)
-    table.add_row("Include Passed", "Yes" if include_passed else "No")
-    table.add_row("Severity Filter", severity_filter)
-
-    console.print(table)
+    config_data = {
+        "Input File": str(input_file),
+        "Output File": str(output),
+        "Format": output_format.upper(),
+        "Template": template,
+        "Include Passed": include_passed,
+        "Severity Filter": severity_filter,
+    }
+    rich_output.table(config_data, title="Report Configuration")
     console.print()
 
 

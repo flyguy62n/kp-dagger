@@ -11,10 +11,11 @@ import sys
 import threading
 from contextlib import contextmanager
 from enum import StrEnum
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, cast
 
 if TYPE_CHECKING:
     import types
+    from collections.abc import Iterator, Mapping, Sequence
 
 import click
 from rich.console import Console
@@ -389,36 +390,135 @@ class RichOutputService:
         with self._lock:
             self.console.print(panel)
 
-    def results_table(
+    def _create_dict_table(
         self,
-        data: list[dict[str, object]],
+        data: Mapping[str, object],
+        title: str | None,
+        show_header: bool,
+        column_styles: dict[str, str] | None,
+    ) -> Table:
+        """Create a two-column key-value table from dict data."""
+        rich_table = Table(title=title, show_header=show_header)
+
+        # Use theme-aware default styles for key-value tables
+        key_style = column_styles.get("key", "cyan") if column_styles else "cyan"
+        value_style = column_styles.get("value", "white") if column_styles else "white"
+
+        rich_table.add_column("Setting", style=key_style)
+        rich_table.add_column("Value", style=value_style)
+
+        for key, value in data.items():
+            # Format boolean values
+            if isinstance(value, bool):
+                display_value = "Yes" if value else "No"
+            else:
+                display_value = str(value)
+            rich_table.add_row(key, display_value)
+
+        return rich_table
+
+    def _create_sequence_table(
+        self,
+        data: Sequence[Mapping[str, object]],
         columns: list[str],
-        title: str | None = None,
-    ) -> None:
-        """
-        Display results in table format.
+        title: str | None,
+        show_header: bool,
+        header_style: str,
+        column_styles: dict[str, str] | None,
+    ) -> Table:
+        """Create a multi-column table from sequence data."""
+        rich_table = Table(
+            title=title,
+            show_header=show_header,
+            header_style=header_style,
+        )
 
-        Args:
-            data: List of row data
-            columns: Column names to display
-            title: Optional table title
-
-        """
-        if self.quiet or not data:
-            return
-
-        table = Table(title=title, show_header=True, header_style="bold blue")
-
-        # Add columns
+        # Add columns with optional per-column styling
         for column in columns:
-            table.add_column(column)
+            col_style = column_styles.get(column) if column_styles else None
+            rich_table.add_column(column, style=col_style)
 
         # Add rows
         for row in data:
-            table.add_row(*[str(row.get(col, "")) for col in columns])
+            rich_table.add_row(*[str(row.get(col, "")) for col in columns])
+
+        return rich_table
+
+    def table(
+        self,
+        data: Mapping[str, object] | Sequence[Mapping[str, object]],
+        columns: list[str] | None = None,
+        *,
+        title: str | None = None,
+        show_header: bool | None = None,
+        header_style: str = "bold blue",
+        column_styles: dict[str, str] | None = None,
+    ) -> None:
+        """
+        Display data in table format.
+
+        Handles two display modes:
+        1. Dict mode: Two-column key-value table (when data is a dict)
+        2. Multi-column mode: N-column tabular data (when data is a sequence)
+
+        Args:
+            data: Either a Mapping for key-value display or sequence of Mappings for tabular data
+            columns: Column names (required for sequence data, ignored for dict data)
+            title: Optional table title
+            show_header: Whether to show column headers (auto-detected if None)
+            header_style: Style for header row
+            column_styles: Per-column styles as {column_name: style_string}
+
+        Raises:
+            ValueError: If sequence data provided without columns parameter
+
+        Examples:
+            # Key-value configuration display
+            rich_output.table({"Setting": "value", "Enable": True}, title="Config")
+
+            # Multi-column results display
+            rich_output.table(
+                [{"Name": "Alice", "Score": 95}, {"Name": "Bob", "Score": 87}],
+                columns=["Name", "Score"],
+                title="Results"
+            )
+
+        """
+        if self.quiet:
+            return
+
+        # Handle dict mode (key-value pairs)
+        if isinstance(data, dict):
+            if show_header is None:
+                show_header = False
+            rich_table = self._create_dict_table(
+                data, title, show_header, column_styles
+            )
+
+        # Handle sequence mode (multi-column tabular data)
+        else:
+            if not data:
+                return
+
+            if columns is None:
+                msg = "columns parameter is required when data is a sequence"
+                raise ValueError(msg)
+
+            if show_header is None:
+                show_header = True
+
+            # Type narrowing: data must be Sequence at this point
+            rich_table = self._create_sequence_table(
+                cast("Sequence[Mapping[str, object]]", data),
+                columns,
+                title,
+                show_header,
+                header_style,
+                column_styles,
+            )
 
         with self._lock:
-            self.console.print(table)
+            self.console.print(rich_table)
 
     def tree(self, title: str) -> Tree:
         """
