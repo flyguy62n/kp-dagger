@@ -9,11 +9,8 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import click
-from rich.console import Console
 
 from kp_dagger.cli.utils.output import print_error
-
-console = Console()
 
 
 def validate_file_extensions(

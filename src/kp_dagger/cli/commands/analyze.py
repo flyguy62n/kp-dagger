@@ -9,7 +9,6 @@ from pathlib import Path
 
 import click
 from dependency_injector.wiring import Provide, inject
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from kp_dagger.cli.utils.output import RichCommand, rich_output
 from kp_dagger.containers.application import ApplicationContainer
@@ -143,10 +142,9 @@ def analyze(  # noqa: PLR0913
         cli_handler = CLIEventHandler(rich_output, event_bus)
         logging_handler = LoggingEventHandler(event_bus)
 
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            # No console arg: let Progress use default, output via rich_output
+        with rich_output.progress(
+            "Processing...",
+            show_percentage=False,
         ) as progress:
             # Parse configurations
             parse_task = progress.add_task(

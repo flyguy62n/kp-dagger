@@ -224,7 +224,7 @@ class RichOutputService:
         description: str = "Processing...",
         *,
         show_speed: bool = False,
-        show_percentage: bool = True,
+        show_percentage: bool = False,
     ) -> Iterator[Progress]:
         """
         Context manager for progress tracking.
@@ -492,7 +492,10 @@ class RichOutputService:
             if show_header is None:
                 show_header = False
             rich_table = self._create_dict_table(
-                data, title, show_header, column_styles
+                data,
+                title,
+                show_header,
+                column_styles,
             )
 
         # Handle sequence mode (multi-column tabular data)

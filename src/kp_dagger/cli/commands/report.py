@@ -7,12 +7,8 @@ Handles report generation from analysis results including HTML, JSON, and Excel 
 from pathlib import Path
 
 import click
-from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
-from kp_dagger.cli.utils.output import RichCommand, error_console, success_console
-
-console = Console()
+from kp_dagger.cli.utils.output import RichCommand, rich_output
 
 
 @click.command(cls=RichCommand)
@@ -98,8 +94,7 @@ def report(  # noqa: PLR0913
     verbose = ctx.obj.get("verbose", 0)
     quiet = ctx.obj.get("quiet", False)
 
-    if not quiet:
-        console.print("\n📊 [bold blue]Generating Report[/bold blue]\n")
+    rich_output.info("\n📊 [bold blue]Generating Report[/bold blue]\n")
 
     # Auto-generate output filename if not provided
     if not output:
@@ -117,10 +112,9 @@ def report(  # noqa: PLR0913
         )
 
     try:
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            console=console,
+        with rich_output.progress(
+            "Processing...",
+            show_percentage=False,
         ) as progress:
             # Load analysis results
             progress.add_task("Loading analysis results...", total=None)
@@ -137,19 +131,17 @@ def report(  # noqa: PLR0913
             progress.add_task("Saving report...", total=None)
             _save_report(output, output_format, template)
 
-        if not quiet:
-            success_console.print(f"✅ Report generated: {output}")
+        rich_output.success(f"✅ Report generated: {output}")
 
         # Open report if requested
         if open_report:
             _open_report(output)
-            if not quiet:
-                console.print(f"🔗 Opened report: {output}")
+            rich_output.info(f"🔗 Opened report: {output}")
 
     except Exception as e:
-        error_console.print(f"❌ Report generation failed: {e}")
+        rich_output.error(f"❌ Report generation failed: {e}")
         if verbose > 0:
-            console.print_exception()
+            rich_output.error_console.print_exception()
         ctx.exit(1)
 
 
@@ -186,7 +178,6 @@ def _show_report_config(
         "Severity Filter": severity_filter,
     }
     rich_output.table(config_data, title="Report Configuration")
-    console.print()
 
 
 def _save_report(output: Path, output_format: str, template: str) -> None:

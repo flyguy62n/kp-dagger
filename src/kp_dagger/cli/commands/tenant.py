@@ -5,11 +5,8 @@ Handles tenant management including creation, deletion, and listing of tenants.
 """
 
 import click
-from rich.console import Console
 
 from kp_dagger.cli.utils.output import RichCommand, RichGroup, success_console
-
-console = Console()
 
 
 @click.group("tenant", cls=RichGroup)

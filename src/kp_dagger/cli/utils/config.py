@@ -9,11 +9,8 @@ from pathlib import Path
 from typing import Any, ClassVar
 
 import click
-from rich.console import Console
 
 from kp_dagger.cli.utils.output import print_error, print_info
-
-console = Console()
 
 
 class ConfigManager:

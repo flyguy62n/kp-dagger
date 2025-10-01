@@ -8,11 +8,9 @@ It serves as the entry point for all CLI operations.
 import click
 from dependency_injector.errors import Error as DIError
 from pydantic import ValidationError
-from rich.panel import Panel
-from rich.text import Text
 
 from kp_dagger.cli.utils.config import config
-from kp_dagger.cli.utils.output import RichGroup, error_console
+from kp_dagger.cli.utils.output import RichGroup, rich_output
 
 # Configuration service
 from kp_dagger.config import ConfigurationService
@@ -91,13 +89,13 @@ def main(  # noqa: PLR0913
         config_service = ConfigurationService(config_dir=config_dir)
         ctx.obj["config_service"] = config_service
     except FileNotFoundError as e:
-        error_console.print(f"❌ Configuration file not found: {e}", style="red")
+        rich_output.error(f"Configuration file not found: {e}")
         ctx.exit(1)
     except ValidationError as e:
-        error_console.print(f"❌ Configuration validation failed: {e}", style="red")
+        rich_output.error(f"Configuration validation failed: {e}")
         ctx.exit(1)
     except ConfigurationError as e:
-        error_console.print(f"❌ Configuration service failed: {e}", style="red")
+        rich_output.error(f"Configuration service failed: {e}")
         ctx.exit(1)
 
     # Initialize and wire DI container (minimal config for compatibility)
@@ -128,10 +126,10 @@ def main(  # noqa: PLR0913
             ],
         )
     except DIError as e:
-        error_console.print(f"❌ Dependency injection error: {e}", style="red")
+        rich_output.error(f"Dependency injection error: {e}")
         ctx.exit(1)
     except ImportError as e:
-        error_console.print(f"❌ Failed to import DI modules: {e}", style="red")
+        rich_output.error(f"Failed to import DI modules: {e}")
         ctx.exit(1)
 
     if version:
@@ -149,43 +147,21 @@ def show_version() -> None:
     try:
         from kp_dagger import __author__, __url__, __version__
 
-        version_text = Text()
-        version_text.append("Dagger ", style="bold blue")
-        version_text.append(f"v{__version__}", style="bold green")
-        version_text.append(f"\nBy {__author__}", style="dim")
-        version_text.append(f"\nWebsite: {__url__}", style="dim")
-        panel = Panel(
-            version_text,
-            title="Version Information",
-            border_style="blue",
-            padding=(1, 2),
-        )
-        # Use error_console for now (will switch to DI output in commands)
-        error_console.print(panel)
+        version_data = {
+            "Version": f"v{__version__}",
+            "Author": __author__,
+            "Website": __url__,
+        }
+        rich_output.summary_panel("Version Information", version_data)
     except ImportError:
-        error_console.print("❌ Could not determine version information", style="red")
+        rich_output.error("Could not determine version information")
 
 
 def show_welcome() -> None:
     """Display welcome message."""
-    welcome_text = Text()
-    welcome_text.append("🏰 Dagger\n", style="bold blue")
-    welcome_text.append(
-        "Network Device Configuration Security Analysis\n\n",
-        style="blue",
-    )
-    welcome_text.append(
-        "⚠️  Development Version - Not Production Ready",
-        style="bold yellow",
-    )
-
-    panel = Panel(
-        welcome_text,
-        title="Welcome",
-        border_style="blue",
-        padding=(1, 2),
-    )
-    error_console.print(panel)
+    rich_output.info("🏰 [bold blue]Dagger[/bold blue]")
+    rich_output.info("[blue]Network Device Configuration Security Analysis[/blue]")
+    rich_output.warning("⚠️  Development Version - Not Production Ready")
 
 
 # Add subcommands
