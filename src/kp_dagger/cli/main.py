@@ -5,18 +5,21 @@ This module provides the main command-line interface for Dagger using Click.
 It serves as the entry point for all CLI operations.
 """
 
-from pathlib import Path
-
 import click
-import yaml
+from dependency_injector.errors import Error as DIError
+from pydantic import ValidationError
 from rich.panel import Panel
 from rich.text import Text
 
 from kp_dagger.cli.utils.config import config
-from kp_dagger.cli.utils.output import RichGroup, error_console, setup_logging
+from kp_dagger.cli.utils.output import RichGroup, error_console
+
+# Configuration service
+from kp_dagger.config import ConfigurationService
 
 # Dependency Injection
 from kp_dagger.containers.application import ApplicationContainer
+from kp_dagger.core.exceptions import ConfigurationError
 
 # Initialize global container
 container = ApplicationContainer()
@@ -52,9 +55,10 @@ from kp_dagger.cli.commands.tenant import tenant  # noqa: E402
     help="Output format for CLI messages.",
 )
 @click.option(
-    "--config-file",
+    "--config-dir",
     type=click.Path(exists=True, path_type=str),
-    help="Path to configuration file.",
+    default="config",
+    help="Path to configuration directory.",
 )
 @click.pass_context
 def main(  # noqa: PLR0913
@@ -63,7 +67,7 @@ def main(  # noqa: PLR0913
     verbose: int,
     quiet: bool,  # noqa: FBT001
     output_format: str,
-    config_file: str | None,
+    config_dir: str,
 ) -> None:
     """
     Dagger - Network Device Configuration Security Analysis Tool.
@@ -80,18 +84,41 @@ def main(  # noqa: PLR0913
     ctx.obj["verbose"] = verbose
     ctx.obj["quiet"] = quiet
     ctx.obj["output_format"] = output_format
-    ctx.obj["config_file"] = config_file
+    ctx.obj["config_dir"] = config_dir
 
-    # Setup logging based on verbosity
-    setup_logging(verbose, quiet)
-
-    # Configure and wire DI container
+    # Initialize application configuration service
     try:
-        if config_file:
-            config_path: Path = Path(config_file)
-            with config_path.open(encoding="utf-8") as f:
-                config_data = yaml.safe_load(f)
-            container.config.from_dict(config_data)
+        config_service = ConfigurationService(config_dir=config_dir)
+        ctx.obj["config_service"] = config_service
+    except FileNotFoundError as e:
+        error_console.print(f"❌ Configuration file not found: {e}", style="red")
+        ctx.exit(1)
+    except ValidationError as e:
+        error_console.print(f"❌ Configuration validation failed: {e}", style="red")
+        ctx.exit(1)
+    except ConfigurationError as e:
+        error_console.print(f"❌ Configuration service failed: {e}", style="red")
+        ctx.exit(1)
+
+    # Initialize and wire DI container (minimal config for compatibility)
+    try:
+        # Inject ConfigurationService into the container
+        container.configuration_service.override(config_service)
+        # Provide minimal configuration to prevent DI container errors
+        # TEMPORARY: Minimal DI config until services use ConfigurationService
+        minimal_di_config = {
+            "core": {
+                "database": {"path": ":memory:"},
+                "encryption": {"master_key": "temp", "salt": "temp"},
+            },
+            "api_clients": {
+                "cve": {"api_key": ""},
+                "eol": {},
+            },
+            "scanner": {"verbose": verbose > 0},
+        }
+        container.config.from_dict(minimal_di_config)
+
         container.wire(
             modules=[
                 "kp_dagger.cli.main",
@@ -100,8 +127,11 @@ def main(  # noqa: PLR0913
                 "kp_dagger.cli.commands.tenant",
             ],
         )
-    except Exception as e:
-        error_console.print(f"❌ Failed to initialize DI container: {e}", style="red")
+    except DIError as e:
+        error_console.print(f"❌ Dependency injection error: {e}", style="red")
+        ctx.exit(1)
+    except ImportError as e:
+        error_console.print(f"❌ Failed to import DI modules: {e}", style="red")
         ctx.exit(1)
 
     if version:

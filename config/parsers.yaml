@@ -1,0 +1,35 @@
+# Parser configuration for KP Dagger
+# This file configures which device parsers are available and their settings
+
+parsers:
+  # FortiGate firewall parser
+  fortigate:
+    enabled: true
+    module: "kp_dagger.parsers.fortigate.parser"
+    class: "FortigateConfigParser"
+    cleaner: "FortigateCleaner"
+    description: "Fortinet FortiGate firewall configuration parser"
+  
+  # Cisco IOS router/switch parser (not yet implemented)
+  cisco_ios:
+    enabled: false
+    module: "kp_dagger.parsers.cisco_ios.parser"
+    class: "CiscoIOSParser"
+    cleaner: "CiscoCleaner" 
+    description: "Cisco IOS router and switch configuration parser"
+  
+  # Cisco ASA firewall parser (not yet implemented)
+  cisco_asa:
+    enabled: false
+    module: "kp_dagger.parsers.cisco_asa.parser"
+    class: "CiscoASAParser"
+    cleaner: "CiscoCleaner"
+    description: "Cisco ASA firewall configuration parser"
+
+  # Palo Alto firewall parser (not yet implemented)
+  paloalto:
+    enabled: false
+    module: "kp_dagger.parsers.paloalto.parser"
+    class: "PaloaltoParser"
+    cleaner: "PaloaltoCleaner"
+    description: "Palo Alto Networks firewall configuration parser"

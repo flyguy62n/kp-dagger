@@ -4,6 +4,7 @@ from uuid import UUID
 
 from sqlmodel import Field
 
+from kp_dagger.models.base import KPDaggerBaseModel
 from kp_dagger.models.base.enums import DeviceType
 
 
@@ -30,7 +31,12 @@ class Device(KPDaggerBaseModel, table=True):
         description="Device model",
     )
 
-    version: str | None = Field(
+    hardware: str | None = Field(
+        default=None,
+        description="Device hardware platform/series",
+    )
+
+    sw_version: str | None = Field(
         default=None,
         description="Software/firmware version",
     )

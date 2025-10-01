@@ -15,6 +15,8 @@ from rich.table import Table
 from kp_dagger.cli.utils.output import RichCommand, rich_output
 from kp_dagger.containers.application import ApplicationContainer
 from kp_dagger.core.services.events.service import EventBusService
+from kp_dagger.models.base.enums import DeviceType
+from kp_dagger.parsers.factory import ParserFactory
 
 
 @click.command(cls=RichCommand)
@@ -78,12 +80,13 @@ from kp_dagger.core.services.events.service import EventBusService
     help="Number of parallel analysis threads (default: 1).",
 )
 @inject
-def analyze(
+def analyze(  # noqa: PLR0913
     config_files: tuple[Path, ...],
     device_type: str,
     output: Path | None,
     output_format: str,
     severity: str,
+    *,
     include_passed: bool,
     cis_benchmarks: bool,
     vulnerability_check: bool,
@@ -91,6 +94,9 @@ def analyze(
     # Injected dependencies
     event_bus: EventBusService = Provide[
         ApplicationContainer.core_container.event_bus_service
+    ],
+    parser_factory: ParserFactory = Provide[
+        ApplicationContainer.parser_container.parser_factory
     ],
 ) -> None:
     """
@@ -130,11 +136,13 @@ def analyze(
     )
 
     try:
-        # Subscribe to events (example: print all events to rich_output)
-        def handle_event(event):
-            rich_output.info(f"[event] {event}")
+        # Set up proper event handlers for CLI display and logging
+        from kp_dagger.cli.event_handlers.cli_event_handler import CLIEventHandler
+        from kp_dagger.core.services.logging.event_handler import LoggingEventHandler
 
-        event_bus.subscribe(object, handle_event)  # Subscribe to all events for now
+        # Initialize event handlers with proper separation of concerns
+        cli_handler = CLIEventHandler(rich_output, event_bus)
+        logging_handler = LoggingEventHandler(event_bus)
 
         with Progress(
             SpinnerColumn(),
@@ -148,7 +156,33 @@ def analyze(
             )
             for config_file in config_files:
                 rich_output.debug(f"  📄 Processing: {config_file}")
-                # TODO(kp): Call parser for each file
+
+                # Determine device type (auto-detect if needed)
+                detected_device_type = _detect_device_type(config_file, device_type)
+
+                if detected_device_type:
+                    try:
+                        # Get appropriate parser for device type
+                        parser = parser_factory.get_parser(detected_device_type)
+
+                        # Parse the configuration file
+                        parsed_config = parser.parse_file(config_file)
+
+                        rich_output.success(
+                            f"✅ Parsed {config_file.name} "
+                            f"({detected_device_type.value}) - "
+                            f"{len(parsed_config)} sections",
+                        )
+
+                    except Exception as e:
+                        rich_output.error(
+                            f"❌ Failed to parse {config_file.name}: {e}",
+                        )
+                else:
+                    rich_output.warning(
+                        f"⚠️  Could not detect device type for {config_file.name}",
+                    )
+
                 progress.advance(parse_task)
 
             # Security analysis
@@ -238,17 +272,67 @@ def _show_analysis_results(output_format: str, include_passed: bool) -> None:
     rich_output.info(results_table)
 
 
+def _detect_device_type(config_file: Path, device_type_hint: str) -> DeviceType | None:
+    """
+    Detect device type from configuration file.
+
+    Args:
+        config_file: Path to configuration file
+        device_type_hint: User-provided device type hint
+
+    Returns:
+        Detected DeviceType or None if cannot detect
+
+    """
+    # If user explicitly specified device type, use it (except for "auto")
+    if device_type_hint != "auto":
+        try:
+            return DeviceType(device_type_hint)
+        except ValueError:
+            rich_output.warning(f"Unknown device type: {device_type_hint}")
+            return None
+
+    # Auto-detection based on file content
+    try:
+        with config_file.open(encoding="utf-8") as f:
+            # Read first few lines to detect device type
+            lines = [f.readline().strip() for _ in range(10)]
+            content = " ".join(lines).lower()
+
+        # FortiGate detection patterns
+        fortigate_patterns = [
+            "config system global",
+            "config firewall policy",
+            "set status enable",
+            "set status disable",
+            "edit ",
+            "next",
+            "end",
+        ]
+
+        if any(pattern in content for pattern in fortigate_patterns):
+            return DeviceType.FORTIGATE
+
+        # NOTE: Add detection patterns for other device types as parsers are implemented
+
+    except (OSError, UnicodeDecodeError) as e:
+        rich_output.error(f"Could not read file {config_file}: {e}")
+        return None
+
+    return None
+
+
 def _save_results(output_path: Path, output_format: str) -> None:
     """Save analysis results to file."""
-    # TODO: Implement actual result saving
+    # NOTE: Implementation deferred until analysis results are structured
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     if output_format == "json":
-        # TODO: Save as JSON
+        # NOTE: Save as JSON when results structure is defined
         pass
     elif output_format == "yaml":
-        # TODO: Save as YAML
+        # NOTE: Save as YAML when results structure is defined
         pass
     elif output_format == "table":
-        # TODO: Save as formatted table
+        # NOTE: Save as formatted table when results structure is defined
         pass

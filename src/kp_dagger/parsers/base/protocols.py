@@ -1,13 +1,22 @@
-"""Base parser class for all device configuration parsers."""
+"""Base parser protocols for all device configuration parsers."""
 
-from typing import Protocol
+from typing import Any, Protocol
 
-from kp_dagger.models.base.device_config import ParsedDeviceConfig
+from kp_dagger.models.base.types import PathLike
 
 
-class DeviceParser(Protocol):
+class ConfigurationParser(Protocol):
     """Protocol for device configuration parsers."""
 
-    def parse_config(self, config_text: str) -> ParsedDeviceConfig:
-        """Extract all configuration data into generic structure using parameter=value patterns."""
+    def parse_file(self, file_path: PathLike) -> dict[str, Any]:
+        """
+        Parse a configuration file and return structured data.
+
+        Args:
+            file_path: Path to the configuration file
+
+        Returns:
+            Dictionary containing parsed configuration data
+
+        """
         ...

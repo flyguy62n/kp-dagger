@@ -14,6 +14,9 @@ class ApplicationContainer(containers.DeclarativeContainer):
 
     config = providers.Configuration()
 
+    # External dependencies
+    configuration_service = providers.Dependency()
+
     # Service containers
     core_container = providers.Container(
         CoreContainer,
@@ -28,7 +31,10 @@ class ApplicationContainer(containers.DeclarativeContainer):
     parser_container = providers.Container(
         ParserContainer,
         config=config.parsers,
-        database_manager=core_container.database_manager,
+        file_processing_service=core_container.file_processing_service,
+        event_publisher=core_container.event_publisher,
+        timestamp_service=core_container.timestamp_service,
+        configuration_service=configuration_service,
     )
 
     analyzer_container = providers.Container(

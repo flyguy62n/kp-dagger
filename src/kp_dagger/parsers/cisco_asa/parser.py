@@ -2,27 +2,29 @@
 
 from typing import Any
 
-from kp_dagger.parsers.base.protocols import BaseParser
+from kp_dagger.models.base.types import PathLike
+from kp_dagger.parsers.base.protocols import ConfigurationParser
 
 
-class CiscoASAParser(BaseParser):
+class CiscoASAParser(ConfigurationParser):
     """Parser for Cisco ASA device configurations."""
 
-    def parse(self, config_text: str) -> dict[str, Any]:
+    def parse_file(self, file_path: PathLike) -> dict[str, Any]:
         """
-        Parse Cisco ASA configuration text.
+        Parse Cisco ASA configuration file.
 
         Args:
-            config_text: Raw configuration text
+            file_path: Path to configuration file
 
         Returns:
             Structured configuration data
 
         """
         # TODO: Implement Cisco ASA parsing logic
+        # For now, return basic structure
         return {
             "device_type": "cisco-asa",
-            "hostname": self._extract_hostname(config_text),
+            "source_file": str(file_path),
         }
 
     def can_parse(self, config_text: str) -> bool:

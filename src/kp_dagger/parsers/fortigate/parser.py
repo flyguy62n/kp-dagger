@@ -56,6 +56,7 @@ class FortigateConfigParser:
             "unset": re.compile(r"^\s*unset\s+(\S+)$"),
             "next": re.compile(r"^\s*next\s*$"),
             "end": re.compile(r"^\s*end\s*$"),
+            "config_version": re.compile(r"^\s*#config-version=([^:]+):(.*)"),
             "comment": re.compile(r"^\s*#.*$"),
             "empty": re.compile(r"^\s*$"),
         }
@@ -81,7 +82,7 @@ class FortigateConfigParser:
         self.event_publisher.publish(
             OperationStarted(
                 operation_type="parsing",
-                resource_path=file_path,
+                resource_path=str(file_path),
                 context={"device_type": "fortigate"},
             ),
         )
@@ -101,7 +102,7 @@ class FortigateConfigParser:
             self.event_publisher.publish(
                 OperationError(
                     operation_type="parsing",
-                    resource_path=file_path,
+                    resource_path=str(file_path),
                     error_message=str(e),
                 ),
             )
@@ -111,7 +112,7 @@ class FortigateConfigParser:
             self.event_publisher.publish(
                 OperationCompleted(
                     operation_type="parsing",
-                    resource_path=file_path,
+                    resource_path=str(file_path),
                     success=True,
                     duration=self.timestamp_service.elapsed_seconds(start_time),
                     results={"sections_count": len(result)},
@@ -123,7 +124,12 @@ class FortigateConfigParser:
     def parse_lines(self, lines: list[str], file_path: Path) -> dict[str, Any]:
         """Parse configuration lines with local state management."""
         # All state is local to this method call - makes parser stateless
-        config_data: dict[str, Any] = {}
+        config_data: dict[str, Any] = {
+            "_device_metadata": {
+                "hardware": None,
+                "sw_version": None,
+            },
+        }
         context_stack: list[dict[str, Any]] = [config_data]
         current_path: list[str] = []
 
@@ -136,7 +142,7 @@ class FortigateConfigParser:
                 self.event_publisher.publish(
                     OperationError(
                         operation_type="parsing",
-                        resource_path=file_path,
+                        resource_path=str(file_path),
                         error_message=f"Unrecognized line format: {e.line_content}",
                         error_context={
                             "line_number": line_num,
@@ -154,7 +160,7 @@ class FortigateConfigParser:
                 self.event_publisher.publish(
                     OperationError(
                         operation_type="parsing",
-                        resource_path=file_path,
+                        resource_path=str(file_path),
                         error_message=str(e),
                         error_context={
                             "line_number": line_num,
@@ -176,6 +182,11 @@ class FortigateConfigParser:
         current_path: list[str],
     ) -> None:
         """Parse a single configuration line with provided state."""
+        # Check for config-version line first (before general comment pattern)
+        if match := self.patterns["config_version"].match(line):
+            self._handle_config_version(match.group(1), match.group(2), context_stack)
+            return
+
         # Skip comments and empty lines
         if self.patterns["comment"].match(line) or self.patterns["empty"].match(line):
             return
@@ -205,6 +216,58 @@ class FortigateConfigParser:
                 device_type="fortigate",
                 expected_patterns=list(self.patterns.keys()),
             )
+
+    def _handle_config_version(
+        self,
+        device_info: str,
+        _additional_info: str,
+        context_stack: list[dict[str, Any]],
+    ) -> None:
+        """
+        Handle config-version lines to extract device hardware and software version.
+
+        Example line: #config-version=FGT60F-7.6.3-FW-build3510-250415:opmode=1:vdom=0:user=admin
+        Extracts: hardware=FGT60F, sw_version=7.6.3-FW-build3510
+        """
+        # Split device_info to extract hardware and software version
+        # Format is typically: HARDWARE-VERSION-FW-buildXXXX-YYMMDD
+        minimum_parts_count = 2
+        parts = device_info.split("-", 1)  # Split on first dash only
+        if len(parts) >= minimum_parts_count:
+            hardware = parts[0]  # e.g., FGT60F
+            version_part = parts[1]  # e.g., 7.6.3-FW-build3510-250415
+
+            # Extract version up to the build info
+            # Look for pattern like "7.6.3-FW-build3510"
+            version_match = re.match(r"^([^-]+(?:-[^-]+)*?)-build\d+", version_part)
+            if version_match:
+                sw_version = version_match.group(1)  # e.g., 7.6.3-FW
+            else:
+                # Fallback: take everything before the last dash (if it exists)
+                version_parts = version_part.rsplit("-", 1)
+                sw_version = (
+                    version_parts[0] if len(version_parts) > 1 else version_part
+                )
+
+            # Store in device metadata
+            root_config = context_stack[0]
+            if "_device_metadata" in root_config:
+                root_config["_device_metadata"]["hardware"] = hardware
+                root_config["_device_metadata"]["sw_version"] = sw_version
+
+                # Publish event to notify about extracted device metadata
+                self.event_publisher.publish(
+                    OperationCompleted(
+                        operation_type="device_metadata_extraction",
+                        success=True,
+                        duration=0.0,  # Instantaneous operation
+                        results={
+                            "hardware": hardware,
+                            "sw_version": sw_version,
+                            "source": "config_version_line",
+                        },
+                    ),
+                )
 
     def _handle_config(
         self,

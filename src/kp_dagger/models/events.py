@@ -7,14 +7,36 @@ import uuid
 # Import locally to avoid circular dependencies during model initialization
 # Does not use dependency-injected timestamp service as Pydantic and DI don't play well
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING, TypeVar
+from enum import Enum
+from typing import TypeVar
 
 from pydantic import BaseModel, Field
 
-if TYPE_CHECKING:
-    from pathlib import Path
-
 EventT = TypeVar("EventT", bound="BaseEvent")
+
+
+class EventLevel(str, Enum):
+    """Event severity levels for filtering and display purposes."""
+
+    DEBUG = "debug"  # Detailed diagnostic information
+    INFO = "info"  # General information about operations
+    WARN = "warn"  # Warning conditions that don't prevent operation
+    ERROR = "error"  # Error conditions that prevent or impair operation
+
+
+__all__ = [
+    "BaseEvent",
+    "EventLevel",
+    "EventT",
+    "FindingDiscovered",
+    "LogMessage",
+    "MetricRecorded",
+    "OperationCompleted",
+    "OperationError",
+    "OperationProgress",
+    "OperationStarted",
+    "all_event_types",
+]
 
 
 def _get_utc_now() -> datetime:
@@ -31,6 +53,10 @@ class BaseEvent(BaseModel):
 
     timestamp: datetime = Field(default_factory=_get_utc_now)
     correlation_id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    level: EventLevel = Field(
+        default=EventLevel.INFO,
+        description="Event severity level for filtering",
+    )
 
     class Config:
         """Pydantic configuration."""
@@ -48,7 +74,7 @@ class OperationStarted(BaseEvent):
         min_length=1,
         description="Type of operation (parsing, analysis, reporting)",
     )
-    resource_path: Path | None = Field(
+    resource_path: str | None = Field(
         default=None,
         description="Path to resource being processed",
     )
@@ -69,7 +95,7 @@ class OperationCompleted(BaseEvent):
         min_length=1,
         description="Type of operation that completed",
     )
-    resource_path: Path | None = Field(
+    resource_path: str | None = Field(
         default=None,
         description="Path to resource that was processed",
     )
@@ -84,11 +110,12 @@ class OperationCompleted(BaseEvent):
 class OperationError(BaseEvent):
     """Generic event for operation failures."""
 
+    level: EventLevel = EventLevel.ERROR  # Always important
     operation_type: str = Field(
         min_length=1,
         description="Type of operation that failed",
     )
-    resource_path: Path | None = Field(
+    resource_path: str | None = Field(
         default=None,
         description="Path to resource being processed",
     )
@@ -129,3 +156,36 @@ class FindingDiscovered(BaseEvent):
         default=None,
         description="Location information (line number, section, etc.)",
     )
+
+
+class LogMessage(BaseEvent):
+    """Generic log message event for arbitrary logging needs."""
+
+    message: str = Field(min_length=1, description="Log message")
+    level: EventLevel = Field(default=EventLevel.INFO, description="Log level")
+    logger_name: str = Field(
+        default="DaggerScanner",
+        description="Logger name/category",
+    )
+    extra: dict = Field(default_factory=dict, description="Extra log context")
+
+
+class MetricRecorded(BaseEvent):
+    """Event for recording metrics/measurements."""
+
+    metric_name: str = Field(min_length=1)
+    value: float = Field(description="Metric value")
+    unit: str = Field(default="", description="Metric unit")
+    tags: dict = Field(default_factory=dict, description="Metric tags")
+
+
+# List of all event types for easy subscription
+all_event_types: list[type[BaseEvent]] = [
+    FindingDiscovered,
+    LogMessage,
+    MetricRecorded,
+    OperationCompleted,
+    OperationError,
+    OperationProgress,
+    OperationStarted,
+]

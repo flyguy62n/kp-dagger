@@ -1,3 +1,5 @@
-﻿"""Package placeholder."""
+﻿"""FortiGate parser module."""
 
-__all__ = []
+from kp_dagger.parsers.fortigate.parser import FortigateConfigParser
+
+__all__ = ["FortigateConfigParser"]

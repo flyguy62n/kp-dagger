@@ -1,0 +1,27 @@
+# Main Dagger application settings
+# This file is loaded by DynaConf and contains general app configuration
+
+# Environment settings
+environments:
+  - development
+  - production
+  - testing
+
+# Default environment
+default:
+  environment: development
+
+# Development settings  
+development:
+  debug: true
+  log_level: DEBUG
+
+# Production settings
+production:
+  debug: false
+  log_level: INFO
+
+# Test settings
+testing:
+  debug: true
+  log_level: WARNING

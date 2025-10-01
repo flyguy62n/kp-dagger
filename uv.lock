@@ -358,6 +358,15 @@ wheels = [
 ]
 
 [[package]]
+name = "dynaconf"
+version = "3.2.11"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/62/eb/e9d1249ff56b11e63fd8c7d0fcc1f94704e21693c16862bf0ebfb07bd61a/dynaconf-3.2.11.tar.gz", hash = "sha256:4cfc6a730c533bf1a1d0bf266ae202133a22236bb3227d23eff4b8542d4034a5", size = 234694, upload-time = "2025-05-06T15:44:59.16Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/36/64/580c74003a356c5662e7b1da43ecd7cbda6e8f970c87b30c5a654c8ccb53/dynaconf-3.2.11-py2.py3-none-any.whl", hash = "sha256:660de90879d4da236f79195692a7d197957224d7acf922bcc6899187dc7b4a27", size = 236536, upload-time = "2025-05-06T15:44:56.18Z" },
+]
+
+[[package]]
 name = "editorconfig"
 version = "0.17.1"
 source = { registry = "https://pypi.org/simple" }
@@ -594,6 +603,7 @@ dependencies = [
     { name = "dependency-injector" },
     { name = "duckdb" },
     { name = "duckdb-engine" },
+    { name = "dynaconf" },
     { name = "httpx" },
     { name = "jinja2" },
     { name = "mypy" },
@@ -647,6 +657,7 @@ requires-dist = [
     { name = "dependency-injector", specifier = ">=4.41.0" },
     { name = "duckdb", specifier = ">=0.10.0" },
     { name = "duckdb-engine", specifier = ">=0.17.0" },
+    { name = "dynaconf", specifier = ">=3.2.0" },
     { name = "httpx", specifier = ">=0.27.0" },
     { name = "jinja2", specifier = ">=3.1.0" },
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.6.0" },

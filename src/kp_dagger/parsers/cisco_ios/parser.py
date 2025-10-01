@@ -2,16 +2,19 @@
 
 from typing import Any
 
+from kp_dagger.models.base.types import PathLike
+from kp_dagger.parsers.base.protocols import ConfigurationParser
 
-class CiscoIOSParser:
+
+class CiscoIOSParser(ConfigurationParser):
     """Parser for Cisco IOS device configurations."""
 
-    def parse(self, config_text: str) -> dict[str, Any]:
+    def parse_file(self, file_path: PathLike) -> dict[str, Any]:
         """
-        Parse Cisco IOS configuration text.
+        Parse Cisco IOS configuration file.
 
         Args:
-            config_text: Raw configuration text
+            file_path: Path to configuration file
 
         Returns:
             Structured configuration data
@@ -20,7 +23,7 @@ class CiscoIOSParser:
         # TODO: Implement Cisco IOS parsing logic
         return {
             "device_type": "cisco-ios",
-            "hostname": self._extract_hostname(config_text),
+            "source_file": str(file_path),
         }
 
     def can_parse(self, config_text: str) -> bool:

@@ -6,12 +6,16 @@ from typing import Any
 from dependency_injector.wiring import Provide, inject
 
 from kp_dagger.containers import ApplicationContainer
+from kp_dagger.containers.analyzers import AnalyzerContainer
+from kp_dagger.containers.reports import ReportContainer
 from kp_dagger.core.database import DatabaseManager
 from kp_dagger.core.exceptions import (
     NetworkScannerError,
     UnsupportedDeviceError,
 )
+from kp_dagger.core.services.events import SafeEventPublisher
 from kp_dagger.models.base.enums import DeviceType, ReportFormat
+from kp_dagger.models.events import EventLevel, LogMessage
 from kp_dagger.parsers.factory import ParserFactory
 
 
@@ -27,9 +31,11 @@ class DaggerScanner:
         parser_factory: ParserFactory = Provide[
             ApplicationContainer.parser_container.parser_factory
         ],
-        analyzers: Any = Provide[ApplicationContainer.analyzer_container],
-        reporters: Any = Provide[ApplicationContainer.report_container],
-        verbose: bool = False,
+        analyzers: AnalyzerContainer = Provide[ApplicationContainer.analyzer_container],
+        reporters: ReportContainer = Provide[ApplicationContainer.report_container],
+        event_publisher: SafeEventPublisher = Provide[
+            ApplicationContainer.core_container.event_publisher
+        ],
     ) -> None:
         """
         Initialize the network scanner.
@@ -39,17 +45,31 @@ class DaggerScanner:
             parser_factory: Parser factory instance
             analyzers: Analyzer services container
             reporters: Reporter services container
-            verbose: Enable verbose logging
+            event_publisher: Event publisher service
 
         """
-        self.verbose = verbose
         self.database = database_manager
         self.parser_factory = parser_factory
         self.analyzers = analyzers
         self.reporters = reporters
+        self.event_publisher = event_publisher
 
         # Initialize database
         self.database.initialize()
+
+        # Publish event for successful scanner initialization
+        self.event_publisher.publish(
+            LogMessage(
+                message="Scanner initialized successfully",
+                level=EventLevel.DEBUG,
+                extra={
+                    "database_manager": self.database,
+                    "parser_factory": self.parser_factory,
+                    "analyzers": self.analyzers,
+                    "reporters": self.reporters,
+                },
+            ),
+        )
 
     def scan_file(
         self,
@@ -86,7 +106,7 @@ class DaggerScanner:
             parser = self.parser_factory.get_parser(device_type)
 
             # Parse configuration
-            parsed_config = parser.parse(config_text)
+            parsed_config = parser.parse_file(config_file)
 
             # Store in database
             device_id = self.database.store_device_config(

@@ -1,26 +1,29 @@
-"""PaloAlto PAN-OS configuration parser."""
+"""Palo Alto configuration parser."""
 
 from typing import Any
 
+from kp_dagger.models.base.types import PathLike
+from kp_dagger.parsers.base.protocols import ConfigurationParser
 
-class PaloaltoParser:
-    """Parser for PaloAlto PAN-OS device configurations."""
 
-    def parse(self, config_text: str) -> dict[str, Any]:
+class PaloaltoParser(ConfigurationParser):
+    """Parser for Palo Alto device configurations."""
+
+    def parse_file(self, file_path: PathLike) -> dict[str, Any]:
         """
-        Parse PaloAlto configuration text.
+        Parse Palo Alto configuration file.
 
         Args:
-            config_text: Raw configuration text
+            file_path: Path to configuration file
 
         Returns:
             Structured configuration data
 
         """
-        # TODO: Implement PaloAlto parsing logic
+        # TODO: Implement Palo Alto parsing logic
         return {
             "device_type": "paloalto",
-            "hostname": self._extract_hostname(config_text),
+            "source_file": str(file_path),
         }
 
     def can_parse(self, config_text: str) -> bool:
