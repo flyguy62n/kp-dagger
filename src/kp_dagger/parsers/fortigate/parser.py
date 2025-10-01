@@ -82,7 +82,8 @@ class FortigateConfigParser:
         self.event_publisher.publish(
             OperationStarted(
                 operation_type="parsing",
-                resource_path=str(file_path),
+                resource_path=file_path,
+                display_name=file_path.name,
                 context={"device_type": "fortigate"},
             ),
         )
@@ -102,7 +103,8 @@ class FortigateConfigParser:
             self.event_publisher.publish(
                 OperationError(
                     operation_type="parsing",
-                    resource_path=str(file_path),
+                    resource_path=file_path,
+                    display_name=file_path.name,
                     error_message=str(e),
                 ),
             )
@@ -112,7 +114,8 @@ class FortigateConfigParser:
             self.event_publisher.publish(
                 OperationCompleted(
                     operation_type="parsing",
-                    resource_path=str(file_path),
+                    resource_path=file_path,
+                    display_name=file_path.name,
                     success=True,
                     duration=self.timestamp_service.elapsed_seconds(start_time),
                     results={"sections_count": len(result)},
@@ -142,7 +145,8 @@ class FortigateConfigParser:
                 self.event_publisher.publish(
                     OperationError(
                         operation_type="parsing",
-                        resource_path=str(file_path),
+                        resource_path=file_path,
+                        display_name=file_path.name,
                         error_message=f"Unrecognized line format: {e.line_content}",
                         error_context={
                             "line_number": line_num,
@@ -160,7 +164,8 @@ class FortigateConfigParser:
                 self.event_publisher.publish(
                     OperationError(
                         operation_type="parsing",
-                        resource_path=str(file_path),
+                        resource_path=file_path,
+                        display_name=file_path.name,
                         error_message=str(e),
                         error_context={
                             "line_number": line_num,

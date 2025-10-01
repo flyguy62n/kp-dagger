@@ -78,7 +78,8 @@ class FileProcessingService:
         self.event_publisher.publish(
             OperationStarted(
                 operation_type="file_processing",
-                resource_path=str(file_path),
+                resource_path=file_path,
+                display_name=file_path.name,
                 context={"operation": "metadata_extraction"},
             ),
         )
@@ -88,7 +89,8 @@ class FileProcessingService:
                 self.event_publisher.publish(
                     OperationError(
                         operation_type="file_processing",
-                        resource_path=str(file_path),
+                        resource_path=file_path,
+                        display_name=file_path.name,
                         error_message=f"File not found: {file_path}",
                         error_context={"operation": "file_validation"},
                     ),
@@ -100,7 +102,7 @@ class FileProcessingService:
                 self.event_publisher.publish(
                     OperationError(
                         operation_type="file_processing",
-                        resource_path=str(file_path),
+                        resource_path=file_path,
                         error_message=f"Could not detect encoding for: {file_path}",
                         error_context={"operation": "encoding_detection"},
                     ),
@@ -126,7 +128,8 @@ class FileProcessingService:
             self.event_publisher.publish(
                 OperationCompleted(
                     operation_type="file_processing",
-                    resource_path=str(file_path),
+                    resource_path=file_path,
+                    display_name=file_path.name,
                     success=True,
                     duration=duration,
                     results={
@@ -144,7 +147,8 @@ class FileProcessingService:
             self.event_publisher.publish(
                 OperationError(
                     operation_type="file_processing",
-                    resource_path=str(file_path),
+                    resource_path=file_path,
+                    display_name=file_path.name,
                     error_message=str(e),
                     error_context={
                         "operation": "metadata_extraction",
@@ -248,6 +252,7 @@ class FileProcessingService:
             OperationStarted(
                 operation_type="file_discovery",
                 resource_path=base_path_obj,
+                display_name=base_path_obj.name or str(base_path_obj),
                 context={"pattern": pattern, "recursive": recursive},
             ),
         )
@@ -264,7 +269,8 @@ class FileProcessingService:
             self.event_publisher.publish(
                 OperationCompleted(
                     operation_type="file_discovery",
-                    resource_path=str(base_path_obj),
+                    resource_path=base_path_obj,
+                    display_name=base_path_obj.name or str(base_path_obj),
                     success=True,
                     duration=duration,
                     results={
@@ -281,7 +287,8 @@ class FileProcessingService:
             self.event_publisher.publish(
                 OperationError(
                     operation_type="file_discovery",
-                    resource_path=str(base_path_obj),
+                    resource_path=base_path_obj,
+                    display_name=base_path_obj.name or str(base_path_obj),
                     error_message=str(e),
                     error_context={
                         "pattern": pattern,

@@ -65,7 +65,7 @@ class LoggingEventHandler:
         """Log operation completion with results and performance data."""
         extra_data = {
             "operation_type": event.operation_type,
-            "resource_path": str(event.resource_path) if event.resource_path else None,
+            "resource_path": event.resource_path,
             "correlation_id": event.correlation_id,
             "success": event.success,
             "duration": event.duration,
@@ -110,7 +110,7 @@ class LoggingEventHandler:
 
         extra_data = {
             "operation_type": event.operation_type,
-            "resource_path": str(event.resource_path) if event.resource_path else None,
+            "resource_path": event.resource_path,
             "correlation_id": event.correlation_id,
             "error_context": event.error_context,
         }

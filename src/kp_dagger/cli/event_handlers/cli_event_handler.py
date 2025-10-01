@@ -5,8 +5,6 @@ Provides context-aware event handling that displays appropriate
 messages and formatting for terminal user interfaces.
 """
 
-from pathlib import Path
-
 from kp_dagger.cli.utils.output import RichOutputService
 from kp_dagger.core.services.events.service import EventBusService
 from kp_dagger.models.events import (
@@ -46,11 +44,13 @@ class CLIEventHandler:
     def handle_operation_started(self, event: OperationStarted) -> None:
         """Handle operation start with context-aware messaging."""
         if event.operation_type == "parsing":
+            # Skip internal parsing events without a resource identifier
+            if not event.resource_path and not event.display_name:
+                return
+
             device_type = event.context.get("device_type", "unknown")
             batch_info = event.batch_info
-            resource_name = (
-                Path(str(event.resource_path)).name if event.resource_path else "N/A"
-            )
+            resource_name = event.display_name or event.resource_path or "N/A"
             if batch_info:
                 self.rich_output.info(
                     f"[{batch_info['current']}/{batch_info['total']}] "
@@ -75,9 +75,7 @@ class CLIEventHandler:
         elif event.operation_type == "parsing" and event.success:
             # Parsing success with section count
             results = event.results
-            resource_name = (
-                Path(str(event.resource_path)).name if event.resource_path else "N/A"
-            )
+            resource_name = event.display_name or event.resource_path or "N/A"
             sections_count = results.get("sections_count", 0)
             self.rich_output.success(
                 f"✅ Parsed {resource_name} - {sections_count} sections",
@@ -106,9 +104,7 @@ class CLIEventHandler:
             context_info = f" at line {event.error_context['line_number']}"
 
         resource_name = (
-            Path(str(event.resource_path)).name
-            if event.resource_path
-            else "unknown resource"
+            event.display_name or event.resource_path or "unknown resource"
         )
         self.rich_output.error(
             f"❌ Failed {event.operation_type} on {resource_name}{context_info}: {event.error_message}",

@@ -8,11 +8,49 @@ import uuid
 # Does not use dependency-injected timestamp service as Pydantic and DI don't play well
 from datetime import UTC, datetime
 from enum import Enum
+from pathlib import Path
 from typing import TypeVar
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 EventT = TypeVar("EventT", bound="BaseEvent")
+
+
+class PathNormalizationMixin(BaseModel):
+    """
+    Mixin providing automatic Path-to-string normalization for resource_path fields.
+
+    This allows event publishers to pass Path objects for convenience while
+    ensuring event handlers always receive consistent string values.
+    """
+
+    resource_path: str | Path | None = Field(
+        default=None,
+        description="Canonical identifier for the resource (file path, URL, config hierarchy, etc.)",
+    )
+    display_name: str | None = Field(
+        default=None,
+        description="Optional user-friendly short name for UI display",
+    )
+
+    @field_validator("resource_path", mode="before")
+    @classmethod
+    def normalize_resource_path(cls, v: str | Path | None) -> str | None:
+        """
+        Convert Path objects to strings for consistent handler interface.
+
+        Args:
+            v: Input value (str, Path, or None)
+
+        Returns:
+            String representation of path, or None if input was None
+
+        """
+        if v is None:
+            return None
+        if isinstance(v, Path):
+            return str(v)
+        return v
 
 
 class EventLevel(str, Enum):
@@ -67,16 +105,12 @@ class BaseEvent(BaseModel):
         use_enum_values = True
 
 
-class OperationStarted(BaseEvent):
+class OperationStarted(PathNormalizationMixin, BaseEvent):
     """Generic event for any operation beginning."""
 
     operation_type: str = Field(
         min_length=1,
         description="Type of operation (parsing, analysis, reporting)",
-    )
-    resource_path: str | None = Field(
-        default=None,
-        description="Path to resource being processed",
     )
     context: dict = Field(
         default_factory=dict,
@@ -88,16 +122,12 @@ class OperationStarted(BaseEvent):
     )
 
 
-class OperationCompleted(BaseEvent):
+class OperationCompleted(PathNormalizationMixin, BaseEvent):
     """Generic event for any operation completion."""
 
     operation_type: str = Field(
         min_length=1,
         description="Type of operation that completed",
-    )
-    resource_path: str | None = Field(
-        default=None,
-        description="Path to resource that was processed",
     )
     success: bool
     duration: float = Field(ge=0, description="Operation duration in seconds")
@@ -107,17 +137,13 @@ class OperationCompleted(BaseEvent):
     )
 
 
-class OperationError(BaseEvent):
+class OperationError(PathNormalizationMixin, BaseEvent):
     """Generic event for operation failures."""
 
     level: EventLevel = EventLevel.ERROR  # Always important
     operation_type: str = Field(
         min_length=1,
         description="Type of operation that failed",
-    )
-    resource_path: str | None = Field(
-        default=None,
-        description="Path to resource being processed",
     )
     error_message: str = Field(min_length=1, description="Error description")
     error_context: dict = Field(
